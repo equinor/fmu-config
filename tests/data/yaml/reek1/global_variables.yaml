@@ -1,12 +1,14 @@
-# Master global config for Troll
-# Prototype by JRIV
+# Master global config for Reek
+
+version: 1.0
+authors: [jriv, nn, aa]
 
 #-------------------------------------------------------------------------
 # GLOBAL
 #-------------------------------------------------------------------------
-
 global:
   name: Reek
+  coordsys: ST_SOMEWHAT_COORDSYS
 
   dates: &global_dates
     - 20000101
@@ -22,6 +24,9 @@ global:
 # RMS
 #-------------------------------------------------------------------------
 rms:
+  ipldestfile: TMP/global_variables.ipl
+  ipltmplfile: TMP/global_variables.tmpl
+
   horizons:
     TOPNAME:
       - TopUpperReek
@@ -29,19 +34,20 @@ rms:
       - TopLowerReek
       - BaseLowerReek
 
-
   zones:
     ISONAME:
       - UpperReek
       - MidReek
       - LowerReek
 
+  freeform:
+    COHIBA_MODE:
+      dtype: str
+      value: PREDICTION~<COHIBA_MODE>
 
-
-  aux:
     RUN_HAVANA:
       dtype: int
-      default: 0
+      value: 0
 
 
     HAVANA_FAULT_LIST:
@@ -57,7 +63,7 @@ rms:
     SCALE_THROW:
       list: Yes
       dtype: int
-      values: [2]
+      values: [2~<THROW>]
 
     FWL:
       list: Yes
@@ -73,3 +79,26 @@ rms:
 
 
 eclipse:
+  RELPERM:
+    destfile: TMP/relperm_config.txt
+    # eclipse/include/props/relperm_config.txt
+
+    tmplfile: TMP/relperm_config.tmpl
+    # ert/input/templates/relperm_config.tmpl
+
+    content: |
+      INTERPOLATE_WO 0.3~<INTERPOLATE_WO>
+      INTERPOLATE_GO 0.7~<INTERPOLATE_GO>
+
+
+  MULTFLT:
+    destfile: TMP/reek.multflt  # eclipse/include/grid/reek.multflt
+    tmplfile: TMP/multflt.tmpl  # ert/input/templates/multflt.tmpl
+    content: |
+      MULTFLT
+      'F1'   0.12~<MULTFLT_F1> /
+      'F2'   0.01~<MULTFLT_F2> /
+      'F3'   0.04~<MULTFLT_F3> /
+      'F4'   0.12~<MULTFLT_F4> /
+      'F5'   0.06~<MULTFLT_F5> /
+      /
