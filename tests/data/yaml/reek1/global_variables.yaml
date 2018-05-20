@@ -1,4 +1,4 @@
-# Master global config for Reek
+# Master FMU global config for Reek
 
 version: 1.0
 authors: [jriv, nn, aa]
@@ -16,9 +16,9 @@ global:
     - 20030101
 
   diffdates: &global_diff_dates
-    - 20010601_20000101
-    - 20030101_20010601
-    - 20030101_20000101
+    - [20010601, 20000101]
+    - [20030101, 20010601]
+    - [20030101, 20000101]
 
 #-------------------------------------------------------------------------
 # RMS
@@ -51,22 +51,18 @@ rms:
 
 
     HAVANA_FAULT_LIST:
-      list: Yes
       dtype: str
       values: [F4]
 
     MOVE_LAT:
-      list: Yes
       dtype: float
       values: [400.0]
 
     SCALE_THROW:
-      list: Yes
       dtype: int
       values: [2~<THROW>]
 
     FWL:
-      list: Yes
       dtype: float
       values: [1705~<FWL1>, 1000]
 
