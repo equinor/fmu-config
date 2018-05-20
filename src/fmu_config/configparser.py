@@ -1,10 +1,13 @@
+import os
+import errno
 import pprint
 import re
 import getpass
 import socket
 from datetime import datetime
 
-import yaml
+import json
+import oyaml as yaml  # for ordered dicts!
 import xtgeo
 
 from ._loader import Loader
@@ -14,7 +17,7 @@ xxx = xtgeo.common.XTGeoDialog()
 logger = xxx.functionlogger(__name__)
 
 
-class ConfigParser(object):
+class ConfigParserFMU(object):
     """Class for parsing config files for FMU."""
 
     def __init__(self):
@@ -37,46 +40,111 @@ class ConfigParser(object):
             self._config = yaml.load(stream, Loader=Loader)
         self._yamlfile = yfile
 
-    @staticmethod
-    def _get_tmpl_form(stream):
-        """Given variables..."""
-
-        pattern = '[a-zA-Z0-9.]+~'
-
-        if isinstance(stream, list):
-            logger.info('STREAM is a list object')
-            result = []
-            for item in stream:
-                moditem = re.sub(pattern, '', item)
-                moditem = re.sub('"', '', moditem)
-                result.append(moditem)
-        else:
-            result = re.sub(pattern, '', stream)
-            result = re.sub('"', '', result)
-
-        return result
-
-    @staticmethod
-    def _get_dest_form(stream):
-        """Given variables..."""
-
-        if isinstance(stream, list):
-            logger.info('STREAM is a list object')
-            result = []
-            for item in stream:
-                moditem = re.sub('\~.*>', '', item)
-                result.append(moditem)
-        else:
-            result = re.sub('\~.*>', '', stream)
-
-        return result
-
     def show(self):
         """Show the current configuration using prettyprinter"""
 
         pp = pprint.PrettyPrinter(indent=4)
 
         pp.pprint(self.config)
+
+    def to_yaml(self, rootname, destination=None, template=None,
+                createfolders=False):
+        """Export the config as YAML files; one with true values and
+        one with templated variables.
+
+        Args:
+            rootname: Root file name without extension. An extension
+                .yaml will be added for destination, and .tmpl
+                for template output.
+            destination: The directory path for the destination
+                file. If None, than no output will be given
+            template: The directory path for the templated
+                file. If None, than no templated output will be given.
+            createfolders: If True then folders will be created if they
+                do not exist.
+
+        Raises:
+            ValueError: If both destination and template output is None,
+                or folder does not exist in advance, if createfolder=False.
+
+        Example:
+
+            >>> config.to_json('global_variables', destination='../')
+        """
+
+        if not destination and not template:
+            raise ValueError('Both desitionation and template are None.'
+                             'At least one of them has to be set!.')
+
+        if createfolders:
+            self._force_create_folders([destination, template])
+        else:
+            self._check_folders([destination, template])
+
+        mystream = yaml.dump(self.config)
+        mystream = ''.join(self._get_sysinfo()) + mystream
+
+        cfg1 = self._get_dest_form(mystream)
+        cfg2 = self._get_tmpl_form(mystream)
+
+        if destination:
+            cfg1 = self._get_dest_form(mystream)
+            out = os.path.join(destination, rootname + '.yaml')
+            with open(out, 'w') as stream:
+                stream.write(cfg1)
+
+        if template:
+            cfg2 = self._get_tmpl_form(mystream)
+            out = os.path.join(destination, rootname + '.tmpl')
+            with open(out, 'w') as stream:
+                stream.write(cfg2)
+
+    def to_json(self, rootname, destination=None, template=None,
+                createfolders=False):
+        """Export the config as JSON files; one with true values and
+        one with templated variables.
+
+        Args:
+            rootname: Root file name without extension. An extension
+                .json will be added for destination, and .tmpl
+                for template output.
+            destination: The directory path for the destination
+                file. If None, than no output will be given
+            template: The directory path for the templated
+                file. If None, than no output will be given
+            createfolders: If True then folders will be created if they
+                do not exist.
+
+        Raises:
+            ValueError: If both destination and template output is None,
+                or folder does not exist in advance, if createfolder=False.
+
+        Example:
+
+            >>> config.to_json('global_variables', destination='../')
+        """
+
+        if not destination and not template:
+            raise ValueError('Both desitionation and template are None.'
+                             'At least one of them has to be set!.')
+
+        if createfolders:
+            self._force_create_folders([destination, template])
+        else:
+            self._check_folders([destination, template])
+
+        mystream = json.dumps(self.config, indent=4)
+
+        if destination:
+            cfg1 = self._get_dest_form(mystream)
+            out = os.path.join(destination, rootname + '.json')
+            with open(out, 'w') as stream:
+                stream.write(cfg1)
+        if template:
+            cfg2 = self._get_tmpl_form(mystream)
+            out = os.path.join(destination, rootname + '.tmpl')
+            with open(out, 'w') as stream:
+                stream.write(cfg2)
 
     def to_ipl(self):
         """Export the config as a global variables IPL and template."""
@@ -89,16 +157,7 @@ class ConfigParser(object):
         declarations = []
         expressions = []
 
-        host = socket.gethostname()
-        user = getpass.getuser()
-        now = str(datetime.now())
-
-        metadata = ['// global_variables.xxxx\n',
-                    '// This file is AUTOGENERATED. DO NOT EDIT MANUALLY!\n',
-                    '// User is {}\n'.format(user),
-                    '// Date is right {}\n'.format(now),
-                    '// Machine is {}\n'.format(host)]
-
+        metadata = self._get_sysinfo(commentmarker='//')
         declarations.extend(metadata)
 
         hdecl, hlist = self._ipl_stringlist_format('horizons')
@@ -177,16 +236,11 @@ class ConfigParser(object):
             else:
                 raise ValueError('Do not understand dtype: {}'.format(mydtype))
 
-            listtype = ''
-            if cfg[variable].get('list', False):
-                listtype = '[]'
-
-            mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
-            decl.append(mydecl)
-
             myvalue = cfg[variable].get('value')
             myvalues = cfg[variable].get('values')
+
             if myvalue:
+                listtype = ''
                 fnutt = ''
                 if subtype == 'String':
                     fnutt = '"'
@@ -194,6 +248,7 @@ class ConfigParser(object):
                                                 fnutt)
                 expr.append(myexpr)
             elif myvalues:
+                listtype = '[]'
                 for i, val in enumerate(myvalues):
                     fnutt = ''
                     if subtype == 'String':
@@ -201,6 +256,9 @@ class ConfigParser(object):
                     myexpr = '{}[{}] = {}{}{}\n'.format(variable, i + 1,
                                                         fnutt, val, fnutt)
                     expr.append(myexpr)
+
+            mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
+            decl.append(mydecl)
 
         return decl, expr
 
@@ -224,3 +282,89 @@ class ConfigParser(object):
 
             with open(edeck['tmplfile'], 'w') as tmpl:
                 tmpl.write(content_tmpl)
+
+    # =========================================================================
+    # Private methods
+    # =========================================================================
+
+    @staticmethod
+    def _get_sysinfo(commentmarker='#'):
+        """Return a text string that serves as info for the outpyt styles
+        that support comments."""
+
+        host = socket.gethostname()
+        user = getpass.getuser()
+        now = str(datetime.now())
+
+        cmt = commentmarker
+
+        meta = ['{} Autogenerated from global configuration.\n'.format(cmt),
+                '{} DO NOT EDIT THIS FILE MANUALLY!\n'.format(cmt),
+                '{} Machine {} by user {}, at {}\n'
+                .format(cmt, host, user, now)]
+
+        return meta
+
+    @staticmethod
+    def _force_create_folders(folderlist):
+
+        for folder in folderlist:
+            if folder is None:
+                continue
+            try:
+                os.makedirs(folder)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+
+    @staticmethod
+    def _check_folders(folderlist):
+
+        for folder in folderlist:
+            if folder is None:
+                continue
+
+            if not os.path.exists(folder):
+                raise ValueError('Folder {} does not exist. It must either '
+                                 'exist in advance, or the createfolders key'
+                                 'must be True.'.format(folder))
+
+    @staticmethod
+    def _get_tmpl_form(stream):
+        """Given variables..."""
+
+        pattern = '[a-zA-Z0-9.]+~'
+
+        if isinstance(stream, list):
+            logger.info('STREAM is a list object')
+            result = []
+            for item in stream:
+                moditem = re.sub(pattern, '', item)
+                moditem = re.sub('"', '', moditem)
+                result.append(moditem)
+        elif isinstance(stream, str):
+            result = re.sub(pattern, '', stream)
+            result = re.sub('"', '', result)
+        else:
+            raise ValueError('Input for templateconversion neither string '
+                             'or list')
+
+        return result
+
+    @staticmethod
+    def _get_dest_form(stream):
+        """Given variables..."""
+
+        if isinstance(stream, list):
+            logger.info('STREAM is a list object')
+            result = []
+            for item in stream:
+                moditem = re.sub('\~.*>', '', item)
+                result.append(moditem)
+        elif isinstance(stream, str):
+            result = re.sub('\~.*>', '', stream)
+        else:
+            raise ValueError('Input for templateconversion neither string '
+                             'or list')
+
+        return result
