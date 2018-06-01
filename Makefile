@@ -34,8 +34,7 @@ APPLICATION := fmu_config
 DOCSINSTALL := /project/sdpdocs/FMU/lib
 
 # A list of the applications
-RUNAPPS := estimate_remaining_volumes \
-	   rename_roff_parameter
+RUNAPPS := fmuconfig
 
 BROWSER := firefox
 
