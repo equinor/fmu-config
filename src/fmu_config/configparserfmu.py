@@ -47,19 +47,21 @@ class ConfigParserFMU(object):
 
         pp.pprint(self.config)
 
-    def to_yaml(self, rootname, destination=None, template=None,
-                createfolders=False):
+    def to_yaml(self, rootname='myconfig', destination=None, template=None,
+                tool=None, createfolders=False):
         """Export the config as YAML files; one with true values and
         one with templated variables.
 
         Args:
             rootname: Root file name without extension. An extension
-                .yaml will be added for destination, and .tmpl
+                .yml will be added for destination, and .tmpl
                 for template output.
             destination: The directory path for the destination
                 file. If None, than no output will be given
             template: The directory path for the templated
                 file. If None, than no templated output will be given.
+            tool (str): Using one of the specified tool sections in the
+                master config, e.g. 'rms'. Default is None
             createfolders: If True then folders will be created if they
                 do not exist.
 
@@ -87,14 +89,16 @@ class ConfigParserFMU(object):
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
 
+        # if tool is not None:
+        #     cfg1 = cfg1[tool]
+        #     cfg2 = cfg2[tool]
+
         if destination:
-            cfg1 = self._get_dest_form(mystream)
-            out = os.path.join(destination, rootname + '.yaml')
+            out = os.path.join(destination, rootname + '.yml')
             with open(out, 'w') as stream:
                 stream.write(cfg1)
 
         if template:
-            cfg2 = self._get_tmpl_form(mystream)
             out = os.path.join(destination, rootname + '.tmpl')
             with open(out, 'w') as stream:
                 stream.write(cfg2)
@@ -146,13 +150,34 @@ class ConfigParserFMU(object):
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
-    def to_ipl(self):
-        """Export the config as a global variables IPL and template."""
+    def to_ipl(self, rootname='global_variables', destination=None,
+               template=None, tool='rms'):
+        """Export the config as a global variables IPL and template.
+
+        Args:
+            rootname (str): Root file name for the IPL config. Default is
+                'global_variables'.
+            destination (str): If given, the path to the global_variables.ipl.
+            template (str): If given, the path to the global_variables.tmpl
+                (for ERT to use).
+            tool (str): Which section in the master to use (default is 'rms')
+
+        """
+
+        if not destination and not template:
+            raise ValueError('Both desitionation and template are None.'
+                             'At least one of them has to be set!.')
 
         cfg = self.config['rms']
 
-        destfile = cfg['ipldestfile']
-        tmplfile = cfg['ipltmplfile']
+        if destination is None:
+            destfile = cfg['ipldestfile']
+        else:
+            destfile = os.path.join(destination, rootname + '.ipl')
+        if template is None:
+            tmplfile = cfg['ipltmplfile']
+        else:
+            tmplfile = os.path.join(template, rootname + '.yml')
 
         declarations = []
         expressions = []

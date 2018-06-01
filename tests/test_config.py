@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
 import fmu_config
+import fmu_config.fmuconfigrunner as rr
+
 from xtgeo.common import XTGeoDialog
 
 tfile1 = 'tests/data/yaml/troll1/global_variables.yaml'
@@ -47,3 +50,16 @@ def test_basic_reek():
 
     # # export the config as a global variables IPL
     # cfg.to_ipl('myfile')
+
+
+def test_command_make_ipls():
+    """Make IPL both global_variable.ipl and global_variables.tmpl, Reek."""
+    rr.main(['--input', rfile1, '--mode', 'ipl'])  # noqa
+
+
+def test_command_make_yamls():
+    """Make IPL both global_variables_rms.yml and global_variables_tmpl.yml,
+    Reek.
+    """
+
+    rr.main(['--input', rfile1, '--mode', 'yaml', --tool, 'rms'])  # noqa

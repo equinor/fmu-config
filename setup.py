@@ -26,14 +26,8 @@ test_requirements = [
     'pytest',
 ]
 
-# erv_function = ('estimate_remaining_volumes='
-#                 'xtgeo_utils1.estimate_remaining_volumes.erv:main')
-# rrp_function = ('rename_roff_parameter='
-#                 'xtgeo_utils1.rename_roff_prop.rrp:main')
-# cgf_function = ('convert_grid_format='
-#                 'xtgeo_utils1.convert_grid_format.cgf:main')
-# xsc_function = ('xsections='
-#                 'xtgeo_utils1.xsections.xsect:main')
+fmuconfig_function = ('fmuconfig='
+                      'fmu_config.fmuconfigrunner:main')
 
 setup(
     name='fmu_config',
@@ -47,11 +41,9 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-    # entry_points={
-    #     'console_scripts': [
-    #         erv_function, rrp_function, cgf_function, xsc_function
-    #     ]
-    # },
+    entry_points={
+        'console_scripts': [fmuconfig_function]
+    },
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
