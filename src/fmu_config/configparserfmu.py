@@ -1,10 +1,12 @@
 import os
+import sys
 import errno
 import pprint
 import re
 import getpass
 import socket
-from datetime import datetime
+#from datetime import datetime
+import datetime
 
 import json
 import oyaml as yaml  # for ordered dicts!
@@ -40,12 +42,20 @@ class ConfigParserFMU(object):
             self._config = yaml.load(stream, Loader=Loader)
         self._yamlfile = yfile
 
-    def show(self):
-        """Show the current configuration using prettyprinter"""
+    def show(self, style='yaml'):
+        """Show the current configuration to STDOUT.
 
-        pp = pprint.PrettyPrinter(indent=4)
+        Args:
+            style: Choose between 'yaml, 'json' or 'pretty'"""
 
-        pp.pprint(self.config)
+        # pp = pprint.PrettyPrinter(indent=4)
+
+        # pp.pprint(self.config)
+        if style in ('yaml', 'yml'):
+            yaml.dump(self.config, stream=sys.stdout)
+        elif style in ('json', 'jason'):
+            stream = json.dumps(self.config, indent=4, default=str)
+            print(stream)
 
     def to_yaml(self, rootname='myconfig', destination=None, template=None,
                 tool=None, createfolders=False):
@@ -150,34 +160,18 @@ class ConfigParserFMU(object):
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
-    def to_ipl(self, rootname='global_variables', destination=None,
-               template=None, tool='rms'):
+    def to_ipl(self, destination='global_variables.ipl', template=False):
         """Export the config as a global variables IPL and template.
 
         Args:
-            rootname (str): Root file name for the IPL config. Default is
-                'global_variables'.
-            destination (str): If given, the path to the global_variables.ipl.
-            template (str): If given, the path to the global_variables.tmpl
-                (for ERT to use).
+            destination (str): The output file.
+            template (str): If True, a templated version of the file (for ERT)
             tool (str): Which section in the master to use (default is 'rms')
 
         """
 
-        if not destination and not template:
-            raise ValueError('Both desitionation and template are None.'
-                             'At least one of them has to be set!.')
-
-        cfg = self.config['rms']
-
-        if destination is None:
-            destfile = cfg['ipldestfile']
-        else:
-            destfile = os.path.join(destination, rootname + '.ipl')
-        if template is None:
-            tmplfile = cfg['ipltmplfile']
-        else:
-            tmplfile = os.path.join(template, rootname + '.yml')
+        if not destination:
+            raise ValueError('Destination for IPL cannot be None.')
 
         declarations = []
         expressions = []
@@ -200,21 +194,16 @@ class ConfigParserFMU(object):
             declarations.extend(hdecl)
             expressions.extend(hlist)
 
-        expressions_dest = self._get_dest_form(expressions)
-        expressions_tmpl = self._get_tmpl_form(expressions)
+        if template:
+            expressions_dest = self._get_tmpl_form(expressions)
+        else:
+            expressions_dest = self._get_dest_form(expressions)
 
-        with open(destfile, 'w') as stream:
+        with open(destination, 'w') as stream:
             for line in declarations:
                 stream.write(line)
 
             for line in expressions_dest:
-                stream.write(line)
-
-        with open(tmplfile, 'w') as stream:
-            for line in declarations:
-                stream.write(line)
-
-            for line in expressions_tmpl:
                 stream.write(line)
 
     def _ipl_stringlist_format(self, subtype):
@@ -240,17 +229,38 @@ class ConfigParserFMU(object):
         return decl, expr
 
     def _ipl_freeform_format(self):
-        """Process the RMS IPL YAML config freeform types."""
+        """Process the RMS IPL YAML config freeform types.
+
+        The freeform types are e.g. like this::
+
+            rms:
+              GOC:
+                dtype: float
+                values:
+                  - 2010.0
+                  - 2016.0
+
+        I.e. they are defined as BIG_LETTER keys within
+        the RMS section, in contrast to 'horizons' and 'zones'
+        """
 
         decl = ['// Declare free form:\n']
         expr = ['// Free form expressions:\n']
 
-        cfg = self.config['rms'].get('freeform')
-        if cfg is None:
+        cfg = self.config['rms']
+
+        # collect uppercase keys in 'rms'
+        freeform_keys = []
+        for key in cfg:
+            if all(word[0].isupper() for word in key if word.isalpha()):
+                freeform_keys.append(key)
+
+        if len(freeform_keys) == 0:
             return None, None
 
-        for variable in cfg:
-            print(variable)
+        for variable in freeform_keys:
+            logger.info('Variable to process is {}'.format(variable))
+            expr.append('\n')
             mydtype = cfg[variable]['dtype']
             if 'str' in mydtype:
                 subtype = 'String'
@@ -258,20 +268,65 @@ class ConfigParserFMU(object):
                 subtype = 'Int'
             elif 'float' in mydtype:
                 subtype = 'Float'
+            elif 'date' in mydtype:
+                subtype = 'String'
             else:
                 raise ValueError('Do not understand dtype: {}'.format(mydtype))
 
             myvalue = cfg[variable].get('value')
             myvalues = cfg[variable].get('values')
 
+            if mydtype == 'date':
+                if myvalue:
+                    if type(myvalue) in (datetime.datetime, datetime.date):
+                        myvalue = str(myvalue)
+                        myvalue = myvalue.replace('-', '')
+
+                if myvalues:
+                    mynewvalues = []
+                    for val in myvalues:
+                        if type(val) in (datetime.datetime, datetime.date):
+                            val = str(val)
+                            val = val.replace('-', '')
+                            mynewvalues.append(val)
+                    myvalues = mynewvalues
+
+            if mydtype == 'datepair':
+                if myvalue:
+                    date1, date2 = myvalue
+                    if type(date1) in (datetime.datetime, datetime.date):
+                        date1 = str(date1)
+                        date1 = date1.replace('-', '')
+
+                    if type(date2) in (datetime.datetime, datetime.date):
+                        date2 = str(date2)
+                        date2 = date1.replace('-', '')
+                    myvalue = date1 + '_' + date2
+
+                if myvalues:
+                    mynewvalues = []
+                    for val in myvalues:
+                        date1, date2 = val
+                        if type(date1) in (datetime.datetime, datetime.date):
+                            date1 = str(date1)
+                            date1 = date1.replace('-', '')
+                        if type(date2) in (datetime.datetime, datetime.date):
+                            date2 = str(date2)
+                            date2 = date2.replace('-', '')
+                        mynewvalues.append(date1 + '_' + date2)
+
+                    myvalues = mynewvalues
+
+            listtype = ''
             if myvalue:
-                listtype = ''
                 fnutt = ''
                 if subtype == 'String':
                     fnutt = '"'
                 myexpr = '{} = {}{}{}\n'.format(variable, fnutt, myvalue,
                                                 fnutt)
                 expr.append(myexpr)
+
+            # list of values:
             elif myvalues:
                 listtype = '[]'
                 for i, val in enumerate(myvalues):
@@ -285,6 +340,7 @@ class ConfigParserFMU(object):
             mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
             decl.append(mydecl)
 
+        decl.append('{}\n'.format('/' * 79))
         return decl, expr
 
     def to_eclipse(self):
@@ -319,7 +375,7 @@ class ConfigParserFMU(object):
 
         host = socket.gethostname()
         user = getpass.getuser()
-        now = str(datetime.now())
+        now = str(datetime.datetime.now())
 
         cmt = commentmarker
 
