@@ -1,0 +1,131 @@
+# Master global config for Troll
+# Prototype by JRIV
+
+#-------------------------------------------------------------------------------
+# Global settings
+#-------------------------------------------------------------------------------
+
+global:
+
+  DATES: &global_dates
+    - 1991-07-01
+    - 2001-07-01
+    - 2003-07-01
+    - 2005-07-01
+    - 2010-07-01
+    - 2013-06-01
+    - 2016-07-01
+
+  DIFFDATES: &global_diffdates
+    - [2001-07-01, 1991-07-01]
+    - [2003-07-01, 2001-07-01]
+    - [2005-07-01, 2003-07-01]
+    - [2007-07-01, 2005-07-01]
+    - [2010-07-01, 2007-07-01]
+    - [2013-06-01, 2010-07-01]
+    - [2016-07-01, 2013-06-01]
+    - [2003-07-01, 1991-07-01]
+    - [2005-07-01, 1991-07-01]
+    - [2007-07-01, 1991-07-01]
+    - [2010-07-01, 1991-07-01]
+    - [2013-06-01, 1991-07-01]
+    - [2016-07-01, 1991-07-01]
+
+  FWL: &global_fwl
+    - 1553.0
+    - 1560.0
+    - 1557.0
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1555.5
+    - 1553.0
+    - 1552.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1557.5
+    - 1568.0
+    - 1567.5
+    - 1568.5
+    - 1567.5
+
+  GOC: &global_goc
+    - 1543.0
+    - 1545.0
+    - 1542.0
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1546.0
+    - 1546.0
+    - 1542.5
+    - 1545.0
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1544.5
+    - 1541.0
+    - 1541.5
+    - 1542.5
+    - 1546.0
+
+
+#-------------------------------------------------------------------------------
+# RMS settings
+#-------------------------------------------------------------------------------
+rms:
+  horizons: !include rms_horizons.yml
+  zones:  !include rms_zones.yml
+
+  # the freeform is implit not beeing horizons or zones
+
+  FWL:
+    dtype: float
+    values: *global_fwl
+
+  GOC:
+    dtype: float
+    values: *global_goc
+
+  KH_MULT_CSAND:
+    dtype: float
+    value: 1.0
+
+  KH_MULT_MTR:
+    dtype: float
+    value: 1.0
+
+  KH_MULT_MST:
+    dtype: float
+    value: 1.0
+
+  A_OIL_CSAND: {dtype: float, value: 8.0152}
+  B_OIL_CSAND: {dtype: float, value: -2.2573}
+
+  TESTSOMEDATE:
+    dtype: date
+    value: 2017-01-01
+
+  TESTSOMEDATEPAIR:
+    dtype: datepair
+    value: [2017-01-01, 2018-01-01]
+
+  EDATES:
+    dtype: date
+    values: *global_dates
+
+  4D_DATES:
+    dtype: date
+    values: *global_dates
+
+  DIFF4D_DATES:
+    dtype: datepair
+    values: *global_diffdates

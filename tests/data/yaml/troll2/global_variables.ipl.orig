@@ -1,0 +1,436 @@
+//=============================================================================
+//
+// NAME:
+//    global_variables.ipl for Troll FMU model
+//    NB! ../../ert/input/templates/global_variables.tmpl" must be accordingly!
+//
+// AUTHOR(S):
+//    Jan C. Rivenaes
+//    Roger Nyboe
+//    Roelf Mulder
+//    Vibeke Bruvoll
+//    Rannveig Elise Otterlei
+//    Paul Valle
+//
+// DESCRIPTION:
+//    Global file for Troll FMU model
+//
+// CHANGELOG:
+//    20170130: First version for 16a/r002, fully rewritten from r001 (JRIV)
+//    20170607: Added FWL and GOC (rnyb)
+//    20170818: Added Kh multiplier and kvkh values per facies (rnyb)
+//    20171106: Edited surface categories; added *_MAINRES_INPUT (jriv)
+//    20180119: Added 4d dates --> input to sim2seis (rnyb)
+//    20180208: Added GEOGRID* names (jriv)
+//    20180405: Added VARIOGRAM_RANGE and OVERBURDEN (pjv/jriv)
+//    20180509: Added a and b values for geo sw model j function (rnyb)
+//    20180604: Added diffdate 2016-2010 (rnyb)
+//
+//=============================================================================
+//
+String  MODEL_ID = "work_in_progress"
+
+
+String  DCONV_SURF[], TOP_MAINRES[], TOP_RES[], ZONE_RES[], TOP_EROSION, BCU
+String  TOP_PARAS[], ZONE_PARAS[], ZONE_MAINRES[], ZONE_ALL[], TOP_LOBE[]
+String  TOP_MAINRES_INPUT[], ZONE_MAINRES_INPUT[], OVERBURDEN
+
+Int     NZRU[], NZRL[], i_local
+Int     N_TOP_SO62, N_TOP_SO45, N_TOP_SO36, N_TOP_FENS63
+
+Float   FWL[], GOC[]
+Float   KH_MULT_CSAND, KH_MULT_MTR, KH_MULT_MST, KVKH_CSAND, KVKH_MTR, KVKH_MST, MAX_KH
+Float   SWIRR[], AVALUE[], BVALUE[], POROREF[], PERMREF[], SWLHEIGHT
+Float   NW[], NOW[], KRWEND[], SORW[], SORG[], SGCR[], NOG[], NG[], KRGEND[], SWCR_ADD[]
+Float   A_OIL_CSAND, B_OIL_CSAND, A_OIL_MTR, B_OIL_MTR, A_OIL_MST, B_OIL_MST
+Float   A_GAS_CSAND, B_GAS_CSAND, A_GAS_MTR, B_GAS_MTR, A_GAS_MST, B_GAS_MST
+
+Float   VARIOGRAM_RANGE
+
+String  DATES4D[], DIFF4D_DATES[], FROM_DATE_4D[], TO_DATE_4D[]
+Int     ECLIPSE_DATES[], DIFFCOUNT
+
+String  GEOGRIDNAME, GEOSUBGRIDNAME[]
+
+//=============================================================================
+// Horizons top and zone (thickness/iso) names
+//=============================================================================
+
+// names on main surfaces for depth conversion
+DCONV_SURF[1] = "SEABED"
+DCONV_SURF[2] = "BaseQUAT"
+DCONV_SURF[3] = "BasePLIO"
+DCONV_SURF[4] = "TopSO62"
+DCONV_SURF[5] = "TopSO62_flatspot"
+DCONV_SURF[6] = "TopFENS63_flatspot"
+DCONV_SURF[7] = "TopBRENT"
+
+// actual current top Sogn interpretation, but not with air interpr.
+// but note that all other below are ~aka air intepreted!
+TOP_EROSION = "BCU"
+BCU = "BCU"
+
+// main reservoir TOP names
+TOP_MAINRES[1]  = "TopSO62"
+TOP_MAINRES[2]  = "TopSO45"
+TOP_MAINRES[3]  = "TopSO36"
+TOP_MAINRES[4]  = "TopFENS63"
+TOP_MAINRES[5]  = "TopBRENT"
+
+// need an overburden interval in HUM
+OVERBURDEN = "MSL_TopSO62"
+
+// main reservoir ZONE names
+ZONE_MAINRES[1]  = "TopSO62_TopSO45"
+ZONE_MAINRES[2]  = "TopSO45_TopSO36"
+ZONE_MAINRES[3]  = "TopSO36_TopFENS63"
+ZONE_MAINRES[4]  = "TopFENS63_TopBRENT"
+
+// some important tops for the next lists
+N_TOP_SO62 = 3
+N_TOP_SO45 = 8
+N_TOP_SO36 = 13
+
+// all reservoir TOP names
+TOP_RES[1]  = "TopDRAUPNE"
+TOP_RES[2]  = "TopHEATHERC"
+TOP_RES[3]  = "TopSO62"
+TOP_RES[4]  = "TopSO61"
+TOP_RES[5]  = "TopSO53"
+TOP_RES[6]  = "TopSO52"
+TOP_RES[7]  = "TopSO51"
+TOP_RES[8]  = "TopSO45"
+TOP_RES[9]  = "TopSO44"
+TOP_RES[10] = "TopSO43"
+TOP_RES[11] = "TopSO42"
+TOP_RES[12] = "TopSO41"
+TOP_RES[13] = "TopSO36"
+TOP_RES[14] = "TopSO34"
+TOP_RES[15] = "TopSO33"
+TOP_RES[16] = "TopSO32"
+TOP_RES[17] = "TopSO31"
+TOP_RES[18] = "TopSO22"
+TOP_RES[19] = "TopSO21"
+TOP_RES[20] = "TopFENS63"
+TOP_RES[21] = "TopFENS62"
+TOP_RES[22] = "TopFENS61"
+TOP_RES[23] = "TopFENS52"
+TOP_RES[24] = "TopFENS51"
+TOP_RES[25] = "TopFENS4"
+TOP_RES[26] = "TopFENS3"
+TOP_RES[27] = "TopFENS2"
+TOP_RES[28] = "TopFENS1"
+TOP_RES[29] = "TopKROSS"
+TOP_RES[30] = "TopHEATHERA"
+TOP_RES[31] = "TopBRENT"
+
+// all reservoir ZONE names
+ZONE_RES[1]  = "DRAUPNE"
+ZONE_RES[2]  = "HEATHERC"
+ZONE_RES[3]  = "SO62"
+ZONE_RES[4]  = "SO61"
+ZONE_RES[5]  = "SO53"
+ZONE_RES[6]  = "SO52"
+ZONE_RES[7]  = "SO51"
+ZONE_RES[8]  = "SO45"
+ZONE_RES[9]  = "SO44"
+ZONE_RES[10] = "SO43"
+ZONE_RES[11] = "SO42"
+ZONE_RES[12] = "SO41"
+ZONE_RES[13] = "SO36"
+ZONE_RES[14] = "SO34"
+ZONE_RES[15] = "SO33"
+ZONE_RES[16] = "SO32"
+ZONE_RES[17] = "SO31"
+ZONE_RES[18] = "SO22"
+ZONE_RES[19] = "SO21"
+ZONE_RES[20] = "FENS63"
+ZONE_RES[21] = "FENS62"
+ZONE_RES[22] = "FENS61"
+ZONE_RES[23] = "FENS52"
+ZONE_RES[24] = "FENS51"
+ZONE_RES[25] = "FENS4"
+ZONE_RES[26] = "FENS3"
+ZONE_RES[27] = "FENS2"
+ZONE_RES[28] = "FENS1"
+ZONE_RES[29] = "KROSS"
+ZONE_RES[30] = "HEATHERA"
+
+// Number range of each stack of isochores between main surfaces
+// cf numbering in ZONE_RES:
+
+// Sogn 6 and 5 series
+NZRU[1] = 3
+NZRL[1] = 7
+
+// Sogn 4 series
+NZRU[2] = 8
+NZRL[2] = 12
+
+// Sogn 3 and 2 series
+NZRU[3] = 13
+NZRL[3] = 19
+
+// Fens+Kross+HeatherA
+NZRU[4] = 20
+NZRL[4] = 30
+
+//------------------------------------------------------------
+// Set variogram ranges for HUM jobs
+//    set range and subrange for residual variograms in
+//    HUM job "HUM_GF_pass3". Introuduced as a
+//    workaround since RMS seems to re-use the number
+//    set for "residiual variogram range" also for
+//    "residual variogram subrange" even if the user
+//    try to set the values for these parameters
+//    individually (bug in RMS10.1.3?).
+//
+// Value for residual variogram range = the value set
+// from this file. The value for residual variogram subrange
+// is set to 0.5*residual variogram range.
+//
+// Used in StructuralModelDepthWorkflow/Make_GF_pass3
+// -----------------------------------------------------------
+
+VARIOGRAM_RANGE = 2500
+
+// seismically defined main OR patchy lobe tops within SOGN
+TOP_PARAS[1]  = "TopSO62"
+TOP_PARAS[2]  = "TopSO52"
+TOP_PARAS[3]  = "TopSO51"
+TOP_PARAS[4]  = "TopSO45"
+TOP_PARAS[5]  = "TopSO44"
+TOP_PARAS[6]  = "TopSO43"
+TOP_PARAS[7]  = "TopSO42"
+TOP_PARAS[8]  = "TopSO41"
+TOP_PARAS[9]  = "TopSO36"
+TOP_PARAS[10] = "TopSO34"
+TOP_PARAS[11] = "TopSO33"
+TOP_PARAS[12] = "TopSO32"
+TOP_PARAS[13] = "TopSO31"
+TOP_PARAS[14] = "TopSO22"
+TOP_PARAS[15] = "TopSO21"
+TOP_PARAS[16] = "TopFENS63"
+
+// seismically patchy lobe tops ONLY
+TOP_LOBE[1]  = "TopSO52"
+TOP_LOBE[2]  = "TopSO51"
+TOP_LOBE[3]  = "TopSO44"
+TOP_LOBE[4]  = "TopSO43"
+TOP_LOBE[5]  = "TopSO42"
+TOP_LOBE[6]  = "TopSO41"
+TOP_LOBE[7]  = "TopSO34"
+TOP_LOBE[8]  = "TopSO33"
+TOP_LOBE[9]  = "TopSO32"
+TOP_LOBE[10] = "TopSO31"
+TOP_LOBE[11] = "TopSO22"
+TOP_LOBE[12] = "TopSO21"
+
+
+ZONE_PARAS[1]= "SO62"
+ZONE_PARAS[2]= "SO52"
+ZONE_PARAS[3]= "SO51"
+ZONE_PARAS[4]= "SO45"
+ZONE_PARAS[5]= "SO44"
+ZONE_PARAS[6]= "SO43"
+ZONE_PARAS[7]= "SO42"
+ZONE_PARAS[8]= "SO41"
+ZONE_PARAS[9]= "SO36"
+ZONE_PARAS[10]= "SO34"
+ZONE_PARAS[11]= "SO33"
+ZONE_PARAS[12]= "SO32"
+ZONE_PARAS[13]= "SO31"
+ZONE_PARAS[14]= "SO22"
+ZONE_PARAS[15]= "SO21"
+
+//-----------------------------------------
+// GridModel names
+//-----------------------------------------
+GEOGRIDNAME = "Geogrid"
+
+// start from ZONES_RES 2 as DRAUPNE is not modelled
+FOR i_local FROM 2 TO ZONE_RES.length DO
+    GEOSUBGRIDNAME[i_local - 1] = "Geogrid_" + ZONE_RES[i_local]
+ENDFOR
+
+//-----------------------------------------
+// FWL and GOC per segment
+//-----------------------------------------
+// used in
+//   1) fwl_and_paleocontact.ipl (workflow: Paleo_satnum_geo)
+//   2) create_fwl_goc_parameter.ipl (workflow: WaterSaturation)
+//   3) troll_equil.ipl (workflow: export_to _eclipse)
+//
+FWL[1] =1553.0
+FWL[2] =1560.0
+FWL[3] =1557.0
+FWL[4] =1557.5
+FWL[5] =1557.5
+FWL[6] =1557.5
+FWL[7] =1557.5
+FWL[8] =1557.5
+FWL[9] =1557.5
+FWL[10]=1555.5
+FWL[11]=1553.0
+FWL[12]=1552.5
+FWL[13]=1557.5
+FWL[14]=1557.5
+FWL[15]=1557.5
+FWL[16]=1557.5
+FWL[17]=1557.5
+FWL[18]=1568.0
+FWL[19]=1567.5
+FWL[20]=1568.5
+FWL[21]=1567.5
+
+
+GOC[1] =1543.0
+GOC[2] =1545.0
+GOC[3] =1542.0
+GOC[4] =1544.5
+GOC[5] =1544.5
+GOC[6] =1544.5
+GOC[7] =1544.5
+GOC[8] =1546.0
+GOC[9] =1546.0
+GOC[10]=1542.5
+GOC[11]=1545.0
+GOC[12]=1544.5
+GOC[13]=1544.5
+GOC[14]=1544.5
+GOC[15]=1544.5
+GOC[16]=1544.5
+GOC[17]=1544.5
+GOC[18]=1541.0
+GOC[19]=1541.5
+GOC[20]=1542.5
+GOC[21]=1546.0
+
+
+//-----------------------------------------
+// Kh multiplier and Kv/Kh per facies
+//-----------------------------------------
+// used in
+//   1) perm_mult.ipl (workflow: Upscaling) --> operations are on the geogrid parameters (prior to upscale)
+//
+
+KH_MULT_CSAND = 1.0
+KH_MULT_MTR   = 1.0
+KH_MULT_MST   = 1.0
+
+MAX_KH = 50000   // truncate KHLOG if exceeding this value
+
+KVKH_CSAND = 1.0
+KVKH_MTR   = 0.1
+KVKH_MST   = 0.1
+
+
+//-----------------------------------------
+// geo water saturation model, j-function  a and b values
+//-----------------------------------------
+// used in
+//   1) update_sw_model.ipl (workflow: water_saturation)
+//      --> updated values parsed to 'sw_model_oil' and 'sw_model_gas' jobs
+
+A_OIL_CSAND = 8.0152    A_OIL_MTR = 3.328      A_OIL_MST = 0.4746          // a value per facies, rms simplified J-function
+B_OIL_CSAND = -2.2573   B_OIL_MTR = -2.994     B_OIL_MST = -4.9261          // b value per facies, rms simplified J-function
+
+A_GAS_CSAND = 9.803    A_GAS_MTR = 1.4039      A_GAS_MST = 0.6017          // a value per facies, rms simplified J-function
+B_GAS_CSAND = -2.1598  B_GAS_MTR = -3.096      B_GAS_MST = -3.69          // b value per facies, rms simplified J-function
+
+
+//-----------------------------------------
+//----------------------------------------------------------
+// Values used in the RMS ipl script 'eclipse_saturation_table.ipl'
+// Values are linked to the upscaled satnum which is upscaled based on 'create_satnum_geo.ipl'
+// Consistency must be checked manually!!
+
+//swirr, a and b used in simplified J equation (nb! does not affect values in rms sw job, only eclipse sw - check consistency manually)
+FOR i_local FROM 1 TO 6 DO
+   SWIRR[i_local]=0.0         //rms swirr set to zero (asymptotic value; a value>0 will shift curves towards higher sw)
+ENDFOR
+
+// a value and b values in rms simplified J
+// Csand: above paleo contact = 1, below paleo conatct = 4
+// Msand: above paleo contact = 2-3, below paleo conatct = 5-6
+AVALUE[1]=A_OIL_CSAND  AVALUE[2]=A_OIL_MTR   AVALUE[3]=A_OIL_MST   AVALUE[4]=AVALUE[1]  AVALUE[5]=AVALUE[2]  AVALUE[6]=AVALUE[3]
+BVALUE[1]=B_OIL_CSAND  BVALUE[2]=B_OIL_MTR   BVALUE[3]=B_OIL_MST   BVALUE[4]=BVALUE[1]  BVALUE[5]=BVALUE[2]  BVALUE[6]=BVALUE[3]
+
+// Reference porosity and permeability used in Pc calculation per satnum (not used in current set-up with eclipse JFUNC)
+POROREF[1]=0.30  POROREF[2]=0.27  POROREF[3]=0.23   POROREF[4]=POROREF[1]  POROREF[5]=POROREF[2]  POROREF[6]=POROREF[3]
+PERMREF[1]=4500  PERMREF[2]=400   PERMREF[3]=50     PERMREF[4]=PERMREF[1]  PERMREF[5]=PERMREF[2]  PERMREF[6]=PERMREF[3]
+
+SWLHEIGHT = 250       // for computing swl (swl = sw at swlheight)
+
+// water corey exponent
+NW[1]=4.0    NW[2]=4.0    NW[3]=4.0             NW[4]=NW[1]    NW[5]=NW[2]    NW[6]=NW[3]
+
+// oil corey exponent (wrt water)
+NOW[1]=3.0  NOW[2]=3.0   NOW[3]=3.0             NOW[4]=NOW[1]  NOW[5]=NOW[2]  NOW[6]=NOW[3]
+
+// water relperm endpoint, i.e. krw@sorw
+KRWEND[1]=0.6  KRWEND[2]=0.6  KRWEND[3]=0.6     KRWEND[4]=KRWEND[1]  KRWEND[5]=KRWEND[2]  KRWEND[6]=KRWEND[3]
+
+// Residual oil saturation wrt water
+SORW[1]=0.15     SORW[2]=0.15    SORW[3]=0.15   SORW[4]=SORW[1]    SORW[5]=SORW[2]    SORW[6]=SORW[3]
+
+// Residual oil saturation wrt gas
+SORG[1]=0.075   SORG[2]=0.075   SORG[3]=0.075   SORG[4]=SORG[1]    SORG[5]=SORG[2]    SORG[6]=SORG[3]
+
+// Critical gas saturation
+SGCR[1]=0.05    SGCR[2]=0.05    SGCR[3]=0.05    SGCR[4]=SGCR[1]    SGCR[5]=SGCR[2]    SGCR[6]=SGCR[3]
+
+// oil corey exponent (wrt gas)
+NOG[1]=3.0  NOG[2]=3.0  NOG[3]=3.0              NOG[4]=NOG[1]  NOG[5]=NOG[2]  NOG[6]=NOG[3]
+
+// gas corey exponent
+NG[1]=2.0    NG[2]=2.0    NG[3]=2.0             NG[4]=NG[1]    NG[5]=NG[2]    NG[6]=NG[3]
+
+// gas relperm endpoint, i.e. krg@swl+sorg
+KRGEND[1]=0.9  KRGEND[2]=0.9  KRGEND[3]=0.9     KRGEND[4]=KRGEND[1]  KRGEND[5]=KRGEND[2]  KRGEND[6]=KRGEND[3]
+
+// SWCR_ADD - swcr is defined as follows: swcr= swl + swcr_add
+// swl (irreducible water saturation)  is calculated at a specified height SWLHEIGHT abobe the FWL from the j-function,
+// swcr_add in a constant added to swl to achive swcr (critical water saturation)
+FOR i_local FROM 1 TO 6 DO
+   SWCR_ADD[i_local]=0.01
+ENDFOR
+
+//SPECIFY SURVEY ON THE FOLLOWING FORMAT YYYYMMDD
+ECLIPSE_DATES[1]=19910701
+ECLIPSE_DATES[2]=20010701
+ECLIPSE_DATES[3]=20030701
+ECLIPSE_DATES[4]=20050701
+ECLIPSE_DATES[5]=20070701
+ECLIPSE_DATES[6]=20100701
+ECLIPSE_DATES[7]=20130601
+ECLIPSE_DATES[8]=20160701
+
+DATES4D[1]=ECLIPSE_DATES[1]
+DATES4D[2]=ECLIPSE_DATES[2]
+DATES4D[3]=ECLIPSE_DATES[3]
+DATES4D[4]=ECLIPSE_DATES[4]
+DATES4D[5]=ECLIPSE_DATES[5]
+DATES4D[6]=ECLIPSE_DATES[6]
+DATES4D[7]=ECLIPSE_DATES[7]
+DATES4D[8]=ECLIPSE_DATES[8]
+
+DIFF4D_DATES[1]   = "20010701_19910701"
+DIFF4D_DATES[2]   = "20030701_20010701"
+DIFF4D_DATES[3]   = "20050701_20030701"
+DIFF4D_DATES[4]   = "20070701_20050701"
+DIFF4D_DATES[5]   = "20100701_20070701"
+DIFF4D_DATES[6]   = "20130601_20100701"
+DIFF4D_DATES[7]   = "20160701_20130601"
+DIFF4D_DATES[8]   = "20160701_20100701"
+DIFF4D_DATES[9]   = "20030701_19910701"
+DIFF4D_DATES[10]  = "20050701_19910701"
+DIFF4D_DATES[11]  = "20070701_19910701"
+DIFF4D_DATES[12]  = "20100701_19910701"
+DIFF4D_DATES[13]  = "20130601_19910701"
+DIFF4D_DATES[14]  = "20160701_19910701"
+
+FOR DIFFCOUNT FROM 1 TO DIFF4D_DATES.length DO
+	TO_DATE_4D[DIFFCOUNT]     =  StringRange(DIFF4D_DATES[DIFFCOUNT],1,8)
+	FROM_DATE_4D[DIFFCOUNT]   =  StringRange(DIFF4D_DATES[DIFFCOUNT],10,17)
+ENDFOR
