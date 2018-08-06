@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Script for converting the global config to various flavours of suiteble
-flavours"""
+flavours."""
 
 from __future__ import division, print_function, absolute_import
 
@@ -8,18 +8,11 @@ import argparse
 import sys
 import os.path
 
-import fmu_config
-from xtgeo.common import XTGeoDialog
+import fmu.config as fmu_config
 
-from fmu_config import _version as vv
+from fmu.config import _version
 
-appname = 'fmuconfigrunner'
-
-__version__ = vv.get_versions()['version']
-
-xtg = XTGeoDialog()
-
-logger = xtg.functionlogger(__name__)
+__version__ = _version.get_versions()['version']
 
 
 def _do_parse_args(args):
@@ -36,15 +29,11 @@ def _do_parse_args(args):
         usage=usetxt
     )
 
-    parser.add_argument('--input',
-                        dest='infile',
+    parser.add_argument('-c', '--config',
+                        dest='config',
                         type=str,
-                        help='Input file name')
-
-    parser.add_argument('--output',
-                        dest='outfile',
-                        type=str,
-                        help='Output file name')
+                        help=('Input global config master file name '
+                              'on YAML format'))
 
     parser.add_argument('--mode',
                         dest='mode',
@@ -77,24 +66,25 @@ def _do_parse_args(args):
     if len(args) < 2:
         parser.print_help()
         print('QUIT')
-        sys.exit(0)
+        raise SystemExit
 
     args = parser.parse_args(args)
     return args
 
 
 def main(args=None):
+    """The fmuconfigrunner is a script that takes ..."""
 
     args = _do_parse_args(args)
 
     cfg = fmu_config.ConfigParserFMU()
 
-    xtg.say('OK {}'.format(cfg))
+    print('OK {}'.format(cfg))
 
-    if isinstance(args.infile, str):
-        if not os.path.isfile(args.infile):
+    if isinstance(args.config, str):
+        if not os.path.isfile(args.config):
             raise IOError('Input file does not exist')
-        cfg.parse(args.infile)
+        cfg.parse(args.config)
 
     if args.mode == 'ipl':
         print('Mode is IPL')

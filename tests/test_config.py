@@ -5,8 +5,8 @@ from __future__ import print_function
 
 import os.path
 
-import fmu_config
-import fmu_config.fmuconfigrunner as rr
+from fmu import config
+import fmu.config.fmuconfigrunner as rr
 
 from xtgeo.common import XTGeoDialog
 
@@ -18,13 +18,19 @@ xxx = XTGeoDialog()
 logger = xxx.basiclogger(__name__)
 testdir = 'TMP'
 
+try:
+    os.makedirs(testdir)
+except OSError:
+    if not os.path.isdir(testdir):
+        raise
+
 
 def test_basic_troll():
     """Test basic behaviour"""
 
-    cfg = fmu_config.ConfigParserFMU()
+    cfg = config.ConfigParserFMU()
 
-    assert isinstance(cfg, fmu_config.ConfigParserFMU)
+    assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(tfile1)
 
@@ -39,9 +45,9 @@ def test_basic_troll():
 def test_basic_troll2():
     """Test basic behaviour"""
 
-    cfg = fmu_config.ConfigParserFMU()
+    cfg = config.ConfigParserFMU()
 
-    assert isinstance(cfg, fmu_config.ConfigParserFMU)
+    assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(tfile2)
 
@@ -54,12 +60,13 @@ def test_basic_troll2():
     logger.info('Test dir is {}'.format(testdir))
     cfg.to_ipl(destination=os.path.join(testdir, 'myfile.ipl'))
 
+
 def test_basic_reek():
     """Test basic behaviour, Reek setup"""
 
-    cfg = fmu_config.ConfigParserFMU()
+    cfg = config.ConfigParserFMU()
 
-    assert isinstance(cfg, fmu_config.ConfigParserFMU)
+    assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(rfile1)
 

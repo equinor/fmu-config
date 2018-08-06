@@ -1,4 +1,4 @@
-Welcome to fmu_config's documentation!
+Welcome to fmu-config's documentation!
 ======================================
 
 Contents:

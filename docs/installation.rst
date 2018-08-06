@@ -12,18 +12,18 @@ The stable release of the scripts is on /project/res, so it can be run as:
 
 .. code-block:: console
 
-    $ text_to_come<options>
+    $ fmuconfig the_master_file.yml
 
 From sources
 ------------
 
-The sources for fmu_config can be downloaded from the `Statoil Git repo`_.
+The sources for fmu-config can be downloaded from the `Statoil Git repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://git.statoil.no/fmu-utilities/fmu_config
+    $ git clone git://git.statoil.no/fmu-utilities/fmu-config
 
 Once you have a copy of the source, and you have a `virtual environment`_,
 you can install it with:
@@ -33,5 +33,5 @@ you can install it with:
     $ make install
 
 
-.. _Statoil Git repo: https://git.statoil.no/fmu-utilities/fmu_config
+.. _Statoil Git repo: https://git.statoil.no/fmu-utilities/fmu-config
 .. _virtual environment: http://docs.python-guide.org/en/latest/dev/virtualenvs/

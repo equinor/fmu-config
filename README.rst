@@ -1,16 +1,6 @@
-==============================
-The script library *fmu_utils*
-==============================
+===============================
+The script library *fmu.config*
+===============================
 
 
-Text to come
-
-
-Features
---------
-
-A set of smaller snippets are ran from this library:
-
-* one
-* two
-* three
+FMU config is a Python library to facilitate a global configuration in FMU.
