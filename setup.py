@@ -16,6 +16,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
+    'oyaml',
 ]
 
 setup_requirements = [
@@ -27,17 +28,17 @@ test_requirements = [
 ]
 
 fmuconfig_function = ('fmuconfig='
-                      'fmu_config.fmuconfigrunner:main')
+                      'fmu.config.fmuconfigrunner:main')
 
 setup(
-    name='fmu_config',
+    name='fmu.config',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="Library for various smaller scripts in FMU scope",
     long_description=readme + '\n\n' + history,
     author="Jan C. Rivenaes",
     author_email='jriv@statoil.com',
-    url='https://git.statoil.no/fmu-utilities/fmu_config',
+    url='https://git.equinor.com/fmu-utilities/fmu-config',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -47,7 +48,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
-    keywords='fmu_config',
+    keywords='fmu, config',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

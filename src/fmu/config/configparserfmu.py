@@ -1,22 +1,24 @@
+"""Module for parsing global configuration for FMU.
+
+This module will be ran from the `fmuconfig` script, which is the
+front-end for the user.
+"""
+
+from __future__ import division, absolute_import
+from __future__ import print_function
+
 import os
 import sys
 import errno
-import pprint
 import re
 import getpass
 import socket
-#from datetime import datetime
 import datetime
 
 import json
 import oyaml as yaml  # for ordered dicts!
-import xtgeo
 
 from ._loader import Loader
-
-# just borrow a few useful things from xtgeo
-xxx = xtgeo.common.XTGeoDialog()
-logger = xxx.functionlogger(__name__)
 
 
 class ConfigParserFMU(object):
@@ -29,10 +31,12 @@ class ConfigParserFMU(object):
 
     @property
     def config(self):
+        """Get the current config as a Python dictionary (read only)."""
         return self._config
 
     @property
     def yamlfile(self):
+        """The name of the input YAML formatted file (read only)."""
         return self._yamlfile
 
     def parse(self, yfile):
@@ -43,14 +47,11 @@ class ConfigParserFMU(object):
         self._yamlfile = yfile
 
     def show(self, style='yaml'):
-        """Show the current configuration to STDOUT.
+        """Show (print) the current configuration to STDOUT.
 
         Args:
-            style: Choose between 'yaml, 'json' or 'pretty'"""
+            style: Choose between 'yaml' (default), or 'json'"""
 
-        # pp = pprint.PrettyPrinter(indent=4)
-
-        # pp.pprint(self.config)
         if style in ('yaml', 'yml'):
             yaml.dump(self.config, stream=sys.stdout)
         elif style in ('json', 'jason'):
@@ -139,7 +140,7 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both desitionation and template are None.'
+            raise ValueError('Both destionation and template are None.'
                              'At least one of them has to be set!.')
 
         if createfolders:
@@ -160,18 +161,23 @@ class ConfigParserFMU(object):
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
-    def to_ipl(self, destination='global_variables.ipl', template=False):
-        """Export the config as a global variables IPL and template.
+    def to_ipl(self, rootname='global_variables.ipl', destination=None,
+               template=None, tool='rms'):
+        """Export the config as a global variables IPL and/or template.
 
         Args:
-            destination (str): The output file.
-            template (str): If True, a templated version of the file (for ERT)
+            rootname: Root file name without extension. An extension
+                .ipl will be added for destination, and .tmpl
+                for template output.
+            destination (str): The output file destination (folder)
+            template (str): The folder for the templated version of the
+                IPL (for ERT).
             tool (str): Which section in the master to use (default is 'rms')
-
         """
 
-        if not destination:
-            raise ValueError('Destination for IPL cannot be None.')
+        if not destination and not template:
+            raise ValueError('Both destination and template for IPL cannot '
+                             'be None.')
 
         declarations = []
         expressions = []
@@ -179,12 +185,12 @@ class ConfigParserFMU(object):
         metadata = self._get_sysinfo(commentmarker='//')
         declarations.extend(metadata)
 
-        hdecl, hlist = self._ipl_stringlist_format('horizons')
+        hdecl, hlist = self._ipl_stringlist_format('horizons', tool=tool)
         if hdecl is not None:
             declarations.extend(hdecl)
             expressions.extend(hlist)
 
-        hdecl, hlist = self._ipl_stringlist_format('zones')
+        hdecl, hlist = self._ipl_stringlist_format('zones', tool=tool)
         if hdecl is not None:
             declarations.extend(hdecl)
             expressions.extend(hlist)
@@ -206,10 +212,10 @@ class ConfigParserFMU(object):
             for line in expressions_dest:
                 stream.write(line)
 
-    def _ipl_stringlist_format(self, subtype):
+    def _ipl_stringlist_format(self, subtype, tool='rms'):
         """Process the rms horizons etc, and return declarations and values."""
 
-        cfg = self.config['rms'].get(subtype)
+        cfg = self.config[tool].get(subtype)
         if cfg is None:
             return None, None
 
@@ -259,7 +265,7 @@ class ConfigParserFMU(object):
             return None, None
 
         for variable in freeform_keys:
-            logger.info('Variable to process is {}'.format(variable))
+            print('Variable to process is {}'.format(variable))
             expr.append('\n')
             mydtype = cfg[variable]['dtype']
             if 'str' in mydtype:
@@ -349,14 +355,14 @@ class ConfigParserFMU(object):
         cfg = self.config
 
         for deck in cfg['eclipse']:
-            logger.info('Deck is {}'.format(deck))
+            print('Deck is %s', deck)
             edeck = cfg['eclipse'][deck]
 
             content = edeck['content']
             content_dest = self._get_dest_form(content)
             content_tmpl = self._get_tmpl_form(content)
-            logger.info(content_dest)
-            logger.info(content_tmpl)
+            print(content_dest)
+            print(content_tmpl)
 
             with open(edeck['destfile'], 'w') as dest:
                 dest.write(content_dest)
@@ -417,7 +423,7 @@ class ConfigParserFMU(object):
         pattern = '[a-zA-Z0-9.]+~'
 
         if isinstance(stream, list):
-            logger.info('STREAM is a list object')
+            print('STREAM is a list object')
             result = []
             for item in stream:
                 moditem = re.sub(pattern, '', item)
@@ -437,7 +443,7 @@ class ConfigParserFMU(object):
         """Given variables..."""
 
         if isinstance(stream, list):
-            logger.info('STREAM is a list object')
+            print('STREAM is a list object')
             result = []
             for item in stream:
                 moditem = re.sub('\~.*>', '', item)

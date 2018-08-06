@@ -30,7 +30,8 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 
-APPLICATION := fmu_config
+APPLICATION := fmu/config
+SRCAPPLICATION := src/fmu/config
 DOCSINSTALL := /project/sdpdocs/FMU/lib
 
 # A list of the applications
@@ -90,7 +91,7 @@ clean-test: ## remove test and coverage artifacts
 
 
 lint: ## check style with flake8
-	flake8 ${APPLICATION} tests
+	flake8 ${SRCAPPLICATION} tests
 
 
 test:  ## run tests quickly with the default Python
@@ -102,7 +103,7 @@ test-all: ## run tests on every Python version with tox (not active)
 
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source ${APPLICATION} -m pytest
+	coverage run --source ${SRCAPPLICATION} -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
@@ -112,7 +113,7 @@ docsrun: clean ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/${APPLICATION}*.rst
 	rm -f docs/modules.rst
 	rm -fr docs/_build
-	# sphinx-build -o docs/ src/${APPLICATION}
+	sphinx-apidoc -H "FMU CONFIG" -o docs ${SRCAPPLICATION}
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
