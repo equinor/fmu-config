@@ -24,7 +24,7 @@ setup_requirements = [
 ]
 
 test_requirements = [
-    'pytest',
+    'pytest', 'pytest-catchlog',
 ]
 
 fmuconfig_function = ('fmuconfig='
@@ -34,7 +34,7 @@ setup(
     name='fmu.config',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    description="Library for various smaller scripts in FMU scope",
+    description="Library for various config scripts in FMU scope",
     long_description=readme + '\n\n' + history,
     author="Jan C. Rivenaes",
     author_email='jriv@statoil.com',

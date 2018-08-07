@@ -18,16 +18,20 @@ import datetime
 import json
 import oyaml as yaml  # for ordered dicts!
 
-from ._loader import Loader
+from fmu.config._loader import Loader
+from fmu.config import etc
+
+xfmu = etc.Interaction()
+logger = xfmu.functionlogger(__name__)
 
 
 class ConfigParserFMU(object):
-    """Class for parsing config files for FMU."""
+    """Class for parsing global config files for FMU."""
 
     def __init__(self):
-
         self._config = {}
         self._yamlfile = None
+        logger.debug('Ran __init__')
 
     @property
     def config(self):
@@ -52,6 +56,7 @@ class ConfigParserFMU(object):
         Args:
             style: Choose between 'yaml' (default), or 'json'"""
 
+        xfmu.echo('Output of configuration:')
         if style in ('yaml', 'yml'):
             yaml.dump(self.config, stream=sys.stdout)
         elif style in ('json', 'jason'):
