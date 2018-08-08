@@ -97,11 +97,11 @@ rms:
 
   KH_MULT_CSAND:
     dtype: float
-    value: 1.0
+    value: 1.0  ~<KH_MULT_CSAND>  # in <...>: template value from ERT
 
   KH_MULT_MTR:
     dtype: float
-    value: 1.0
+    value: 1.0 ~ <KH_MULT_MTR>
 
   KH_MULT_MST:
     dtype: float
