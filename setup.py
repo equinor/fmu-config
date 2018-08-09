@@ -24,7 +24,7 @@ setup_requirements = [
 ]
 
 test_requirements = [
-    'pytest', 'pytest-catchlog',
+    'pytest',
 ]
 
 fmuconfig_function = ('fmuconfig='

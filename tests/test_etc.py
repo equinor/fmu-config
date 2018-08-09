@@ -5,21 +5,32 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import pytest
+
 from fmu.config import etc
 
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
+# always this statement
+if not fmux.testsetup():
+    raise SystemExit()
 
-def test_info_logger(caplog):  # note caplog is an extension to be installed!
+
+@pytest.fixture()
+def mylogger():
+    # need to do it like this...
+    mlogger = fmux.basiclogger(__name__, level='DEBUG')
+    return mlogger
+
+
+def test_info_logger(mylogger, caplog):
     """Test basic logger behaviour, will capture output to stdin"""
 
-    logger.info('This is a test')
-    print(caplog.text)
+    mylogger.info('This is a test')
     assert 'This is a test' in caplog.text
 
     logger.warn('This is a warning')
-    print(caplog.text)
     assert 'This is a warning' in caplog.text
 
 
