@@ -146,8 +146,8 @@ siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
 	\rm -fr  ${TARGET}/${APPLICATION}
 	\rm -fr  ${TARGET}/${APPLICATION}-*
-	@${PIP} install --target ${TARGET} --upgrade  ./dist/${APPLICATION}*.whl
-	/project/res/bin/res_perm ${TARGET}/${APPLICATION}*
+	@${PYTHON} -m pip install --target ${TARGET} --upgrade  ./dist/${APPLICATIONROOT}*.whl
+	/project/res/bin/res_perm ${TARGET}/${APPLICATIONROOT}*
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
 	$(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )
