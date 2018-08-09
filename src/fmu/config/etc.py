@@ -77,6 +77,8 @@ class Interaction(object):
         self._caller = None
         self._lformat = None
         self._lformatlevel = 1
+        self._logginglevel = 'CRITICAL'
+        self._loggingname = ''
         self._syslevel = 1
         self._test_env = True
         self._tmpdir = 'TMP'
@@ -89,7 +91,7 @@ class Interaction(object):
         loggingformat = os.environ.get('FMU_LOGGING_FORMAT')
 
         if logginglevel is not None:
-            self._logginglevel = str(logginglevel)
+            self.logginglevel = logginglevel
 
         if loggingformat is not None:
             self._lformatlevel = int(loggingformat)
@@ -110,7 +112,7 @@ class Interaction(object):
     @logginglevel.setter
     def logginglevel(self, level):
         # pylint: disable=pointless-statement
-        validlevels = ('INFO', 'DEBUG', 'CRITICAL')
+        validlevels = ('INFO', 'WARNING', 'DEBUG', 'CRITICAL')
         if level in validlevels:
             self._logginglevel == level
         else:
@@ -176,10 +178,14 @@ class Interaction(object):
         print(_BColors.ENDC)
         print('')
 
-    def basiclogger(self, name):
+    def basiclogger(self, name, level='CRITICAL'):
         """Initiate the logger by some default settings."""
 
+        self._logginglevel = level
+        print('YYY', self.logginglevel)
+
         fmt = self.loggingformat
+        self._loggingname = name
         logging.basicConfig(format=fmt, stream=sys.stdout)
         logging.getLogger().setLevel(self.logginglevel)  # root logger!
         logging.captureWarnings(True)
@@ -301,15 +307,19 @@ class Interaction(object):
         if six.PY2:
             # pylint: disable=deprecated-method
             args, _, _, value_dict = inspect.getargvalues(frame)
+            # we check the first parameter for the frame function is
+            # named 'self'
+            if args and args[0] == 'self':
+                instance = value_dict.get('self', None)
+                if instance:
+                    # return its class
+                    return getattr(instance, '__class__', None)
         else:
-            args, _, _, value_dict = inspect.signature(frame)
-        # we check the first parameter for the frame function is
-        # named 'self'
-        if args and args[0] == 'self':
-            instance = value_dict.get('self', None)
-            if instance:
-                # return its class
-                return getattr(instance, '__class__', None)
+            # python3 is incomplete (need more coffee)
+            current = inspect.currentframe()
+            outer = inspect.getouterframes(current)
+            return outer[0]
+
         # return None otherwise
         return None
 
