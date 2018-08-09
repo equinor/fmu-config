@@ -82,7 +82,7 @@ PEP8 and PEP20
   * Avoid one or two letter variables, except for counters. And meaningful names, but don't
     overdo it.
 
-  * See also: https://github.com/google/styleguide/blob/gh-pages/pyguide.md
+  * See also: https://git.equinor.com/fmu-utilities/fmu-coding-practice
 
 
 In addition:
@@ -90,7 +90,7 @@ In addition:
 
 * Start with documentation and tests. Think first!
 
-* Docstrings shall start and end with """ and use Google style:
+* Docstrings shall start and end with """ and use Google style.
 
 * Use a single underscore to protect class properties, and use a single underscore
   in file names for submodules that should not be exposed in the documentation.
@@ -103,23 +103,23 @@ In addition:
 
 
 Use flake8 and/or pylint to check
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  flake8 mycode.py
+  python -m flake8 mycode.py
 
 The pylint command is much stricter and sometimes wrong... , but can be quite useful!
 
-  pylint mycode.py
+  python -m pylint mycode.py
 
 Get Started!
 ------------
 
 Ready to contribute? Here's how to set up `fmu-config` for local development.
 
-1. Fork the `fmu-config` repo on Github
+1. Fork the `fmu-config` repo in web browser to a personal fork
 2. Clone your fork locally::
 
-    $ git clone git@git.equinor.com:fmu-utilities/fmu-config.git
+    $ git clone git@git.equinor.com:<your-user>/fmu-config.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed,
    this is how you set up your fork for local development::
@@ -157,6 +157,7 @@ Pull Request Guidelines
 Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
+
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.

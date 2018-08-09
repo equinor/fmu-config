@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Testing fmu-config."""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -8,20 +10,19 @@ import os.path
 from fmu import config
 # import fmu.config.fmuconfigrunner as fmurun
 
-from xtgeo.common import XTGeoDialog
+TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
+TFILE2 = 'tests/data/yaml/troll2/global_master_config.yml'
+RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'
 
-tfile1 = 'tests/data/yaml/troll1/global_variables.yml'
-tfile2 = 'tests/data/yaml/troll2/global_master_config.yml'
-rfile1 = 'tests/data/yaml/reek1/global_variables.yml'
+fmux = config.etc.Interaction()
+logger = fmux.basiclogger(__name__)
 
-xxx = XTGeoDialog()
-logger = xxx.basiclogger(__name__)
-testdir = 'TMP'
+TESTDIR = 'TMP'
 
 try:
-    os.makedirs(testdir)
+    os.makedirs(TESTDIR)
 except OSError:
-    if not os.path.isdir(testdir):
+    if not os.path.isdir(TESTDIR):
         raise
 
 
@@ -32,7 +33,7 @@ def test_basic_troll():
 
     assert isinstance(cfg, config.ConfigParserFMU)
 
-    cfg.parse(tfile1)
+    cfg.parse(TFILE1)
 
     cfg.show()
 
@@ -46,15 +47,15 @@ def test_basic_troll2():
 
     assert isinstance(cfg, config.ConfigParserFMU)
 
-    cfg.parse(tfile2)
+    cfg.parse(TFILE2)
 
     cfg.show()
     cfg.show(style='json')
 
     # export the config as a global variables IPL
-    logger.info('Test dir is {}'.format(testdir))
-    cfg.to_ipl(destination=os.path.join(testdir),
-               template=os.path.join(testdir))
+    logger.info('Test dir is %s', TESTDIR)
+    cfg.to_ipl(destination=os.path.join(TESTDIR),
+               template=os.path.join(TESTDIR))
 
 
 # def test_basic_reek():
@@ -64,7 +65,7 @@ def test_basic_troll2():
 
 #     assert isinstance(cfg, config.ConfigParserFMU)
 
-#     cfg.parse(rfile1)
+#     cfg.parse(RFILE1)
 
 #     cfg.show()
 
@@ -82,7 +83,7 @@ def test_basic_troll2():
 
 # def test_command_make_ipls():
 #     """Make IPL both global_variable.ipl and global_variables.tmpl, Reek."""
-#     fmurun.main(['--input', rfile1, '--mode', 'ipl'])  # noqa
+#     fmurun.main(['--input', RFILE1, '--mode', 'ipl'])  # noqa
 
 
 # def test_command_make_yamls():
@@ -90,4 +91,4 @@ def test_basic_troll2():
 #     Reek.
 #     """
 
-#     fmurun.main(['--input', rfile1, '--mode', 'yaml', --tool, 'rms'])  # noqa
+#     fmurun.main(['--input', RFILE1, '--mode', 'yaml', --tool, 'rms'])  # noqa

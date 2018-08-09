@@ -177,13 +177,14 @@ class ConfigParserFMU(object):
         """Export the config as a global variables IPL and/or template.
 
         Args:
-            rootname: Root file name without extension. An extension
-                .ipl will be added for destination, and .tmpl
+            rootname (str): Root file name without extension. An extension
+                `ipl` will be added for destination, and `tmpl`
                 for template output.
-            destination (str): The output file destination (folder)
+            destination (str): The output file destination (folder).
             template (str): The folder for the templated version of the
                 IPL (for ERT).
-            tool (str): Which section in the master to use (default is 'rms')
+            tool (str): Which section in the master to use (default is 'rms').
+
         """
 
         # keep code in separate file ( a bit lengthy)
@@ -341,10 +342,10 @@ class ConfigParserFMU(object):
             print('STREAM is a list object')
             result = []
             for item in stream:
-                moditem = re.sub('\~.*>', '', item)
+                moditem = re.sub('~.*>', '', item)
                 result.append(moditem)
         elif isinstance(stream, str):
-            result = re.sub('\~.*>', '', stream)
+            result = re.sub('~.*>', '', stream)
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')

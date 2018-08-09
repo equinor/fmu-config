@@ -1,47 +1,54 @@
 # -*- coding: utf-8 -*-
 """Testing the classes/functions in in the etc module."""
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
-
-import pytest  # need the pytest-catchlog plugin installed!
 
 from fmu.config import etc
 
-xfmu = etc.Interaction()
+fmux = etc.Interaction()
+logger = fmux.basiclogger(__name__)
 
 
-@pytest.fixture()
-def mylogger():
-    # need to do it like this...
-    mylogger = xfmu.basiclogger(__name__)
-    mylogger.logginglevel = 'INFO'
-    return mylogger
-
-
-def test_info_logger(mylogger, caplog):
+def test_info_logger(caplog):  # note caplog is an extension to be installed!
     """Test basic logger behaviour, will capture output to stdin"""
 
-    mylogger.info('This is a test')
+    logger.info('This is a test')
     print(caplog.text)
     assert 'This is a test' in caplog.text
 
-    mylogger.warn('This is a warning')
+    logger.warn('This is a warning')
     print(caplog.text)
     assert 'This is a warning' in caplog.text
 
 
+def test_timer(capsys):
+    """Test the timer function"""
+
+    time1 = fmux.timer()
+    for inum in range(100000):
+        inum += 1
+
+    fmux.echo('Used time was {}'.format(fmux.timer(time1)))
+    captured = capsys.readouterr()
+    assert 'Used time was' in captured[0]
+    # repeat to see on screen
+    fmux.echo('')
+    fmux.warn('Used time was {}'.format(fmux.timer(time1)))
+
+
 def test_print_fmu_header():
     """Test writing an app header."""
-    xfmu.print_fmu_header('MYAPP', '0.99')
+    fmux.print_fmu_header('MYAPP', '0.99', info='Beta release (be careful)')
 
 
 def test_user_msg():
     """Testing user messages"""
 
-    xfmu.echo('')
-    xfmu.echo('This is a message')
-    xfmu.warn('This is a warning')
-    xfmu.warning('This is also a warning')
-    xfmu.error('This is an error')
-    xfmu.critical('This is a critical error', sysexit=False)
+    fmux.echo('')
+    fmux.echo('This is a message')
+    fmux.warn('This is a warning')
+    fmux.warning('This is also a warning')
+    fmux.error('This is an error')
+    fmux.critical('This is a critical error', sysexit=False)
