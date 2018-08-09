@@ -13,6 +13,9 @@ from fmu.config import etc
 xfmu = etc.Interaction()
 logger = xfmu.functionlogger(__name__)
 
+# pylint: disable=protected-access
+# pylint: disable=too-many-branches
+
 
 def to_ipl(self, rootname='global_variables', destination=None,
            template=None, tool='rms'):
@@ -106,8 +109,8 @@ def _ipl_stringlist_format(self, subtype, tool='rms'):
         decl.append(mydecl)
 
         array = cfg[variable]
-        for i, element in enumerate(array):
-            mylist = '{}[{}] = "{}"\n'.format(variable, i + 1, element)
+        for inum, element in enumerate(array):
+            mylist = '{}[{}] = "{}"\n'.format(variable, inum + 1, element)
             expr.append(mylist)
 
     expr.append('\n')
@@ -139,6 +142,7 @@ def _ipl_freeform_format(self, template=False):
         template (bool): If True, then the tvalue* are returned, if present
 
     """
+    # pylint: disable=too-many-locals
 
     decl = ['// Declare free form:\n']
     expr = ['// Free form expressions:\n']
@@ -151,7 +155,7 @@ def _ipl_freeform_format(self, template=False):
         if all(word[0].isupper() for word in key if word.isalpha()):
             freeform_keys.append(key)
 
-    if len(freeform_keys) == 0:
+    if not freeform_keys:
         return None, None
 
     for variable in freeform_keys:
@@ -189,11 +193,11 @@ def _ipl_freeform_format(self, template=False):
         # list of values:
         elif myvalues:
             listtype = '[]'
-            for i, val in enumerate(myvalues):
+            for inum, val in enumerate(myvalues):
                 fnutt = ''
                 if subtype == 'String':
                     fnutt = '"'
-                myexpr = '{}[{}] = {}{}{}\n'.format(variable, i + 1,
+                myexpr = '{}[{}] = {}{}{}\n'.format(variable, inum + 1,
                                                     fnutt, val, fnutt)
                 expr.append(myexpr)
 
@@ -220,14 +224,14 @@ def _fix_date_format(dtype, value, aslist=False):
 
     if dtype == 'date':
         if value:
-            if type(value) in (datetime.datetime, datetime.date):
+            if isinstance(value, (datetime.datetime, datetime.date)):
                 value = str(value)
                 value = value.replace('-', '')
 
         if values:
             mynewvalues = []
             for val in values:
-                if type(val) in (datetime.datetime, datetime.date):
+                if isinstance(value, (datetime.datetime, datetime.date)):
                     val = str(val)
                     val = val.replace('-', '')
                     mynewvalues.append(val)
@@ -236,11 +240,11 @@ def _fix_date_format(dtype, value, aslist=False):
     if dtype == 'datepair':
         if value:
             date1, date2 = value
-            if type(date1) in (datetime.datetime, datetime.date):
+            if isinstance(date1, (datetime.datetime, datetime.date)):
                 date1 = str(date1)
                 date1 = date1.replace('-', '')
 
-            if type(date2) in (datetime.datetime, datetime.date):
+            if isinstance(date2, (datetime.datetime, datetime.date)):
                 date2 = str(date2)
                 date2 = date1.replace('-', '')
             value = date1 + '_' + date2
@@ -249,10 +253,10 @@ def _fix_date_format(dtype, value, aslist=False):
             mynewvalues = []
             for val in values:
                 date1, date2 = val
-                if type(date1) in (datetime.datetime, datetime.date):
+                if isinstance(date1, (datetime.datetime, datetime.date)):
                     date1 = str(date1)
                     date1 = date1.replace('-', '')
-                if type(date2) in (datetime.datetime, datetime.date):
+                if isinstance(date2, (datetime.datetime, datetime.date)):
                     date2 = str(date2)
                     date2 = date2.replace('-', '')
                 mynewvalues.append(date1 + '_' + date2)
