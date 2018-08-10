@@ -18,7 +18,8 @@ import socket
 import datetime
 import json
 
-import oyaml as yaml  # for ordered dicts! pylint: disable=import-error
+# for ordered dicts!
+from fmu.config import oyaml as yaml  # pylint: disable=import-error
 
 from fmu.config._loader import Loader
 from fmu.config import etc
