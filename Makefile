@@ -30,8 +30,10 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 
+APPLICATIONROOT := fmu
 APPLICATION := fmu/config
 SRCAPPLICATION := src/fmu/config
+TOPSRCAPPLICATION := src/fmu
 DOCSINSTALL := /project/sdpdocs/FMU/lib
 
 # A list of the applications
@@ -90,8 +92,12 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr TMP/
 
 
-lint: ## check style with flake8
-	flake8 ${SRCAPPLICATION} tests
+flake: ## check style with flake8
+	python -m flake8 ${SRCAPPLICATION} tests
+
+
+lint: ## check style etc with pylint
+	python -m pylint ${SRCAPPLICATION} tests
 
 
 test:  ## run tests quickly with the default Python
@@ -101,19 +107,20 @@ test:  ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox (not active)
 	tox
 
-
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source ${SRCAPPLICATION} -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
+develop:  ## make a development link to src
+	pip install -e .
 
 docsrun: clean ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/${APPLICATION}*.rst
+	rm -f docs/${APPLICATIONROOT}*.rst
 	rm -f docs/modules.rst
 	rm -fr docs/_build
-	sphinx-apidoc -H "FMU CONFIG" -o docs ${SRCAPPLICATION}
+	sphinx-apidoc -H "API for fmu.config" -o docs ${TOPSRCAPPLICATION}
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
@@ -137,12 +144,12 @@ install: dist ## version to VENV install place
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${VIRTUAL_ENV}/bin/.; )
 
-siteinstall: dist ## Install in project/res (Trondheim) using $TARGET
+siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
 	\rm -fr  ${TARGET}/${APPLICATION}
 	\rm -fr  ${TARGET}/${APPLICATION}-*
-	@${PIP} install --target ${TARGET} --upgrade  ./dist/${APPLICATION}*.whl
-	/project/res/bin/res_perm ${TARGET}/${APPLICATION}*
+	@${PYTHON} -m pip install --target ${TARGET} --upgrade  ./dist/${APPLICATIONROOT}*.whl
+	/project/res/bin/res_perm ${TARGET}/${APPLICATIONROOT}*
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
 	$(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )

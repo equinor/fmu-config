@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
 """Module for parsing global configuration for FMU.
 
 This module will be ran from the `fmuconfig` script, which is the
 front-end for the user.
 """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
 
 import os
@@ -14,15 +16,18 @@ import re
 import getpass
 import socket
 import datetime
-
 import json
-import oyaml as yaml  # for ordered dicts!
+
+# for ordered dicts!
+from fmu.config import oyaml as yaml  # pylint: disable=import-error
 
 from fmu.config._loader import Loader
 from fmu.config import etc
 
-xfmu = etc.Interaction()
-logger = xfmu.functionlogger(__name__)
+from fmu.config import _configparserfmu_ipl
+
+xfmu = etc.Interaction()  # pylint: disable=invalid-name
+logger = xfmu.functionlogger(__name__)  # pylint: disable=invalid-name
 
 
 class ConfigParserFMU(object):
@@ -65,6 +70,8 @@ class ConfigParserFMU(object):
 
     def to_yaml(self, rootname='myconfig', destination=None, template=None,
                 tool=None, createfolders=False):
+        # pylint: disable=too-many-arguments
+
         """Export the config as YAML files; one with true values and
         one with templated variables.
 
@@ -105,9 +112,9 @@ class ConfigParserFMU(object):
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
 
-        # if tool is not None:
-        #     cfg1 = cfg1[tool]
-        #     cfg2 = cfg2[tool]
+        if tool is not None:
+            cfg1 = cfg1[tool]
+            cfg2 = cfg2[tool]
 
         if destination:
             out = os.path.join(destination, rootname + '.yml')
@@ -166,193 +173,26 @@ class ConfigParserFMU(object):
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
-    def to_ipl(self, rootname='global_variables.ipl', destination=None,
+    def to_ipl(self, rootname='global_variables', destination=None,
                template=None, tool='rms'):
         """Export the config as a global variables IPL and/or template.
 
         Args:
-            rootname: Root file name without extension. An extension
-                .ipl will be added for destination, and .tmpl
+            rootname (str): Root file name without extension. An extension
+                `ipl` will be added for destination, and `tmpl`
                 for template output.
-            destination (str): The output file destination (folder)
+            destination (str): The output file destination (folder).
             template (str): The folder for the templated version of the
                 IPL (for ERT).
-            tool (str): Which section in the master to use (default is 'rms')
+            tool (str): Which section in the master to use (default is 'rms').
+
         """
 
-        if not destination and not template:
-            raise ValueError('Both destination and template for IPL cannot '
-                             'be None.')
-
-        declarations = []
-        expressions = []
-
-        metadata = self._get_sysinfo(commentmarker='//')
-        declarations.extend(metadata)
-
-        hdecl, hlist = self._ipl_stringlist_format('horizons', tool=tool)
-        if hdecl is not None:
-            declarations.extend(hdecl)
-            expressions.extend(hlist)
-
-        hdecl, hlist = self._ipl_stringlist_format('zones', tool=tool)
-        if hdecl is not None:
-            declarations.extend(hdecl)
-            expressions.extend(hlist)
-
-        hdecl, hlist = self._ipl_freeform_format()
-        if hdecl is not None:
-            declarations.extend(hdecl)
-            expressions.extend(hlist)
-
-        if template:
-            expressions_dest = self._get_tmpl_form(expressions)
-        else:
-            expressions_dest = self._get_dest_form(expressions)
-
-        with open(destination, 'w') as stream:
-            for line in declarations:
-                stream.write(line)
-
-            for line in expressions_dest:
-                stream.write(line)
-
-    def _ipl_stringlist_format(self, subtype, tool='rms'):
-        """Process the rms horizons etc, and return declarations and values."""
-
-        cfg = self.config[tool].get(subtype)
-        if cfg is None:
-            return None, None
-
-        decl = []
-        expr = []
-        for variable in cfg:
-            mydecl = 'String {}[]\n'.format(variable)
-            decl.append(mydecl)
-
-            array = cfg[variable]
-            for i, element in enumerate(array):
-                mylist = '{}[{}] = "{}"\n'.format(variable, i + 1, element)
-                expr.append(mylist)
-
-        expr.append('\n')
-
-        return decl, expr
-
-    def _ipl_freeform_format(self):
-        """Process the RMS IPL YAML config freeform types.
-
-        The freeform types are e.g. like this::
-
-            rms:
-              GOC:
-                dtype: float
-                values:
-                  - 2010.0
-                  - 2016.0
-
-        I.e. they are defined as BIG_LETTER keys within
-        the RMS section, in contrast to 'horizons' and 'zones'
-        """
-
-        decl = ['// Declare free form:\n']
-        expr = ['// Free form expressions:\n']
-
-        cfg = self.config['rms']
-
-        # collect uppercase keys in 'rms'
-        freeform_keys = []
-        for key in cfg:
-            if all(word[0].isupper() for word in key if word.isalpha()):
-                freeform_keys.append(key)
-
-        if len(freeform_keys) == 0:
-            return None, None
-
-        for variable in freeform_keys:
-            print('Variable to process is {}'.format(variable))
-            expr.append('\n')
-            mydtype = cfg[variable]['dtype']
-            if 'str' in mydtype:
-                subtype = 'String'
-            elif 'int' in mydtype:
-                subtype = 'Int'
-            elif 'float' in mydtype:
-                subtype = 'Float'
-            elif 'date' in mydtype:
-                subtype = 'String'
-            else:
-                raise ValueError('Do not understand dtype: {}'.format(mydtype))
-
-            myvalue = cfg[variable].get('value')
-            myvalues = cfg[variable].get('values')
-
-            if mydtype == 'date':
-                if myvalue:
-                    if type(myvalue) in (datetime.datetime, datetime.date):
-                        myvalue = str(myvalue)
-                        myvalue = myvalue.replace('-', '')
-
-                if myvalues:
-                    mynewvalues = []
-                    for val in myvalues:
-                        if type(val) in (datetime.datetime, datetime.date):
-                            val = str(val)
-                            val = val.replace('-', '')
-                            mynewvalues.append(val)
-                    myvalues = mynewvalues
-
-            if mydtype == 'datepair':
-                if myvalue:
-                    date1, date2 = myvalue
-                    if type(date1) in (datetime.datetime, datetime.date):
-                        date1 = str(date1)
-                        date1 = date1.replace('-', '')
-
-                    if type(date2) in (datetime.datetime, datetime.date):
-                        date2 = str(date2)
-                        date2 = date1.replace('-', '')
-                    myvalue = date1 + '_' + date2
-
-                if myvalues:
-                    mynewvalues = []
-                    for val in myvalues:
-                        date1, date2 = val
-                        if type(date1) in (datetime.datetime, datetime.date):
-                            date1 = str(date1)
-                            date1 = date1.replace('-', '')
-                        if type(date2) in (datetime.datetime, datetime.date):
-                            date2 = str(date2)
-                            date2 = date2.replace('-', '')
-                        mynewvalues.append(date1 + '_' + date2)
-
-                    myvalues = mynewvalues
-
-            listtype = ''
-            if myvalue:
-                fnutt = ''
-                if subtype == 'String':
-                    fnutt = '"'
-                myexpr = '{} = {}{}{}\n'.format(variable, fnutt, myvalue,
-                                                fnutt)
-                expr.append(myexpr)
-
-            # list of values:
-            elif myvalues:
-                listtype = '[]'
-                for i, val in enumerate(myvalues):
-                    fnutt = ''
-                    if subtype == 'String':
-                        fnutt = '"'
-                    myexpr = '{}[{}] = {}{}{}\n'.format(variable, i + 1,
-                                                        fnutt, val, fnutt)
-                    expr.append(myexpr)
-
-            mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
-            decl.append(mydecl)
-
-        decl.append('{}\n'.format('/' * 79))
-        return decl, expr
+        # keep code in separate file ( a bit lengthy)
+        _configparserfmu_ipl.to_ipl(self, rootname=rootname,
+                                    destination=destination,
+                                    template=template,
+                                    tool=tool)
 
     def to_eclipse(self):
         """Export the config templates and actuals under `eclipse`"""
@@ -405,8 +245,8 @@ class ConfigParserFMU(object):
                 continue
             try:
                 os.makedirs(folder)
-            except OSError as e:
-                if e.errno != errno.EEXIST:
+            except OSError as errmsg:
+                if errmsg.errno != errno.EEXIST:
                     raise
 
     @staticmethod
@@ -420,6 +260,58 @@ class ConfigParserFMU(object):
                 raise ValueError('Folder {} does not exist. It must either '
                                  'exist in advance, or the createfolders key'
                                  'must be True.'.format(folder))
+
+    @staticmethod
+    def _get_required_form(stream, template=False, ipl=False):
+        """Given a variable on form 1.0 ~ <SOME>, return the required form.
+
+        For single values, it should be flexible how it looks like, e.g.::
+
+            19.0~<SOME>
+            19.0 ~ <SOME>
+
+        If ipl is True and template is false, it should return::
+
+            19.0  // <SOME>
+
+        If ipl is True and template is True, it should return::
+
+            <SOME>  // 19.0
+
+        Args:
+            stream (:obj:`str` or :obj:`list` of :obj:`str`): Input string
+                or list of strings to break up
+            template (bool): If template mode
+            ipl (bool): If IPL mode
+        """
+
+        result = None
+
+        if isinstance(stream, list):
+            pass
+        elif isinstance(stream, str):
+
+            if '~' in stream:
+                value, tvalue = stream.split('~')
+                value = value.strip()
+                tvalue = tvalue.strip()
+
+                if ipl:
+                    if template:
+                        result = tvalue + '  // ' + value
+                    else:
+                        result = value + '  // ' + tvalue
+                else:
+                    if template:
+                        result = tvalue
+                    else:
+                        result = value
+
+        else:
+            raise ValueError('Input for templateconversion neither string '
+                             'or list')
+
+        return result
 
     @staticmethod
     def _get_tmpl_form(stream):
@@ -451,10 +343,10 @@ class ConfigParserFMU(object):
             print('STREAM is a list object')
             result = []
             for item in stream:
-                moditem = re.sub('\~.*>', '', item)
+                moditem = re.sub('~.*>', '', item)
                 result.append(moditem)
         elif isinstance(stream, str):
-            result = re.sub('\~.*>', '', stream)
+            result = re.sub('~.*>', '', stream)
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')
