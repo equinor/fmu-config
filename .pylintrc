@@ -5,7 +5,7 @@ disable=R0205, F0010
 
 [MASTER]
 init-hook='import sys; sys.path.append("src/")'
-ignore=_version.py
+ignore=_version.py, oyaml.py
 
 [BASIC]
 good-names=logger, fmux, xfmu
