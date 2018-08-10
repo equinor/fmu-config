@@ -1,32 +1,37 @@
 # -*- coding: utf-8 -*-
 """Module for basic interaction with user, including logging for debugging.
 
+This module can and should be used by other FMU modules eg. fmu.ensemble also.
+
 Logging is enabled by setting a environment variable::
 
   export FMU_LOGGING_LEVEL=INFO   # if bash; will set logging to INFO level
+  setenv FMU_LOGGING_LEVEL INFO   # if tcsh; will set logging to INFO level
 
 Other levels are DEBUG and CRITICAL. CRITICAL is default (cf. Pythons logging)
 
 Usage of logging in scripts::
 
   from fmu.config import etc
-
-  xfmu = etc.Interaction()
-
-  logger = xfmu.basiclogger(__name__)
-
+  fmux = etc.Interaction()
+  logger = fmux.basiclogger(__name__)
   logger.info('This is logging of %s', something)
 
-User interaction::
+Other than logging, there is also a template for user interaction, which shall
+be used in client scripts::
 
-  xfmu.echo('This is a message')
-  xfmu.warn('This is a warning')
-  xfmu.error('This is an error, will continue')
-  xfmu.critical('This is a big error, will exit')
+  fmux.echo('This is a message')
+  fmux.warn('This is a warning')
+  fmux.error('This is an error, will continue')
+  fmux.critical('This is a big error, will exit')
+
+Ind finally, there is a template for setting up a header for applications, see
+the ```print_fmu_header``` method
 
 """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
 
 import os
@@ -35,12 +40,17 @@ import inspect
 import logging
 import timeit
 
+import six
 
-class _BColors:
+# pylint: disable=protected-access
+
+
+class _BColors(object):
     # local class for ANSI term color commands
     # bgcolors:
     # 40=black, 41=red, 42=green, 43=yellow, 44=blue, 45=pink, 46 cyan
 
+    # pylint: disable=too-few-public-methods
     HEADER = '\033[1;96m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -51,6 +61,9 @@ class _BColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+    def __init__(self):
+        pass
+
 
 class Interaction(object):
     """System for handling interaction; dialogues and messages in FMU.
@@ -60,41 +73,46 @@ class Interaction(object):
 
     def __init__(self):
 
+        self._callclass = None
+        self._caller = None
+        self._lformat = None
+        self._lformatlevel = 1
+        self._logginglevel = 'CRITICAL'
+        self._loggingname = ''
+        self._syslevel = 1
+        self._test_env = True
+        self._tmpdir = 'TMP'
+        self._testpath = None
+
         # a string, for Python logging:
         logginglevel = os.environ.get('FMU_LOGGING_LEVEL')
 
         # a number, for format, 1 is simple, 2 is more info etc
         loggingformat = os.environ.get('FMU_LOGGING_FORMAT')
 
-        if logginglevel is None:
-            self._logginglevel = 'CRITICAL'
-        else:
-            self._logginglevel = str(logginglevel)
+        if logginglevel is not None:
+            self.logginglevel = logginglevel
 
-        if loggingformat is None:
-            self._lformatlevel = 1
-        else:
+        if loggingformat is not None:
             self._lformatlevel = int(loggingformat)
-
-        self._syslevel = 1
 
     @property
     def logginglevel(self):
-        """Will return a logging level property, e.g. logging.CRITICAL"""
-        ll = logging.CRITICAL
+        """Set or return a logging level property, e.g. logging.CRITICAL"""
+        llo = logging.CRITICAL
         if self._logginglevel == 'INFO':
-            ll = logging.INFO
+            llo = logging.INFO
         elif self._logginglevel == 'WARNING':
-            ll = logging.WARNING
+            llo = logging.WARNING
         elif self._logginglevel == 'DEBUG':
-            ll = logging.DEBUG
+            llo = logging.DEBUG
 
-        return ll
+        return llo
 
     @logginglevel.setter
     def logginglevel(self, level):
-
-        validlevels = ('INFO', 'DEBUG', 'CRITICAL')
+        # pylint: disable=pointless-statement
+        validlevels = ('INFO', 'WARNING', 'DEBUG', 'CRITICAL')
         if level in validlevels:
             self._logginglevel == level
         else:
@@ -103,6 +121,7 @@ class Interaction(object):
 
     @property
     def loggingformatlevel(self):
+        """Set logging format (for future use)"""
         return self._lformatlevel
 
     @property
@@ -120,15 +139,36 @@ class Interaction(object):
 
         return self._lformat
 
-    @staticmethod
-    def print_fmu_header(appname, appversion):
-        """Prints a banner for a FMU app to STDOUT."""
+    @property
+    def tmpdir(self):
+        """Get and set tmpdir for testing"""
+        return self._tmpdir
 
+    @tmpdir.setter
+    def tmpdir(self, value):
+        self._tmpdir = value
+
+    @staticmethod
+    def print_fmu_header(appname, appversion, info=None):
+        """Prints a banner for a FMU app to STDOUT.
+
+        Args:
+            appname (str): Name of application.
+            appversion (str): Version of application on form '3.2.1'
+            info (str, optional): More info, e.g. if beta release
+
+        Example::
+
+            fmux.print_fmu_header('fmuconfig', '0.2.1', info='Beta release!')
+        """
         cur_version = 'Python ' + str(sys.version_info[0]) + '.'
         cur_version += str(sys.version_info[1]) + '.' \
             + str(sys.version_info[2])
 
-        app = appname + ' (version ' + str(appversion) + ')'
+        app = 'This is ' + appname + ', v. ' + str(appversion)
+        if info:
+            app = app + ' (' + info + ')'
+
         print('')
         print(_BColors.HEADER)
         print('#' * 79)
@@ -138,11 +178,15 @@ class Interaction(object):
         print(_BColors.ENDC)
         print('')
 
-    def basiclogger(self, name):
+    def basiclogger(self, name, level='CRITICAL'):
         """Initiate the logger by some default settings."""
 
-        format = self.loggingformat
-        logging.basicConfig(format=format, stream=sys.stdout)
+        self._logginglevel = level
+        print('YYY', self.logginglevel)
+
+        fmt = self.loggingformat
+        self._loggingname = name
+        logging.basicConfig(format=fmt, stream=sys.stdout)
         logging.getLogger().setLevel(self.logginglevel)  # root logger!
         logging.captureWarnings(True)
 
@@ -156,21 +200,18 @@ class Interaction(object):
         logger.addHandler(logging.NullHandler())
         return logger
 
-    def _testsetup(self):
-        """Basic setup for FMU testing (private; only relevant for tests)"""
+    def testsetup(self, path='TMP'):
+        """Basic setup for FMU testing (developer only; relevant for tests)"""
 
-        path = 'TMP'
         try:
             os.makedirs(path)
         except OSError:
             if not os.path.isdir(path):
                 raise
 
-        testpath = './examples'
-
-        self.test_env = True
-        self.tmpdir = path
-        self.testpath = testpath
+        self._test_env = True
+        self._tmpdir = path
+        self._testpath = None
 
         return True
 
@@ -190,12 +231,13 @@ class Interaction(object):
         """
         time1 = timeit.default_timer()
 
-        if len(args) > 0:
+        if args:
             return time1 - args[0]
-        else:
-            return time1
+
+        return time1
 
     def echo(self, string):
+        """Show info at runtime (for user scripts)"""
         level = -5
         idx = 3
 
@@ -243,35 +285,47 @@ class Interaction(object):
             raise SystemExit('STOP!')
 
     def get_callerinfo(self, caller, frame):
+        """Get caller info for logging (developer stuff)"""
         the_class = self._get_class_from_frame(frame)
 
         # just keep the last class element
-        x = str(the_class)
-        x = x.split('.')
-        the_class = x[-1]
+        xname = str(the_class)
+        xname = xname.split('.')
+        the_class = xname[-1]
 
         self._caller = caller
         self._callclass = the_class
 
         return (self._caller, self._callclass)
 
-# =============================================================================
-# Private routines
-# =============================================================================
+    # =========================================================================
+    # Private routines
+    # =========================================================================
 
-    def _get_class_from_frame(self, fr):
-        args, _, _, value_dict = inspect.getargvalues(fr)
-        # we check the first parameter for the frame function is
-        # named 'self'
-        if len(args) and args[0] == 'self':
-            instance = value_dict.get('self', None)
-            if instance:
-                # return its class
-                return getattr(instance, '__class__', None)
+    @staticmethod
+    def _get_class_from_frame(frame):
+        if six.PY2:
+            # pylint: disable=deprecated-method
+            args, _, _, value_dict = inspect.getargvalues(frame)
+            # we check the first parameter for the frame function is
+            # named 'self'
+            if args and args[0] == 'self':
+                instance = value_dict.get('self', None)
+                if instance:
+                    # return its class
+                    return getattr(instance, '__class__', None)
+        else:
+            # python3 is incomplete (need more coffee)
+            current = inspect.currentframe()
+            outer = inspect.getouterframes(current)
+            return outer[0]
+
         # return None otherwise
         return None
 
     def _output(self, idx, level, string):
+
+        # pylint: disable=too-many-branches
 
         prefix = ''
         endfix = ''
@@ -301,11 +355,11 @@ class Interaction(object):
                 print('{} {}{}'.format(prefix, string, endfix))
             else:
                 ulevel = str(level)
-                if (level == -5):
+                if level == -5:
                     ulevel = 'M'
-                if (level == -8):
+                if level == -8:
                     ulevel = 'E'
-                if (level == -9):
+                if level == -9:
                     ulevel = 'W'
                 print('{0} <{1}> [{2:23s}->{3:>33s}] {4}{5}'
                       .format(prefix, ulevel, self._callclass,

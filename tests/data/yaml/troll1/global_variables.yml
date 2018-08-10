@@ -1,7 +1,7 @@
 # Master global config for Troll
 # Prototype by JRIV
 
-horizons: !include horizons.yaml
+horizons: !include horizons.yml
 
 zones:
 

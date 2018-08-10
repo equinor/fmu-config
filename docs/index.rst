@@ -9,6 +9,8 @@ Contents:
    readme
    installation
    usage
+   examples_troll
+   modules
    contributing
    authors
    history
