@@ -182,7 +182,7 @@ class Interaction(object):
         """Initiate the logger by some default settings."""
 
         self._logginglevel = level
-        print('YYY', self.logginglevel)
+        print('Info: Numerical logging level is {}'.format(self.logginglevel))
 
         fmt = self.loggingformat
         self._loggingname = name
