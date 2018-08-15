@@ -19,15 +19,15 @@ import datetime
 import json
 
 # for ordered dicts!
-from fmu.config import oyaml as yaml  # pylint: disable=import-error
+from fmu.config import oyaml as yaml
 
 from fmu.config._loader import Loader
 from fmu.config import etc
 
 from fmu.config import _configparserfmu_ipl
 
-xfmu = etc.Interaction()  # pylint: disable=invalid-name
-logger = xfmu.functionlogger(__name__)  # pylint: disable=invalid-name
+xfmu = etc.Interaction()
+logger = xfmu.functionlogger(__name__)
 
 
 class ConfigParserFMU(object):
