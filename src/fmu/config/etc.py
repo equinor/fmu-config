@@ -99,6 +99,23 @@ class Interaction(object):
     @property
     def logginglevel(self):
         """Set or return a logging level property, e.g. logging.CRITICAL"""
+
+        return self._logginglevel
+
+    @logginglevel.setter
+    def logginglevel(self, level):
+        # pylint: disable=pointless-statement
+
+        validlevels = ('INFO', 'WARNING', 'DEBUG', 'CRITICAL')
+        if level in validlevels:
+            self._logginglevel = level
+        else:
+            raise ValueError('Invalid level given, must be '
+                             'in {}'.format(validlevels))
+
+    @property
+    def numericallogginglevel(self):
+        """Return a numerical logging level (read only)"""
         llo = logging.CRITICAL
         if self._logginglevel == 'INFO':
             llo = logging.INFO
@@ -108,16 +125,6 @@ class Interaction(object):
             llo = logging.DEBUG
 
         return llo
-
-    @logginglevel.setter
-    def logginglevel(self, level):
-        # pylint: disable=pointless-statement
-        validlevels = ('INFO', 'WARNING', 'DEBUG', 'CRITICAL')
-        if level in validlevels:
-            self._logginglevel == level
-        else:
-            raise ValueError('Invalid level given, must be '
-                             'in {}'.format(validlevels))
 
     @property
     def loggingformatlevel(self):
@@ -129,8 +136,7 @@ class Interaction(object):
         """Returns the format string to be used in logging"""
 
         if self._lformatlevel <= 1:
-            self._lformat = '%(name)44s %(funcName)44s '\
-                + '%(levelname)8s: \t%(message)s'
+            self._lformat = '%(levelname)8s: \t%(message)s'
         else:
             self._lformat = '%(asctime)s Line: %(lineno)4d %(name)44s '\
                 + '[%(funcName)40s()]'\
@@ -178,16 +184,16 @@ class Interaction(object):
         print(_BColors.ENDC)
         print('')
 
-    def basiclogger(self, name, level='CRITICAL'):
+    def basiclogger(self, name, level=None):
         """Initiate the logger by some default settings."""
 
-        self._logginglevel = level
-        print('YYY', self.logginglevel)
+        if level is not None:
+            self.logginglevel = level
 
         fmt = self.loggingformat
         self._loggingname = name
         logging.basicConfig(format=fmt, stream=sys.stdout)
-        logging.getLogger().setLevel(self.logginglevel)  # root logger!
+        logging.getLogger().setLevel(self.numericallogginglevel)  # root logger
         logging.captureWarnings(True)
 
         return logging.getLogger(name)

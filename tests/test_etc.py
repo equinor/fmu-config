@@ -12,9 +12,17 @@ from fmu.config import etc
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
+logger.info('Running tests...')
+
 # always this statement
 if not fmux.testsetup():
     raise SystemExit()
+
+
+def test_info_logger_plain():
+    """Test basic logger behaviour plain, will capture output to stdin"""
+    logger.info('This is a test')
+    # no assert is intended
 
 
 @pytest.fixture()

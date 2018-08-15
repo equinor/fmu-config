@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import os.path
 
-from fmu import config
+import fmu.config as config
 # import fmu.config.fmuconfigrunner as fmurun
 
 TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
