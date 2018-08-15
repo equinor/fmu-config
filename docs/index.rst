@@ -9,7 +9,7 @@ Contents:
    readme
    installation
    usage
-   examples_troll
+   examples
    modules
    contributing
    authors

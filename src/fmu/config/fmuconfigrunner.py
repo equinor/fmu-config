@@ -29,8 +29,8 @@ def _do_parse_args(args):
         usage=usetxt
     )
 
-    parser.add_argument('-c', '--config',
-                        dest='config',
+    # positional:
+    parser.add_argument('config',
                         type=str,
                         help=('Input global config master file name '
                               'on YAML format'))
