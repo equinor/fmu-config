@@ -8,6 +8,7 @@ from __future__ import print_function
 import os.path
 
 import fmu.config as config
+from fmu.config import oyaml as yaml
 # import fmu.config.fmuconfigrunner as fmurun
 
 TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
@@ -17,13 +18,9 @@ RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
-TESTDIR = 'TMP'
-
-try:
-    os.makedirs(TESTDIR)
-except OSError:
-    if not os.path.isdir(TESTDIR):
-        raise
+# always this statement
+if not fmux.testsetup():
+    raise SystemExit()
 
 
 def test_basic_troll():
@@ -40,7 +37,31 @@ def test_basic_troll():
     assert len(cfg.config['horizons']) == 6
 
 
-def test_basic_troll2():
+def test_to_yaml_troll2():
+    """Test the output for the YAML files, both templated and normal for rms"""
+
+    cfg = config.ConfigParserFMU()
+
+    assert isinstance(cfg, config.ConfigParserFMU)
+
+    cfg.parse(TFILE2)
+    rootn = 'troll2_yaml'
+
+    cfg.to_yaml(rootname=rootn, destination=fmux.tmpdir,
+                template=fmux.tmpdir, tool='rms')
+
+    # now read the files again to assert tests
+    with open(os.path.join(fmux.tmpdir, rootn + '.yml'), 'r') as stream:
+        cfg_yml = yaml.load(stream)
+
+    with open(os.path.join(fmux.tmpdir, rootn + '.tmpl'), 'r') as stream:
+        cfg_tmpl = yaml.load(stream)
+
+    assert cfg_yml['KH_MULT_CSAND']['value'] == 1.0
+    assert cfg_tmpl['KH_MULT_CSAND']['value'] == '<KH_MULT_CSAND>'
+
+
+def test_ipl_troll2():
     """Test basic behaviour"""
 
     cfg = config.ConfigParserFMU()
@@ -53,9 +74,9 @@ def test_basic_troll2():
     cfg.show(style='json')
 
     # export the config as a global variables IPL
-    logger.info('Test dir is %s', TESTDIR)
-    cfg.to_ipl(destination=os.path.join(TESTDIR),
-               template=os.path.join(TESTDIR))
+    logger.info('Test dir is %s', fmux.tmpdir)
+    cfg.to_ipl(destination=os.path.join(fmux.tmpdir),
+               template=os.path.join(fmux.tmpdir))
 
 
 # def test_basic_reek():
