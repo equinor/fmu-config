@@ -15,7 +15,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://git.equinor.com/fmu-utilities/fmu-config/issues.
+Report issues and bugs at https://git.equinor.com/fmu-utilities/fmu-config/issues.
 
 If you are reporting a bug, please include:
 
@@ -71,35 +71,33 @@ PEP8 and PEP20
   * Naming: files_as_this, ClassesAsThis, ExceptionsAsThis, CONSTANTS,
     function_as_this, method_as_this
 
-  * Use a single underscore to protect internal variables and classes
+  * Use a single underscore to protect instance variables, other private
+    variables and and private classes
 
   * 4 space indents (spaces, no tabs)
+
+  * Single quotes to delimit strings, triple double quotes in docstrings.
 
   * One space before and after =, =, +, * etc
 
   * No space around  = in keword lists, e.g. my_function(value=27, default=None)
 
-  * Avoid one or two letter variables, except for counters. And meaningful names, but don't
+  * Avoid one or two letter variables, even for counters. And meaningful names, but don't
     overdo it.
 
-  * See also: https://git.equinor.com/fmu-utilities/fmu-coding-practice
+  * See also: https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/python-style.md
 
 
 In addition:
 ~~~~~~~~~~~~
 
-* Start with documentation and tests. Think first!
+* Start with documentation and tests. Think and communicate first!
 
 * Docstrings shall start and end with """ and use Google style.
 
-* Use a single underscore to protect class properties, and use a single underscore
-  in file names for submodules that should not be exposed in the documentation.
-
-* Use single ticks for strings 'mystring'.
-
 * Use pytest as testing engine
 
-* Code shall be be Python 2.7.10 + and python 3.4 + compliant
+* Code shall be be Python 2.7.13 + and python 3.4 + compliant
 
 
 Use flake8 and/or pylint to check
@@ -107,7 +105,7 @@ Use flake8 and/or pylint to check
 
   python -m flake8 mycode.py
 
-The pylint command is much stricter and sometimes wrong... , but can be quite useful!
+The pylint is rather strict and sometimes excpetions are needed... , but anyway quite useful!
 
   python -m pylint mycode.py
 
@@ -125,72 +123,5 @@ Ready to contribute? Here's how to set up `fmu-config` for local development.
    This means your `origin` is now your personal fork, while the actual master
    is at `upstream`.
 
-3. Activate the virtual envirioment and go to your fork::
-
-     $ <activate your virtual env>
-     $ cd fmu-config/
-     $ pip install -r requirements_dev.txt (needed once or rarely)
-     $ pip install -e .
-     $ make test  (see that test works)
-
-4. Create a branch for local development::
-
-     $ git checkout -b name-of-your-bugfix-or-feature
-
-   Now you can make your changes locally.
-
-5. When you're done making changes, check that your changes pass flake, lint and the tests,
-   including testing and docs::
-
-     $ make flake
-     $ make lint
-     $ make test
-     $ make docs
-
-6. Commit your changes and push your branch to GitHub::
-
-     $ git commit -am "Your detailed description of your changes."
-     $ git push origin name-of-your-bugfix-or-feature
-
-7. Submit a pull request (merge request) through the Git website.
-
-8. Then remove the current branch::
-
-     $ git checkout master
-     $ git fetch upstream
-     $ git merge upstream/master
-
-9. Alterantive in one go::
-
-     $ git pull upstream master
-     $ git push
-     $ git remote  (watch which remotes)
-
-10. Delete your previous branch and make a new feature branch::
-
-      $ git branch -d name-of-your-bugfix-or-feature
-      $ git checkout -b name-of-your-new-bugfix-or-feature
-
-
-Pull Request Guidelines
------------------------
-
-Before you submit a pull request, check that it meets these guidelines:
-
-1. The pull request should include tests.
-
-2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-
-
-Tips
-----
-
-To run a subset of tests::
-
-  $ pytest tests/test_<feature>
-
-Or use the Makefile to speed up things::
-
-  $ make test
+3. See the rest of recipee here:
+   https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/developer-guide.md
