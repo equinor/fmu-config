@@ -57,13 +57,13 @@ PIP := pip${PSHORT}
 
 TARGET := ${SDP_BINDIST_ROOT}
 BINTARGET := ${SDP_BINDIST}
-FULLTARGET := ${TARGET}/lib/python/${PYTHON}/site-packages
+FULLTARGET := ${TARGET}/lib/python${PYTHON_SHORT}/site-packages
 
 BININSTALL := ${BINTARGET}/bin
 
 MY_BINDIST ?= $HOME
 USRPYPATH := ${MY_BINDIST}
-FULLUSRPYPATH := ${USRPYPATH}/lib/python/${PYTHON}/site-packages
+FULLUSRPYPATH := ${USRPYPATH}/lib/python${PYTHON_SHORT}/site-packages
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
