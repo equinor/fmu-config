@@ -45,7 +45,7 @@ class ConfigParserFMU(object):
 
     @property
     def yamlfile(self):
-        """The name of the input YAML formatted file (read only)."""
+        """The name of the input master YAML formatted file (read only)."""
         return self._yamlfile
 
     def parse(self, yfile):
@@ -84,9 +84,9 @@ class ConfigParserFMU(object):
             template: The directory path for the templated
                 file. If None, than no templated output will be given.
             tool (str): Using one of the specified tool sections in the
-                master config, e.g. 'rms'. Default is None
-            createfolders: If True then folders will be created if they
-                do not exist.
+                master config, e.g. 'rms'. Default is None which means all.
+            createfolders (bool): If True then folders will be created if they
+                do not exist (default is False).
 
         Raises:
             ValueError: If both destination and template output is None,
@@ -94,7 +94,7 @@ class ConfigParserFMU(object):
 
         Example:
 
-            >>> config.to_json('global_variables', destination='../')
+            >>> config.to_yaml('global_variables', destination='../')
         """
 
         if not destination and not template:
@@ -106,15 +106,15 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
-        mystream = yaml.dump(self.config)
+        if tool is not None:
+            mystream = yaml.dump(self.config[tool])
+        else:
+            mystream = yaml.dump(self.config)
+
         mystream = ''.join(self._get_sysinfo()) + mystream
 
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
-
-        if tool is not None:
-            cfg1 = cfg1[tool]
-            cfg2 = cfg2[tool]
 
         if destination:
             out = os.path.join(destination, rootname + '.yml')
@@ -127,7 +127,7 @@ class ConfigParserFMU(object):
                 stream.write(cfg2)
 
     def to_json(self, rootname, destination=None, template=None,
-                createfolders=False):
+                createfolders=False, tool=None):
         """Export the config as JSON files; one with true values and
         one with templated variables.
 
@@ -139,6 +139,8 @@ class ConfigParserFMU(object):
                 file. If None, than no output will be given
             template: The directory path for the templated
                 file. If None, than no output will be given
+            tool (str): Using one of the specified tool sections in the
+                master config, e.g. 'rms'. Default is None which means all.
             createfolders: If True then folders will be created if they
                 do not exist.
 
@@ -160,7 +162,12 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
-        mystream = json.dumps(self.config, indent=4)
+        if tool is not None:
+            mycfg = self.config[tool]
+        else:
+            mycfg = self.config
+
+        mystream = json.dumps(mycfg, indent=4)
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
@@ -174,7 +181,7 @@ class ConfigParserFMU(object):
                 stream.write(cfg2)
 
     def to_ipl(self, rootname='global_variables', destination=None,
-               template=None, tool='rms'):
+               template=None, createfolders=False, tool='rms'):
         """Export the config as a global variables IPL and/or template.
 
         Args:
@@ -184,11 +191,18 @@ class ConfigParserFMU(object):
             destination (str): The output file destination (folder).
             template (str): The folder for the templated version of the
                 IPL (for ERT).
+            createfolders: If True then folders will be created if they
+                do not exist.
             tool (str): Which section in the master to use (default is 'rms').
 
         """
 
-        # keep code in separate file ( a bit lengthy)
+        if createfolders:
+            self._force_create_folders([destination, template])
+        else:
+            self._check_folders([destination, template])
+
+        # keep most code in separate file ( a bit lengthy)
         _configparserfmu_ipl.to_ipl(self, rootname=rootname,
                                     destination=destination,
                                     template=template,
@@ -317,7 +331,7 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Given variables..."""
 
-        pattern = '[a-zA-Z0-9.]+~'
+        pattern = '[a-zA-Z0-9.\s]+~\s*'
 
         if isinstance(stream, list):
             print('STREAM is a list object')
@@ -325,9 +339,11 @@ class ConfigParserFMU(object):
             for item in stream:
                 moditem = re.sub(pattern, '', item)
                 moditem = re.sub('"', '', moditem)
+                moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            result = re.sub(pattern, '', stream)
+            print('STREAM is a str object')
+            result = re.sub(pattern, ' ', stream)
             result = re.sub('"', '', result)
         else:
             raise ValueError('Input for templateconversion neither string '

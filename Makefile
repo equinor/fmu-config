@@ -12,8 +12,7 @@
 # > make install
 #
 # $TARGET may also be applied explicitly for e.g. install at /project/res
-# > setenv RESTARGET ${SDP_BINDIST_ROOT}/lib/python${PYTHON_SHORT}/site-packages
-# > make siteinstall TARGET=$RESTARGET
+# > make siteinstall TARGET=${SDP_BINDIST_ROOT} BINTARGET=${SDP_BINDIST}
 # =============================================================================
 
 xt.PHONY: clean clean-test clean-pyc clean-build docs help pyver
@@ -32,6 +31,7 @@ export PRINT_HELP_PYSCRIPT
 
 APPLICATIONROOT := fmu
 APPLICATION := fmu/config
+APPLICATIONPKG := fmu_config
 SRCAPPLICATION := src/fmu/config
 TOPSRCAPPLICATION := src/fmu
 DOCSINSTALL := /project/sdpdocs/FMU/lib
@@ -55,13 +55,15 @@ PYTHON := python${PSHORT}
 PIP := pip${PSHORT}
 
 
-TARGET := ${SDP_BINDIST_ROOT}/lib/python${PYTHON_SHORT}/site-packages
+TARGET := ${SDP_BINDIST_ROOT}
+BINTARGET := ${SDP_BINDIST}
+FULLTARGET := ${TARGET}/lib/python${PYTHON_SHORT}/site-packages
 
-BININSTALL := /project/res/x86_64_RH_6/bin
+BININSTALL := ${BINTARGET}/bin
 
 MY_BINDIST ?= $HOME
-
-USRPYPATH := ${MY_BINDIST}/lib/python${PYVER}/site-packages
+USRPYPATH := ${MY_BINDIST}
+FULLUSRPYPATH := ${USRPYPATH}/lib/python${PYTHON_SHORT}/site-packages
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -146,18 +148,19 @@ install: dist ## version to VENV install place
 
 siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
-	\rm -fr  ${TARGET}/${APPLICATION}
-	\rm -fr  ${TARGET}/${APPLICATION}-*
-	@${PYTHON} -m pip install --target ${TARGET} --upgrade  ./dist/${APPLICATIONROOT}*.whl
-	/project/res/bin/res_perm ${TARGET}/${APPLICATIONROOT}*
+	\rm -fr  ${FULLTARGET}/${APPLICATION}
+	\rm -fr  ${FULLTARGET}/${APPLICATIONPKG}*
+	PYTHONUSERBASE=${TARGET} pip install --user .
+	/project/res/bin/res_perm ${FULLTARGET}/${APPLICATIONROOT}*
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
 	$(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )
 
 userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
-	@\rm -fr  ${USRPYPATH}/${APPLICATION}
-	@\rm -fr  ${USRPYPATH}/${APPLICATION}-*
-	@${PIP} install --target ${USRPYPATH} --upgrade  ./dist/*.whl
+	\rm -fr  ${FULLUSRPYPATH}/${APPLICATION}
+	\rm -fr  ${FULLUSRPYPATH}/${APPLICATIONPKG}*
+	@echo ${USRPYPATH}
+	PYTHONUSERBASE=${USRPYPATH} pip install --user .
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${MYBINDIST}/bin/.; )
 
 

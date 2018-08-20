@@ -76,15 +76,6 @@ def to_ipl(self, rootname='global_variables', destination=None,
 
             expressions_tmpl.extend(hlist)
 
-    if template:
-        tmplfile = os.path.join(template, rootname + '.tmpl')
-        with open(tmplfile, 'w') as stream:
-            for line in declarations:
-                stream.write(line)
-
-            for line in expressions_tmpl:
-                stream.write(line)
-
     if destination:
         destfile = os.path.join(destination, rootname + '.ipl')
         with open(destfile, 'w') as stream:
@@ -92,6 +83,15 @@ def to_ipl(self, rootname='global_variables', destination=None,
                 stream.write(line)
 
             for line in expressions_dest:
+                stream.write(line)
+
+    if template:
+        tmplfile = os.path.join(template, rootname + '.tmpl')
+        with open(tmplfile, 'w') as stream:
+            for line in declarations:
+                stream.write(line)
+
+            for line in expressions_tmpl:
                 stream.write(line)
 
 
@@ -181,11 +181,11 @@ def _ipl_freeform_format(self, template=False):
             if subtype == 'String':
                 fnutt = '"'
             myvalue = '{}{}{}'.format(fnutt, myvalue, fnutt)
-            print('XXX', myvalue)
+            logger.info('Process value: %s', myvalue)
 
-            myvalue = self._get_required_form(myvalue, template=template,
-                                              ipl=True)
+            myvalue = _get_required_iplform(myvalue, template=template)
 
+            logger.info('Returns value: %s', myvalue)
             myexpr = '{} = {}\n'.format(variable, myvalue)
 
             expr.append(myexpr)
@@ -264,3 +264,32 @@ def _fix_date_format(dtype, value, aslist=False):
             values = mynewvalues
 
     return values
+
+
+def _get_required_iplform(stream, template=False):
+    """Strip a string for IPL output.
+
+    If template is True, keep the value if no ~ is present,
+    otherwise return the <...> string and the value as a comment.
+
+    If template is False, return the value with <...> as comment
+    if present.
+    """
+
+    if isinstance(stream, str):
+        logger.info('STREAM is a str object')
+    else:
+        raise NotImplementedError('Wait')
+
+    if '~' in stream:
+        val, var = stream.split('~')
+        val = val.strip()
+        var = var.strip()
+        if template:
+            result = var + '  // ' + val
+        else:
+            result = val + '  // ' + var
+    else:
+        result = stream.strip()
+
+    return result
