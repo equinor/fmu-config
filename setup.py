@@ -30,7 +30,7 @@ fmuconfig_function = ('fmuconfig='
                       'fmu.config.fmuconfigrunner:main')
 
 setup(
-    name='fmu.config',
+    name='fmu_config',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="Library for various config scripts in FMU scope",
