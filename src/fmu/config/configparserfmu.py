@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Module for parsing global configuration for FMU.
 
-This module will be ran from the `fmuconfig` script, which is the
-front-end for the user.
+This module will normally be ran from the `fmuconfig` script,
+which is the front-end script for the user.
 """
 
 from __future__ import absolute_import
@@ -80,9 +80,9 @@ class ConfigParserFMU(object):
                 .yml will be added for destination, and .tmpl
                 for template output.
             destination: The directory path for the destination
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             template: The directory path for the templated
-                file. If None, than no templated output will be given.
+                file. If None, then no templated output will be given.
             tool (str): Using one of the specified tool sections in the
                 master config, e.g. 'rms'. Default is None which means all.
             createfolders (bool): If True then folders will be created if they
@@ -136,9 +136,9 @@ class ConfigParserFMU(object):
                 .json will be added for destination, and .tmpl
                 for template output.
             destination: The directory path for the destination
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             template: The directory path for the templated
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             tool (str): Using one of the specified tool sections in the
                 master config, e.g. 'rms'. Default is None which means all.
             createfolders: If True then folders will be created if they

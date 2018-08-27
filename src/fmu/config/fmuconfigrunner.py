@@ -11,8 +11,12 @@ import os.path
 import fmu.config as fmu_config
 
 from fmu.config import _version
+from fmu.config import etc
 
 __version__ = _version.get_versions()['version']
+
+xfmu = etc.Interaction()
+logger = xfmu.basiclogger(__name__)
 
 
 def _do_parse_args(args):
@@ -39,7 +43,7 @@ def _do_parse_args(args):
                         dest='mode',
                         default='ipl',
                         type=str,
-                        help='Mode for conversion: "ipl" etc...')
+                        help='Mode for conversion: ipl/yaml etc...')
 
     parser.add_argument('--rootname',
                         dest='rootname',
@@ -59,7 +63,6 @@ def _do_parse_args(args):
 
     parser.add_argument('--tool',
                         dest='tool',
-                        default='rms',
                         type=str,
                         help='Tool section to apply, e.g. rms or eclipse')
 
@@ -91,7 +94,7 @@ def main(args=None):
         cfg.to_ipl(rootname=args.rootname, destination=args.destination,
                    template=args.template, tool=args.tool)
 
-    if args.mode == 'yaml':
+    if args.mode in ('yaml', 'yml'):
         print('Mode is YAML')
         cfg.to_yaml(rootname=args.rootname, destination=args.destination,
                     template=args.template, tool=args.tool)
