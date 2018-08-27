@@ -107,9 +107,6 @@ rms:
     dtype: float
     value: 1.0
 
-  A_OIL_CSAND: {dtype: float, value: 8.0152}
-  B_OIL_CSAND: {dtype: float, value: -2.2573}
-
   TESTSOMEDATE:
     dtype: date
     value: 2017-01-01
@@ -129,3 +126,33 @@ rms:
   DIFF4D_DATES:
     dtype: datepair
     values: *global_diffdates
+
+  #------------------------------------------------------------------------------
+  # Relperm and PC related (shows use of anchors and aliases)
+  #------------------------------------------------------------------------------
+  A_OIL_CSAND:
+    dtype: float
+    value: &aoilcsa 11.978799 ~ <A_OIL_CSAND>
+
+  A_OIL_MTR:
+    dtype: float
+    value: &aoilmtr 2.7431~<A_OIL_MTR>
+
+  A_OIL_MST:
+    dtype: float
+    value: &aoilmst 1.4545
+
+  B_OIL_CSAND:
+    dtype: float
+    value: &boilcsa -2.5000
+  B_OIL_MTR:
+    dtype: float
+    value: &boilmtr -3.8462
+  B_OIL_MST:
+    dtype: float
+    value: &boilmst -4.3478
+
+  # refer to as aliases
+  AVALUE:
+    dtype: float
+    values: [*aoilcsa, *aoilmtr, *aoilmst, *aoilcsa, *aoilmtr, *aoilmst]

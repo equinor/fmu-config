@@ -113,6 +113,9 @@ class ConfigParserFMU(object):
 
         mystream = ''.join(self._get_sysinfo()) + mystream
 
+        mystream = re.sub('\s+~', '~', mystream)
+        mystream = re.sub('~\s+', '~', mystream)
+
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
 
@@ -168,6 +171,9 @@ class ConfigParserFMU(object):
             mycfg = self.config
 
         mystream = json.dumps(mycfg, indent=4)
+
+        mystream = re.sub('\s+~', '~', mystream)
+        mystream = re.sub('~\s+', '~', mystream)
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
@@ -329,9 +335,9 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _get_tmpl_form(stream):
-        """Given variables..."""
+        """Get template form (<...> if present, not numbers)."""
 
-        pattern = '[a-zA-Z0-9.\s]+~\s*'
+        pattern = '[a-zA-Z0-9.]+~'
 
         if isinstance(stream, list):
             print('STREAM is a list object')
@@ -342,9 +348,10 @@ class ConfigParserFMU(object):
                 moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            print('STREAM is a str object')
-            result = re.sub(pattern, ' ', stream)
+            print('STREAM is a str object - get tmpl form')
+            result = re.sub(pattern, '', stream)
             result = re.sub('"', '', result)
+            result = result.strip() + '\n'
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')
@@ -353,16 +360,23 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _get_dest_form(stream):
-        """Given variables..."""
+        """Get destination form (numbers, not <...>)"""
+
+        pattern = '~<.+?>'
 
         if isinstance(stream, list):
             print('STREAM is a list object')
             result = []
             for item in stream:
-                moditem = re.sub('~.*>', '', item)
+                moditem = re.sub(pattern, '', item)
+                moditem = re.sub('"', '', moditem)
+                moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            result = re.sub('~.*>', '', stream)
+            print('STREAM is a str object - get dest form')
+            result = re.sub(pattern, '', stream)
+            result = re.sub('"', '', result)
+            result = result.strip() + '\n'
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')
