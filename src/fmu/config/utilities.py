@@ -20,8 +20,8 @@ def yaml_load(filename, safe=True):
         safe (bool): If True (default), then use `safe_load`
 
     Example::
-        >>> import fmu.config.tools as fmutools
-        >>> cfg = fmutools.yaml_load('somefile.yml')
+        >>> import fmu.config.utilities as utils
+        >>> cfg = utils.yaml_load('somefile.yml')
 
     """
 
