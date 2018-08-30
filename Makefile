@@ -151,10 +151,8 @@ siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	\rm -fr  ${FULLTARGET}/${APPLICATION}
 	\rm -fr  ${FULLTARGET}/${APPLICATIONPKG}*
 	PYTHONUSERBASE=${TARGET} pip install --user .
-	/project/res/bin/res_perm ${FULLTARGET}/${APPLICATIONROOT}*
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
-	$(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )
 
 userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATION}
@@ -166,4 +164,3 @@ userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
 
 docsinstall: docsrun
 	rsync -av --delete docs/_build/html ${DOCSINSTALL}/${APPLICATION}
-	/project/res/bin/res_perm ${DOCSINSTALL}/${APPLICATION}
