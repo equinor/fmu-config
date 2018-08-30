@@ -156,3 +156,10 @@ rms:
   AVALUE:
     dtype: float
     values: [*aoilcsa, *aoilmtr, *aoilmst, *aoilcsa, *aoilmtr, *aoilmst]
+
+
+xtool:
+  values:
+    - 12
+    - 14
+    - 21
