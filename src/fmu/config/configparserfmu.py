@@ -170,7 +170,7 @@ class ConfigParserFMU(object):
         else:
             mycfg = self.config
 
-        mystream = json.dumps(mycfg, indent=4)
+        mystream = json.dumps(mycfg, indent=4, default=str)
 
         mystream = re.sub('\s+~', '~', mystream)
         mystream = re.sub('~\s+', '~', mystream)
@@ -180,6 +180,7 @@ class ConfigParserFMU(object):
             out = os.path.join(destination, rootname + '.json')
             with open(out, 'w') as stream:
                 stream.write(cfg1)
+
         if template:
             cfg2 = self._get_tmpl_form(mystream)
             out = os.path.join(destination, rootname + '.tmpl')
@@ -369,13 +370,11 @@ class ConfigParserFMU(object):
             result = []
             for item in stream:
                 moditem = re.sub(pattern, '', item)
-                moditem = re.sub('"', '', moditem)
                 moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
             print('STREAM is a str object - get dest form')
             result = re.sub(pattern, '', stream)
-            result = re.sub('"', '', result)
             result = result.strip() + '\n'
         else:
             raise ValueError('Input for templateconversion neither string '
