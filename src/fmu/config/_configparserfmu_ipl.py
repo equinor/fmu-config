@@ -224,6 +224,7 @@ def _ipl_freeform_format(self, template=False):
                     fnutt = '"'
                 myexpr = '{}[{}] = {}{}{}\n'.format(variable, inum + 1,
                                                     fnutt, val, fnutt)
+                myexpr = _get_required_iplform(myexpr, template=template)
                 expr.append(myexpr)
 
         mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
@@ -309,7 +310,7 @@ def _get_required_iplform(stream, template=False):
     """
 
     if isinstance(stream, str):
-        logger.info('STREAM is a str object')
+        logger.info('STREAM is a str object: %s', stream)
     else:
         raise NotImplementedError('Wait')
 
@@ -323,5 +324,8 @@ def _get_required_iplform(stream, template=False):
             result = val + '  // ' + var
     else:
         result = stream.strip()
+
+    if '\n' not in result:
+        result = result + '\n'
 
     return result
