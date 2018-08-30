@@ -6,6 +6,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os.path
+import json
 
 import fmu.config as config
 from fmu.config import oyaml as yaml
@@ -59,6 +60,27 @@ def test_to_yaml_troll2():
 
     assert cfg_yml['KH_MULT_CSAND']['value'] == 1.0
     assert cfg_tmpl['KH_MULT_CSAND']['value'] == '<KH_MULT_CSAND>'
+
+
+def test_to_json_troll2():
+    """Test the output for the JSON files, both templated and normal for
+    rms section.
+    """
+
+    cfg = config.ConfigParserFMU()
+
+    assert isinstance(cfg, config.ConfigParserFMU)
+
+    cfg.parse(TFILE2)
+    rootn = 'troll2_json'
+
+    cfg.to_json(rootname=rootn, destination=fmux.tmpdir,
+                template=fmux.tmpdir, tool='rms')
+
+    with open(os.path.join(fmux.tmpdir, rootn + '.json'), 'r') as myfile:
+        cfg_json = json.load(myfile)
+
+    assert cfg_json['KH_MULT_CSAND']['value'] == str(1.0)
 
 
 def test_ipl_troll2():
