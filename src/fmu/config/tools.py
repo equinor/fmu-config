@@ -26,7 +26,7 @@ def yaml_load(filename, safe=True):
     """
 
     if not os.path.isfile(filename):
-        raise IOError('File {} cannot be read'.format(filename)}
+        raise IOError('File {} cannot be read'.format(filename))
 
     with open(filename, 'r') as stream:
         if safe:
