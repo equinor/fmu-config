@@ -224,7 +224,12 @@ def _ipl_freeform_format(self, template=False):
                     fnutt = '"'
                 myexpr = '{}[{}] = {}{}{}\n'.format(variable, inum + 1,
                                                     fnutt, val, fnutt)
-                myexpr = _get_required_iplform(myexpr, template=template)
+                logger.info('Stream for list %s', myexpr)
+                pre, post = myexpr.split('=')
+                pre = pre.strip()
+                post = post.strip()
+                myexpr = (pre + ' = ' +
+                          _get_required_iplform(post, template=template))
                 expr.append(myexpr)
 
         mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
