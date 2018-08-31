@@ -17,6 +17,10 @@ logger = xfmu.functionlogger(__name__)
 # pylint: disable=too-many-branches
 
 
+class ConfigError(ValueError):
+    pass
+
+
 def to_ipl(self, rootname='global_variables', destination=None,
            template=None, tool='rms'):
     """Export the config as a global variables IPL and/or template
@@ -161,6 +165,10 @@ def _ipl_freeform_format(self, template=False):
     for variable in freeform_keys:
         logger.info('Variable to process is %s', variable)
         expr.append('\n')
+        if 'dtype' not in cfg[variable]:
+            raise ConfigError('The "dtype" is missing for RMS '
+                              'variable {}'.format(variable))
+
         mydtype = cfg[variable]['dtype']
         subtype = mydtype.capitalize()
         if 'Str' in subtype:
@@ -170,13 +178,30 @@ def _ipl_freeform_format(self, template=False):
 
         myvalue = cfg[variable].get('value')
         myvalues = cfg[variable].get('values')
+
+        if myvalue is None and myvalues is None:
+            raise ConfigError('"value" or "values" is missing for RMS '
+                              'variable {}'.format(variable))
+
         logger.info('myvalue %s', myvalue)
+
+        if myvalue:
+            if not isinstance(myvalue, (int, float, str, datetime.date, list)):
+                raise ConfigError('"value" is of wrong type for '
+                                  'variable {}: {} ({})'
+                                  .format(variable, myvalue, type(myvalue)))
+        if myvalues:
+            if not isinstance(myvalues, (list)):
+                raise ConfigError('"values" is of wrong type for '
+                                  'variable {}: {} ({})'
+                                  .format(variable, myvalues, type(myvalues)))
 
         myvalue = _fix_date_format(mydtype, myvalue, aslist=False)
         myvalues = _fix_date_format(mydtype, myvalues, aslist=True)
 
         listtype = ''
         if myvalue:
+
             fnutt = ''
             if subtype == 'String':
                 fnutt = '"'
@@ -199,6 +224,12 @@ def _ipl_freeform_format(self, template=False):
                     fnutt = '"'
                 myexpr = '{}[{}] = {}{}{}\n'.format(variable, inum + 1,
                                                     fnutt, val, fnutt)
+                logger.info('Stream for list %s', myexpr)
+                pre, post = myexpr.split('=')
+                pre = pre.strip()
+                post = post.strip()
+                myexpr = (pre + ' = ' +
+                          _get_required_iplform(post, template=template))
                 expr.append(myexpr)
 
         mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
@@ -211,27 +242,34 @@ def _ipl_freeform_format(self, template=False):
 def _fix_date_format(dtype, value, aslist=False):
     """Make dateformat to acceptable RMS IPL format."""
 
+    logger.debug('Fix dates...')
     if not value:
         return None
 
+    logger.debug('Fix dates...2 dtype is %s', dtype)
     if dtype not in ('date', 'datepair'):
+        logger.debug('Fix dates...2 dtype is %s RETURN', dtype)
         return value
 
     values = None
     if aslist:
+        logger.debug('Dates is a list')
         values = value
         value = None
 
     if dtype == 'date':
+        logger.info('Process date ...')
         if value:
+            logger.info('Process date as ONE value')
             if isinstance(value, (datetime.datetime, datetime.date)):
                 value = str(value)
                 value = value.replace('-', '')
 
         if values:
             mynewvalues = []
+            logger.info('Process date as values')
             for val in values:
-                if isinstance(value, (datetime.datetime, datetime.date)):
+                if isinstance(val, (datetime.datetime, datetime.date)):
                     val = str(val)
                     val = val.replace('-', '')
                     mynewvalues.append(val)
@@ -277,7 +315,7 @@ def _get_required_iplform(stream, template=False):
     """
 
     if isinstance(stream, str):
-        logger.info('STREAM is a str object')
+        logger.info('STREAM is a str object: %s', stream)
     else:
         raise NotImplementedError('Wait')
 
@@ -291,5 +329,8 @@ def _get_required_iplform(stream, template=False):
             result = val + '  // ' + var
     else:
         result = stream.strip()
+
+    if '\n' not in result:
+        result = result + '\n'
 
     return result
