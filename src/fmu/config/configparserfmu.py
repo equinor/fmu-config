@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Module for parsing global configuration for FMU.
 
-This module will be ran from the `fmuconfig` script, which is the
-front-end for the user.
+This module will normally be ran from the `fmuconfig` script,
+which is the front-end script for the user.
 """
 
 from __future__ import absolute_import
@@ -80,9 +80,9 @@ class ConfigParserFMU(object):
                 .yml will be added for destination, and .tmpl
                 for template output.
             destination: The directory path for the destination
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             template: The directory path for the templated
-                file. If None, than no templated output will be given.
+                file. If None, then no templated output will be given.
             tool (str): Using one of the specified tool sections in the
                 master config, e.g. 'rms'. Default is None which means all.
             createfolders (bool): If True then folders will be created if they
@@ -113,6 +113,9 @@ class ConfigParserFMU(object):
 
         mystream = ''.join(self._get_sysinfo()) + mystream
 
+        mystream = re.sub('\s+~', '~', mystream)
+        mystream = re.sub('~\s+', '~', mystream)
+
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
 
@@ -136,9 +139,9 @@ class ConfigParserFMU(object):
                 .json will be added for destination, and .tmpl
                 for template output.
             destination: The directory path for the destination
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             template: The directory path for the templated
-                file. If None, than no output will be given
+                file. If None, then no output will be given
             tool (str): Using one of the specified tool sections in the
                 master config, e.g. 'rms'. Default is None which means all.
             createfolders: If True then folders will be created if they
@@ -167,13 +170,17 @@ class ConfigParserFMU(object):
         else:
             mycfg = self.config
 
-        mystream = json.dumps(mycfg, indent=4)
+        mystream = json.dumps(mycfg, indent=4, default=str)
+
+        mystream = re.sub('\s+~', '~', mystream)
+        mystream = re.sub('~\s+', '~', mystream)
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
             out = os.path.join(destination, rootname + '.json')
             with open(out, 'w') as stream:
                 stream.write(cfg1)
+
         if template:
             cfg2 = self._get_tmpl_form(mystream)
             out = os.path.join(destination, rootname + '.tmpl')
@@ -329,9 +336,9 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _get_tmpl_form(stream):
-        """Given variables..."""
+        """Get template form (<...> if present, not numbers)."""
 
-        pattern = '[a-zA-Z0-9.\s]+~\s*'
+        pattern = '[a-zA-Z0-9.]+~'
 
         if isinstance(stream, list):
             print('STREAM is a list object')
@@ -342,9 +349,10 @@ class ConfigParserFMU(object):
                 moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            print('STREAM is a str object')
-            result = re.sub(pattern, ' ', stream)
+            print('STREAM is a str object - get tmpl form')
+            result = re.sub(pattern, '', stream)
             result = re.sub('"', '', result)
+            result = result.strip() + '\n'
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')
@@ -353,16 +361,21 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _get_dest_form(stream):
-        """Given variables..."""
+        """Get destination form (numbers, not <...>)"""
+
+        pattern = '~<.+?>'
 
         if isinstance(stream, list):
             print('STREAM is a list object')
             result = []
             for item in stream:
-                moditem = re.sub('~.*>', '', item)
+                moditem = re.sub(pattern, '', item)
+                moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            result = re.sub('~.*>', '', stream)
+            print('STREAM is a str object - get dest form')
+            result = re.sub(pattern, '', stream)
+            result = result.strip() + '\n'
         else:
             raise ValueError('Input for templateconversion neither string '
                              'or list')
