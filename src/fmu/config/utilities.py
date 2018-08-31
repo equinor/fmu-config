@@ -12,12 +12,14 @@ import os
 from fmu.config import oyaml as yaml
 
 
-def yaml_load(filename, safe=True):
+def yaml_load(filename, safe=True, tool=None):
     """Load as YAML file, return a dictionary which is the config.
 
     Args:
         filename (str): Name of file (YAML formatted)
         safe (bool): If True (default), then use `safe_load`
+        tool (str): Refers to a particular main section in the config.
+            Default is None, which measn 'all'.
 
     Example::
         >>> import fmu.config.utilities as utils
@@ -33,5 +35,13 @@ def yaml_load(filename, safe=True):
             cfg = yaml.safe_load(stream)
         else:
             cfg = yaml.load(stream)
+
+    if tool is not None:
+        try:
+            newcfg = cfg[tool]
+            cfg = newcfg
+        except Exception as exc:
+            print('Cannot import: {}'.format(exc))
+            return None
 
     return cfg
