@@ -18,6 +18,7 @@ logger = xfmu.functionlogger(__name__)
 
 
 class ConfigError(ValueError):
+    """Exception usefo config error, derived from ValueError"""
     pass
 
 
@@ -37,15 +38,15 @@ def to_ipl(self, rootname='global_variables', destination=None,
     """
 
     if not destination and not template:
-        raise ValueError('Both destination and template for IPL cannot '
-                         'be None.')
+        raise ConfigError('Both destination and template for IPL cannot '
+                          'be None.')
 
     if destination and not os.path.isdir(destination):
-        raise ValueError('Given "destination" {} is not a directory'
-                         .format(destination))
+        raise ConfigError('Given "destination" {} is not a directory'
+                          .format(destination))
     if template and not os.path.isdir(template):
-        raise ValueError('Given "template" {} is not a directory'
-                         .format(template))
+        raise ConfigError('Given "template" {} is not a directory'
+                          .format(template))
 
     declarations = []
     expressions_dest = []
