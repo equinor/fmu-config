@@ -7,9 +7,9 @@ Examples to learn from
 
 Below is a presentation of Troll config files
 
--------------
-Troll example
--------------
+--------------------
+Troll example config
+--------------------
 
 Troll has a large number of surfaces, and for convinience these lists
 are places into separate files.
@@ -34,3 +34,29 @@ rms_zones.yml
 
 .. literalinclude:: ../tests/data/yaml/troll2/rms_zones.yml
    :language: yaml
+
+
+----------------------------------------
+Using the config in RMS, IPL and Python
+----------------------------------------
+
+IPL example
+"""""""""""
+.. code-block:: bash
+
+   Include("../input/global_variables/global_variables.ipl")
+
+   FOR i FROM 1 TO TOP_LOBE.length DO
+       Print("Reading ", TOP_LOBE[i])
+
+
+Python example
+""""""""""""""
+.. code-block:: python
+
+   import fmu.config.utilities as utils
+
+   cfg = utils.yaml_load('../input/global_variables/global_variables_rms.yml')
+
+   for toplobe in cfg['horizons']['TOP_LOBE']:
+       print('Working with {}'.format(toplobe))
