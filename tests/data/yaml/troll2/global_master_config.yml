@@ -85,7 +85,7 @@ rms:
   horizons: !include rms_horizons.yml
   zones:  !include rms_zones.yml
 
-  # the freeform is implit not beeing horizons or zones
+  # the following entries are called freeform entries:
 
   FWL:
     dtype: float
