@@ -113,8 +113,8 @@ class ConfigParserFMU(object):
 
         mystream = ''.join(self._get_sysinfo()) + mystream
 
-        mystream = re.sub('\s+~', '~', mystream)
-        mystream = re.sub('~\s+', '~', mystream)
+        mystream = re.sub(r'\s+~', '~', mystream)
+        mystream = re.sub(r'~\s+', '~', mystream)
 
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
@@ -172,8 +172,8 @@ class ConfigParserFMU(object):
 
         mystream = json.dumps(mycfg, indent=4, default=str)
 
-        mystream = re.sub('\s+~', '~', mystream)
-        mystream = re.sub('~\s+', '~', mystream)
+        mystream = re.sub(r'\s+~', '~', mystream)
+        mystream = re.sub(r'~\s+', '~', mystream)
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
