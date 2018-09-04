@@ -5,7 +5,7 @@ Usage
 Run from script
 ---------------
 
-The fmu.config module is accessed through a script, which is ran like this::
+The fmu.config module is accessed through a script, which is run like this::
 
   fmuconfig global_master_config.yml <options...>
 
@@ -41,7 +41,7 @@ Here is an example of a shell script that runs `fmuconfig`:
 Run from RMS python
 -------------------
 
-The config can also be ran from inside RMS. In that cas you need to initiate the Class
+The config can also be ran from inside RMS. In that case you need to initiate the Class
 instance and run a few methods. Here is an example:
 
 .. code-block:: python
@@ -98,24 +98,24 @@ understand the format.
   - ``rms``: For RMS related settings
   - ``eclipse``: For Eclipse related settings
 
-* Notice the difference beteen small letters and upprcase letters
+* Notice the difference beteen small letters and uppercase letters
   - The small letters are YAML keyword
   - Uppercase letters are "client" keywords or variables
 
 * The dates format shall be `ISO 8601`_ complient, on the form ``YYYY-MM-DD``.
   For file naming and IPL that date will be usually be compressed to
-  the ``YYYYMMDD`` form, which is still in accordance to the ISO standard.
+  the ``YYYYMMDD`` form, which is still in accordance with the ISO standard.
 
-* Uncertainties are placed within numbers as this examples show:
+* Uncertainties are placed within numbers as these examples show:
   ``1.0 ~ <KH_MULT_MTR>`` or ``1.0~<KH_MULT_MTR>``. Notice that
 
   - First entry is the number that shall be used when running tests outside ERT,
     i.e. the *work* mode.
-  - A tilde ``~`` is used to seperate this number with an uncertainty identifier,
+  - A tilde ``~`` is used to separate this number with an uncertainty identifier,
     which will be on the form ``<XXX>``, also called the *template* mode.
   - The files generated from this global master config, will either have the
-    *work* form (e.g. 1.0 in this example) or the templated form (<KH_MULT_MTR> in
-    this example). The alternate form may be present as a comment.
+    *work* form (e.g. 1.0 in this example) or the templated form (``<KH_MULT_MTR>``
+    in this example). The alternate form may be present as a comment.
 
 RMS related settings
 --------------------
@@ -125,14 +125,14 @@ Whithin the ``rms`` section there may be 2 significant subheadings:
 * horizons
 * zones
 
-Both these may have horizons list, that will usually (always?) never contain
-uncertainties; they are just lists to facilitate looping with RMS
+Both of these may have the horizons list, that will usually (always?) never
+contain uncertainties; they are just lists to facilitate looping with RMS
 Python or IPL.
 
-The rest of ``rms`` will be on so-called *freeform* format, where one need to
+The rest of ``rms`` will be on so-called *freeform* format, where one needs to
 
 * Have a identifier or variable name in **UPPERCASE**.
-* Then spesify (one indent level more) the
+* Then specify (one indent level more) the
 
   - ``dtype`` (what kind of datatype; int, float, date, datepair, etc.)
   - ``value`` or ``values``: The single form ``value`` for single numbers, and the
