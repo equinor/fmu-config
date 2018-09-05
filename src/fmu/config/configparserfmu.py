@@ -17,6 +17,7 @@ import getpass
 import socket
 import datetime
 import json
+from os.path import join as ojoin
 
 # for ordered dicts!
 from fmu.config import oyaml as yaml
@@ -67,6 +68,77 @@ class ConfigParserFMU(object):
         elif style in ('json', 'jason'):
             stream = json.dumps(self.config, indent=4, default=str)
             print(stream)
+
+    def to_table(self, rootname='myconfig', destination=None, template=None,
+                 entry=None, createfolders=False, sep=','):
+        # pylint: disable=too-many-arguments
+
+        """Export a particular entry in config as text table files;
+        one with true values and one with templated variables.
+
+        Args:
+            rootname: Root file name without extension. An extension
+                .yml will be added for destination, and .tmpl
+                for template output.
+            destination: The directory path for the destination
+                file. If None, then no output will be given
+            template: The directory path for the templated
+                file. If None, then no templated output will be given.
+            entry (str): Using one of the specified key/entry sections in the
+                master config that holds a table, e.g. 'global.FWL'.
+            createfolders (bool): If True then folders will be created if they
+                do not exist (default is False).
+            sep (str): Table separator, e.g. ' '
+
+        Raises:
+            ValueError: If both destination and template output is None,
+                or folder does not exist in advance, if createfolder=False.
+
+        Example:
+
+            >>> config.to_yaml('global_variables', destination='../')
+        """
+
+        if not destination and not template:
+            raise ValueError('Both desitionation and template are None.'
+                             'At least one of them has to be set!.')
+
+        if createfolders:
+            self._force_create_folders([destination, template])
+        else:
+            self._check_folders([destination, template])
+
+        keys = entry.split('.')
+
+        if len(keys) == 1:
+            cfg = self.config[keys[0]]
+        elif len(keys) == 2:
+            cfg = self.config[keys[0]][keys[1]]
+
+        print('\n\n\n\n')
+        print(cfg)
+
+        if destination:
+            with open(ojoin(destination, rootname + '.txt'), 'w') as dest:
+                for row in cfg:
+                    for col in row:
+                        stream = str(col)
+                        stream = self._get_required_form(stream,
+                                                         template=False)
+                        print('<{}>'.format(stream))
+                        print(str(stream) + sep, file=dest, end='')
+                    print('', file=dest)
+        if template:
+            with open(ojoin(template, rootname + '_txt.tmpl'), 'w') as tmpl:
+                for row in cfg:
+                    for col in row:
+                        stream = str(col)
+                        stream = self._get_required_form(stream,
+                                                         template=True)
+                        print(str(stream) + sep, file=tmpl, end='')
+                    print('', file=tmpl)
+
+
 
     def to_yaml(self, rootname='myconfig', destination=None, template=None,
                 tool=None, createfolders=False):
@@ -305,6 +377,9 @@ class ConfigParserFMU(object):
             template (bool): If template mode
             ipl (bool): If IPL mode
         """
+
+        if '~' not in stream:
+            return stream
 
         result = None
 
