@@ -12,6 +12,7 @@ import fmu.config as config
 from fmu.config import oyaml as yaml
 # import fmu.config.fmuconfigrunner as fmurun
 
+JFILE1 = 'tests/data/yaml/jsverdrup/global_master_config.yml'
 TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
 TFILE2 = 'tests/data/yaml/troll2/global_master_config.yml'
 RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'
@@ -22,6 +23,21 @@ logger = fmux.basiclogger(__name__)
 # always this statement
 if not fmux.testsetup():
     raise SystemExit()
+
+
+def test_jsverdrup():
+    """Test table output behaviour"""
+
+    cfg = config.ConfigParserFMU()
+
+    assert isinstance(cfg, config.ConfigParserFMU)
+
+    cfg.parse(JFILE1)
+
+    cfg.show()
+
+    cfg.to_table(rootname='JS', destination=fmux.tmpdir,
+                 template=fmux.tmpdir, entry='global.FWL', sep='      ')
 
 
 def test_basic_troll():
