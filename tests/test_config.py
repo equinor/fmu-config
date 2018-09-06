@@ -12,7 +12,7 @@ import fmu.config as config
 from fmu.config import oyaml as yaml
 # import fmu.config.fmuconfigrunner as fmurun
 
-JFILE1 = 'tests/data/yaml/jsverdrup/global_master_variables.yml'
+JFILE1 = 'tests/data/yaml/jsverdrup/global_master_config.yml'
 TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
 TFILE2 = 'tests/data/yaml/troll2/global_master_config.yml'
 RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'

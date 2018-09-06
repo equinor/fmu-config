@@ -1,7 +1,7 @@
 # Master FMU global config inspired by J Sverdrup setup, but fake numbers
 
 version: 1.0
-authors: [jriv, nn, aa]
+authors: [jriv, peesv, xman]
 
 #-------------------------------------------------------------------------
 # GLOBAL
@@ -10,16 +10,17 @@ global:
   name: Johanne Zverdrup
   coordsys: ST_SOMEWHAT_COORDSYS
 
-  dates: &global_dates
+  DATES: &global_dates
     - 2030-01-01
     - 2031-06-01
     - 2033-01-01
 
-  diffdates: &global_diff_dates
+  DIFFDATES: &global_diff_dates
     - [2031-06-01, 2030-01-01]
     - [2033-01-01, 2031-06-01]
     - [2033-01-01, 2030-01-01]
 
+  # an example of a table input, which may be output as a table file (a text file)
   FWL:
     - [Zone, Region1, Region2, Region3, Region4]
     - [1, 1001.0~<FWL_TONJ_DRAUP>, 1001.0~<FWL_GEIT_DRAUP>, 1001.0~<FWL_ESPN_DRAUP>, 1001.0~<FWL_ESPS_DRAUP>]
@@ -37,67 +38,26 @@ global:
 rms:
   horizons:
     TOPNAME:
-      - TopDitt
-      - TopMidReek
-      - TopLowerReek
-      - BaseLowerReek
+      - TopSverdrup
+      - TopZverdrup
+      - BaseZverdrup
 
   zones:
     ISONAME:
-      - UpperReek
-      - MidReek
-      - LowerReek
+      - Sverdrup
+      - Zverdrup
 
-  freeform:
-    COHIBA_MODE:
-      dtype: str
-      value: PREDICTION~<COHIBA_MODE>
+  COHIBA_MODE:
+    dtype: str
+    value: PREDICTION~<COHIBA_MODE>
 
-    RUN_HAVANA:
-      dtype: int
-      value: 0
-
-
-    HAVANA_FAULT_LIST:
-      dtype: str
-      values: [F4]
-
-    MOVE_LAT:
-      dtype: float
-      values: [400.0]
-
-    SCALE_THROW:
-      dtype: int
-      values: [2~<THROW>]
-
-    FWL1:
-      dtype: float
-      values: [1705~<FWL1>, 1000]
-
-    # or?
-    FWL2:
-      dtype: float
-      values: [<FWL2>, 1000]
-      <FWL2>:
-        default: 1705
-        distribution: N~(1705, 10)
-
-  dates:
-    ECLIPSE_DATES: *global_dates
-    DATES4D: *global_dates
-
-    DIFF4D_DATES: *global_diff_dates
+  RUN_HAVANA:
+    dtype: int
+    value: 0
 
 
 eclipse:
-  RELPERM:
-    content: |
-      INTERPOLATE_WO 0.3~<INTERPOLATE_WO>
-      INTERPOLATE_GO 0.7~<INTERPOLATE_GO>
-
-
-  MULTFLT:
-    content: |
+  MULTFLT: |
       MULTFLT
       'F1'   0.12~<MULTFLT_F1> /
       'F2'   0.01~<MULTFLT_F2> /

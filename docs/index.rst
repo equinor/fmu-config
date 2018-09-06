@@ -8,6 +8,7 @@ Contents:
 
    readme
    installation
+   yamlformat
    usage
    examples
    modules

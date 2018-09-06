@@ -110,7 +110,7 @@ def main(args=None):
         cfg.to_json(rootname=args.rootname, destination=args.destination,
                     template=args.template, tool=args.tool)
 
-    elif args.mode in ('table'):
+    elif args.mode == 'table':
         print('Mode is TABLE')
         cfg.to_table(rootname=args.rootname, destination=args.destination,
                      template=args.template, entry=args.tool, sep=args.sep)
