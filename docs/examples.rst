@@ -36,6 +36,20 @@ rms_zones.yml
    :language: yaml
 
 
+------------------------
+Sverdrup example config
+------------------------
+Note that these data are fake data
+
+.. literalinclude:: ../tests/data/yaml/jsverdrup/global_master_config.yml
+   :language: yaml
+
+The includeded file:
+
+.. literalinclude:: ../tests/data/yaml/jsverdrup/fwl2.yml
+   :language: yaml
+
+
 ----------------------------------------
 Using the config in RMS, IPL and Python
 ----------------------------------------

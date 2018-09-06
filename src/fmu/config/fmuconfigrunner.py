@@ -43,7 +43,7 @@ def _do_parse_args(args):
                         dest='mode',
                         default='ipl',
                         type=str,
-                        help='Mode for conversion: ipl/yaml etc...')
+                        help='Mode for conversion: ipl/yaml/json/table etc...')
 
     parser.add_argument('--rootname',
                         dest='rootname',
@@ -61,10 +61,16 @@ def _do_parse_args(args):
                         type=str,
                         help='Template folder (for files with <xxxx> values)')
 
-    parser.add_argument('--tool',
+    parser.add_argument('--tool', '--entry',
                         dest='tool',
                         type=str,
-                        help='Tool section to apply, e.g. rms or eclipse')
+                        help='Tool or entry section to apply, e.g. rms '
+                        'or eclipse, or global.FWL where "." separates levels')
+    parser.add_argument('--sep',
+                        dest='sep',
+                        type=str,
+                        default=',',
+                        help='Separator string for table mode')
 
     if len(args) < 2:
         parser.print_help()
@@ -94,10 +100,22 @@ def main(args=None):
         cfg.to_ipl(rootname=args.rootname, destination=args.destination,
                    template=args.template, tool=args.tool)
 
-    if args.mode in ('yaml', 'yml'):
+    elif args.mode in ('yaml', 'yml'):
         print('Mode is YAML')
         cfg.to_yaml(rootname=args.rootname, destination=args.destination,
                     template=args.template, tool=args.tool)
+
+    elif args.mode in ('json', 'jason'):
+        print('Mode is JASON')
+        cfg.to_json(rootname=args.rootname, destination=args.destination,
+                    template=args.template, tool=args.tool)
+
+    elif args.mode == 'table':
+        print('Mode is TABLE')
+        cfg.to_table(rootname=args.rootname, destination=args.destination,
+                     template=args.template, entry=args.tool, sep=args.sep)
+    else:
+        raise RuntimeError('Invalid options for mode')
 
 
 if __name__ == '__main__':

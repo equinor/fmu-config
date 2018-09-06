@@ -73,15 +73,6 @@ def to_ipl(self, rootname='global_variables', destination=None,
             declarations.extend(hdecl)
             expressions_dest.extend(hlist)
 
-    if template:
-        hdecl, hlist = _ipl_freeform_format(self, template=True)
-        if hdecl is not None:
-            if not destination:
-                declarations.extend(hdecl)
-
-            expressions_tmpl.extend(hlist)
-
-    if destination:
         destfile = os.path.join(destination, rootname + '.ipl')
         with open(destfile, 'w') as stream:
             for line in declarations:
@@ -91,6 +82,13 @@ def to_ipl(self, rootname='global_variables', destination=None,
                 stream.write(line)
 
     if template:
+        hdecl, hlist = _ipl_freeform_format(self, template=True)
+        if hdecl is not None:
+            if not destination:
+                declarations.extend(hdecl)
+
+            expressions_tmpl.extend(hlist)
+
         tmplfile = os.path.join(template, rootname + '.tmpl')
         with open(tmplfile, 'w') as stream:
             for line in declarations:
@@ -148,6 +146,7 @@ def _ipl_freeform_format(self, template=False):
 
     """
     # pylint: disable=too-many-locals
+    # pylint: disable=too-many-statements
 
     decl = ['// Declare free form:\n']
     expr = ['// Free form expressions:\n']
