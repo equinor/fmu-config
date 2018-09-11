@@ -179,18 +179,25 @@ def _ipl_freeform_format(self, template=False):
         myvalue = cfg[variable].get('value')
         myvalues = cfg[variable].get('values')
 
+        if subtype == 'Bool':
+            if myvalue is False:
+                myvalue = 'FALSE'
+            else:
+                myvalue = 'TRUE'
+
         if myvalue is None and myvalues is None:
             raise ConfigError('"value" or "values" is missing for RMS '
                               'variable {}'.format(variable))
 
         logger.info('myvalue %s', myvalue)
 
-        if myvalue:
-            if not isinstance(myvalue, (int, float, str, datetime.date, list)):
+        if myvalue is not None:
+            if not isinstance(myvalue, (int, float, str, bool, datetime.date,
+                                        list)):
                 raise ConfigError('"value" is of wrong type for '
                                   'variable {}: {} ({})'
                                   .format(variable, myvalue, type(myvalue)))
-        if myvalues:
+        if myvalues is not None:
             if not isinstance(myvalues, (list)):
                 raise ConfigError('"values" is of wrong type for '
                                   'variable {}: {} ({})'
@@ -200,7 +207,7 @@ def _ipl_freeform_format(self, template=False):
         myvalues = _fix_date_format(mydtype, myvalues, aslist=True)
 
         listtype = ''
-        if myvalue:
+        if myvalue is not None:
 
             fnutt = ''
             if subtype == 'String':
@@ -216,7 +223,7 @@ def _ipl_freeform_format(self, template=False):
             expr.append(myexpr)
 
         # list of values:
-        elif myvalues:
+        elif myvalues is not None:
             listtype = '[]'
             for inum, val in enumerate(myvalues):
                 fnutt = ''
