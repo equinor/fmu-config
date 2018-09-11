@@ -87,6 +87,14 @@ rms:
 
   # the following entries are called freeform entries:
 
+  WELLMODEL:
+    dtype: bool
+    value: Yes
+
+  SOMEXMODEL:
+    dtype: bool
+    value: No
+
   FWL:
     dtype: float
     values: *global_fwl
