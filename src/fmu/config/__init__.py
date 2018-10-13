@@ -2,9 +2,9 @@
 
 """Top-level package for fmu_config"""
 
-from ._version import get_versions
-__version__ = get_versions()['version']
+from ._theversion import theversion
+__version__ = theversion()
 
-del get_versions
+del theversion
 
 from .configparserfmu import ConfigParserFMU  # noqa
