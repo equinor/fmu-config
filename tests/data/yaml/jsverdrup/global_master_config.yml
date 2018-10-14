@@ -51,10 +51,20 @@ rms:
     dtype: str
     value: PREDICTION~<COHIBA_MODE>
 
+  COHIBA_MODE2: PREDICTION~<COHIBA_MODE2>
+
   RUN_HAVANA:
     dtype: int
     value: 0
 
+  # guessing the dtype with one value
+  RUN_MANILA: 0
+
+  # guessing the dtype with values
+  FWL3:
+    - 1234.0
+    - 1236.0
+    - 1134.5
 
 eclipse:
   MULTFLT: |
