@@ -8,7 +8,7 @@ from fmu.config._version import get_versions
 
 
 def theversion():
-
+    """Get version on proper form."""
     versions = get_versions()
     version = versions['version']
     sver = version.split('.')
