@@ -39,7 +39,8 @@ rms_zones.yml
 ------------------------
 Sverdrup example config
 ------------------------
-Note that these data are fake data
+Note that these data are fake data. In this example, a simplified version of the FREE IPL variables
+is used, which perhaps should be the preferred form.
 
 .. literalinclude:: ../tests/data/yaml/jsverdrup/global_master_config.yml
    :language: yaml
