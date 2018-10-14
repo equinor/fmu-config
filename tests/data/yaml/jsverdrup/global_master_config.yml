@@ -51,18 +51,22 @@ rms:
     dtype: str
     value: PREDICTION~<COHIBA_MODE>
 
-  COHIBA_MODE2: PREDICTION~<COHIBA_MODE2>
 
   RUN_HAVANA:
     dtype: int
     value: 0
 
   # guessing the dtype with one value
-  RUN_MANILA: 0
+  COHIBA_MODE2: PREDICTION~<COHIBA_MODE2>
+  COHIBA_MODE3: SIMULATION
+  RUN_MANILA1: 1
+  RUN_MANILA2: 0
+  FWL_UBER_ALLES: 1344.0
+  FWL_UBER_ALLES_FINAL: 1344.0 ~ <UBER_FINAL>
 
   # guessing the dtype with values
   FWL3:
-    - 1234.0
+    - 1234.0 ~ <FWL3_FIRST>
     - 1236.0
     - 1134.5
 

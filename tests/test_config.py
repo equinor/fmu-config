@@ -39,8 +39,11 @@ def test_jsverdrup():
     cfg.to_table(rootname='JS', destination=fmux.tmpdir,
                  template=fmux.tmpdir, entry='global.FWL', sep='      ')
 
-    cfg.to_ipl(rootname='global_variables', destination=fmux.tmpdir,
+    cfg.to_ipl(rootname='js_global_variables', destination=fmux.tmpdir,
                template=fmux.tmpdir, tool='rms')
+
+    cfg.to_yaml(rootname='js_global_variables_rms', destination=fmux.tmpdir,
+                template=fmux.tmpdir, tool='rms')
 
 
 def test_basic_troll():

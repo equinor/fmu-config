@@ -99,6 +99,9 @@ understand the format.
 RMS related settings
 --------------------
 
+Horizons and zones
+~~~~~~~~~~~~~~~~~~
+
 Whithin the ``rms`` section there may be 2 significant subheadings:
 
 * horizons
@@ -107,6 +110,9 @@ Whithin the ``rms`` section there may be 2 significant subheadings:
 Both of these may have the horizons list, that will usually (always?) never
 contain uncertainties; they are just lists to facilitate looping with RMS
 Python or IPL.
+
+Freeform, with dtype and value(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The rest of ``rms`` will be on so-called *freeform* format, where one needs to
 
@@ -126,11 +132,31 @@ Example of a freeform type with uncertainty alternative:
     value: 1.0 ~ <KH_MULT_MTR>
 
 
+Freeform, simplified alternative
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From version 0.0.6, ``dtype`` and ``value(s)`` are no longer required (except for dates),
+one can simply use:
+
+.. code-block:: yaml
+
+  KH_MULT_MTR: 0.1 ~ <KH_MULT_MTR>
+
+The parser will then try to guess the IPL datatype from the value. When that is the case,
+use a ``.`` in the number to say that ist shall be Float, e.g.
+
+.. code-block:: yaml
+
+  KH_MULT_MTR: 1.0  # will be interpreted as a Float
+  KH_MULT_XTR: 1    # will be interpreted as an Int
+
+
+
 Summary of Reserved words
 --------------------------
 
 Here is an ovwerview of reserved words (small letters), and the data values are also described
-for some
+for some cases.
 
 .. code-block:: yaml
 
@@ -140,7 +166,7 @@ for some
 
    global:
      name: Name of ypur field
-     coordsys: OW_COORDSYS_ID
+     coordsys: SOME_OW_COORDSYS_ID
 
    rms:
      horizons:
