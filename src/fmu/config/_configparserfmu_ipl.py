@@ -4,6 +4,8 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from copy import deepcopy
+from collections import OrderedDict
 
 import os
 import datetime
@@ -121,6 +123,44 @@ def _ipl_stringlist_format(self, subtype, tool='rms'):
     return decl, expr
 
 
+def _guess_dtype(var, entry):
+    """Guess the IPL dtype and value or values if dtype is missing.
+
+    The entry itself will then be a scalar or a list, which need to be
+    analysed. If a list, only the first value is analysed for data
+    type.
+
+    Returns a dict (OrderedDict) as usekey[keyword]['dtype'] and
+    usekey[keyword]['value'] or usekey[keyword]['values']
+    """
+    values = entry[var]
+    keyword = var
+    logger.info('Guess dtype and value(s) for %s', entry)
+
+    usekey = OrderedDict()
+    usekey[keyword] = OrderedDict()
+    usekey[keyword]['dtype'] = None
+    usekey[keyword]['value'] = None   # Keep "value" if singel entry
+    usekey[keyword]['values'] = None  # Keep "values", if list
+
+    if isinstance(values, list):
+        checkval = values[0]
+        usekey[keyword]['values'] = values
+        del usekey[keyword]['value']
+    else:
+        checkval = values
+        usekey[keyword]['value'] = values
+        del usekey[keyword]['values']
+
+    for alt in ('int', 'str', 'float', 'bool'):
+        if alt in str(type(checkval)):
+            usekey[keyword]['dtype'] = alt
+            break
+
+    logger.info('Updated key is %s', usekey)
+    return usekey
+
+
 # this function is too long...
 def _ipl_freeform_format(self, template=False):
     """Process the RMS IPL YAML config freeform types.
@@ -165,19 +205,25 @@ def _ipl_freeform_format(self, template=False):
     for variable in freeform_keys:
         logger.info('Variable to process is %s', variable)
         expr.append('\n')
-        if 'dtype' not in cfg[variable]:
-            raise ConfigError('The "dtype" is missing for RMS '
-                              'variable {}'.format(variable))
+        if not isinstance(cfg[variable], dict):
+            print('PLING', cfg[variable])
+            guesscfg = _guess_dtype(variable, cfg)
 
-        mydtype = cfg[variable]['dtype']
+            usecfg = guesscfg[variable]
+        else:
+            print('PLONG', cfg[variable])
+            usecfg = deepcopy(cfg[variable])
+
+        print(usecfg)
+        mydtype = usecfg['dtype']
         subtype = mydtype.capitalize()
         if 'Str' in subtype:
             subtype = 'String'
         elif 'Date' in subtype:
             subtype = 'String'
 
-        myvalue = cfg[variable].get('value')
-        myvalues = cfg[variable].get('values')
+        myvalue = usecfg.get('value')
+        myvalues = usecfg.get('values')
 
         if subtype == 'Bool':
             if myvalue is False:
