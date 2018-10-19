@@ -47,6 +47,10 @@ rms:
       - Sverdrup
       - Zverdrup
 
+  # include kwlists which is a special format for keyname, code, fullname:
+  kwlists: !include kwlists.yml
+
+
   COHIBA_MODE:
     dtype: str
     value: PREDICTION~<COHIBA_MODE>
@@ -55,6 +59,7 @@ rms:
   RUN_HAVANA:
     dtype: int
     value: 0
+
 
   # guessing the dtype with one value
   COHIBA_MODE2: PREDICTION~<COHIBA_MODE2>
@@ -69,6 +74,10 @@ rms:
     - 1234.0 ~ <FWL3_FIRST>
     - 1236.0
     - 1134.5
+
+  # include some freeform variables using anonymous entry __xxx
+  __xxx: !include doe_params.yml
+
 
 eclipse:
   MULTFLT: |
