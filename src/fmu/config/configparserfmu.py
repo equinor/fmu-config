@@ -8,7 +8,7 @@ which is the front-end script for the user.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
+from copy import deepcopy
 import os
 from os.path import join as ojoin
 import sys
@@ -19,8 +19,9 @@ import socket
 import datetime
 import json
 
-# for ordered dicts!
 from fmu.config import _theversion
+
+# for ordered dicts!
 from fmu.config import oyaml as yaml
 
 from fmu.config._loader import Loader
@@ -56,6 +57,8 @@ class ConfigParserFMU(object):
         with open(yfile, 'r') as stream:
             self._config = yaml.load(stream, Loader=Loader)
         self._yamlfile = yfile
+
+        self._cleanify_doubleunderscores()
 
     def show(self, style='yaml'):
         """Show (print) the current configuration to STDOUT.
@@ -136,7 +139,7 @@ class ConfigParserFMU(object):
                         stream = str(col)
                         stream = self._get_required_form(stream,
                                                          template=False)
-                        print('<{}>'.format(stream))
+                        # print('<{}>'.format(stream))
                         print(str(stream) + sep, file=dest, end='')
                     print('', file=dest)
         if template:
@@ -320,6 +323,37 @@ class ConfigParserFMU(object):
     # =========================================================================
     # Private methods
     # =========================================================================
+
+    def _cleanify_doubleunderscores(self):
+        """Remove keys with double underscore in level 2, and
+        move data up one level.
+
+        This is done in order to allow anonymous include, e.g.::
+
+           rms:
+              __tmp1: !include facies.yml
+
+        The input in facies.yaml will then be relocated to the key 'rms',
+        up one level.
+
+        """
+
+        newcfg = deepcopy(self._config)
+
+        for key, val in newcfg.items():
+            print(type(key))
+            if isinstance(val, dict):
+
+                for subkey, subval in val.items():
+
+                    if subkey.startswith('__'):
+                        logger.info('Found temporary key %s', subkey)
+                        if isinstance(subval, dict):
+                            for subsubkey, subsubval in subval.items():
+                                newcfg[key][subsubkey] = deepcopy(subsubval)
+                        del newcfg[key][subkey]
+
+        self._config = newcfg
 
     @staticmethod
     def _get_sysinfo(commentmarker='#'):

@@ -69,6 +69,12 @@ def to_ipl(self, rootname='global_variables', destination=None,
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
+    hdecl, hlist = _ipl_kwlists_format(self, tool=tool)
+    if hdecl is not None:
+        declarations.extend(hdecl)
+        expressions_dest.extend(hlist)
+        expressions_tmpl.extend(hlist)
+
     if destination:
         hdecl, hlist = _ipl_freeform_format(self)
         if hdecl is not None:
@@ -119,6 +125,56 @@ def _ipl_stringlist_format(self, subtype, tool='rms'):
             expr.append(mylist)
 
     expr.append('\n')
+
+    return decl, expr
+
+
+def _ipl_kwlists_format(self, tool='rms'):
+    """Process the rms 'kwlists', and return declarations and values.
+
+    This format is on the form::
+
+      rms:
+        kwlists:
+
+          FACIESNAMES:
+            OFFSHORE_VI_C: [1, "Offshore mudstones, Viking Gp."]
+            MUDDY_SPIC_C: [2, "Muddy spiculites"]
+            BIOSTROME_REEF_C: [3, "Biostrome reef"]
+            SANDY_SPIC_C: [4, "Sandy spiculites"]
+            TSS_Z1_C: [5, "Transgressive sands, Draupne Fm 2"]
+
+    It should then give::
+
+       Int OFFSHORE_VI_C = 1
+       Int MUDDY_SPIC_C = 2
+       etc...
+
+       String FACIESNAMES[]
+
+       FACIESNAMES[OFFSHORE_VI_C] = "Offshore mudstones, Viking Gp."
+       etc
+    """
+
+    cfg = self.config[tool].get('kwlists')
+    if cfg is None:
+        return None, None
+
+    decl = []
+    expr = []
+    for key, var in cfg.items():
+        mydecl = 'String {}[]\n'.format(key)
+        decl.append(mydecl)
+
+        for subkey, (code, fullname) in var.items():
+            logger.info(subkey, code, fullname)
+            mydecl = 'Int {} = {}\n'.format(subkey, code)
+            decl.append(mydecl)
+
+            mylist = '{}[{}] = "{}"\n'.format(key, subkey, fullname)
+            expr.append(mylist)
+
+        expr.append('\n')
 
     return decl, expr
 
@@ -303,7 +359,7 @@ def _ipl_freeform_format(self, template=False):
                                             string=isstring)
 
             logger.info('Returns value: %s', myvalue)
-            myexpr = '{} = {}\n'.format(variable, myvalue)
+            myexpr = '{} = {}'.format(variable, myvalue)
 
             expr.append(myexpr)
 
@@ -419,6 +475,7 @@ def _get_required_iplform(stream, template=False, string=False):
         var = var.strip()
         if string:
             val = '"' + val + '"'
+            var = '"' + var + '"'
         if template:
             result = var + '  // ' + val
         else:
