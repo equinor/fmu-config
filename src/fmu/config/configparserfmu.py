@@ -182,7 +182,7 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both desitionation and template are None.'
+            raise ValueError('Both destination and template are None.'
                              'At least one of them has to be set!.')
 
         if createfolders:
@@ -190,10 +190,13 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
+        # remove dtype, value(s) from RMS/IPL freeform entries
+        newcfg = self._strip_rmsdtype()
+
         if tool is not None:
-            mystream = yaml.dump(self.config[tool])
+            mystream = yaml.dump(newcfg[tool])
         else:
-            mystream = yaml.dump(self.config)
+            mystream = yaml.dump(newcfg)
 
         mystream = ''.join(self._get_sysinfo()) + mystream
 
@@ -249,10 +252,13 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
+        # remove dtype, value(s) from RMS/IPL freeform entries
+        newcfg = self._strip_rmsdtype()
+
         if tool is not None:
-            mycfg = self.config[tool]
+            mycfg = newcfg[tool]
         else:
-            mycfg = self.config
+            mycfg = newcfg
 
         mystream = json.dumps(mycfg, indent=4, default=str)
 
@@ -396,6 +402,35 @@ class ConfigParserFMU(object):
                 raise ValueError('Folder {} does not exist. It must either '
                                  'exist in advance, or the createfolders key'
                                  'must be True.'.format(folder))
+
+    def _strip_rmsdtype(self):
+        """Returns a copy of the _config dictionary so that the (e.g.)
+        FREEFORM['dtype'] and FREEFORM['value'] = x or FREEFORM['values'] = x
+        becomes simplified to FREEFORM = x
+        """
+
+        newcfg = deepcopy(self._config)
+
+        if 'rms' in self._config:
+            cfgrms = self._config['rms']
+        else:
+            return newcfg
+
+        for key, val in cfgrms.items():
+            print(key, val)
+            if isinstance(val, dict):
+                print(val.keys())
+                if 'dtype' and 'value' in val.keys():
+                    newcfg['rms'][key] = deepcopy(val['value'])
+                elif 'dtype' and 'values' in val.keys():
+                    newcfg['rms'][key] = deepcopy(val['values'])
+                elif 'dtype' in val.keys():
+                    raise RuntimeError(
+                        'Wrong input YAML?. It seems that "{}" has '
+                        '"dtype" but no "value" or "values" ({})'
+                        .format(key, val.keys()))
+
+        return newcfg
 
     @staticmethod
     def _get_required_form(stream, template=False, ipl=False):
