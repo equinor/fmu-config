@@ -80,8 +80,8 @@ def test_to_yaml_troll2():
     with open(os.path.join(fmux.tmpdir, rootn + '.tmpl'), 'r') as stream:
         cfg_tmpl = yaml.load(stream)
 
-    assert cfg_yml['KH_MULT_CSAND']['value'] == 1.0
-    assert cfg_tmpl['KH_MULT_CSAND']['value'] == '<KH_MULT_CSAND>'
+    assert cfg_yml['KH_MULT_CSAND'] == 1.0
+    assert cfg_tmpl['KH_MULT_CSAND'] == '<KH_MULT_CSAND>'
 
 
 def test_to_json_troll2():
@@ -102,7 +102,7 @@ def test_to_json_troll2():
     with open(os.path.join(fmux.tmpdir, rootn + '.json'), 'r') as myfile:
         cfg_json = json.load(myfile)
 
-    assert cfg_json['KH_MULT_CSAND']['value'] == str(1.0)
+    assert cfg_json['KH_MULT_CSAND'] == str(1.0)
 
 
 def test_ipl_troll2():
