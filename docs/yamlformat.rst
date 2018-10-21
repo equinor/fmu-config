@@ -6,7 +6,7 @@ To summarize:
 
 * YAML file endings is .yml
 
-* Within the YAML master config file, the *small letters* headings are *reserved"* words, while
+* Within the YAML master config file, the *small letters* headings are *"reserved"* words, while
   *uppercase* letters means som kind of freeform variable.
 
 
@@ -44,7 +44,7 @@ fmuconfig script is ran.
 
 In practice it means that the link in the RMS IPL scripts must be changed to:
 
-  include("../../share/config/output/global_variables.ipl")
+  ``include("../../share/config/output/global_variables.ipl")``
 
 
 File format and nested files
@@ -56,7 +56,7 @@ YAML spesification, with *one major exception*, and that is that
 the CONFIG into separate subfiles, which improves the overview.
 
 The *derived* YAML files to e.g. be used by RMS Python will not allow nesting;
-they will follow the standard.
+they will follow the YAML standard.
 
 What will be a good practice regarding nesting of the master config remains to see.
 
@@ -74,8 +74,8 @@ understand the format.
 * The first level indentation is important. Important sections are:
 
   - ``global``: For general settings
-  - ``rms``: For RMS related settings
-  - ``eclipse``: For Eclipse related settings
+  - ``rms``: For RMS IPL compatible related settings
+  - ``eclipse``: For Eclipse decks related settings
 
 * Notice the difference beteen small letters and uppercase letters
   - The small letters are YAML keywords with a special meaning.
@@ -96,20 +96,76 @@ understand the format.
     *work* form (e.g. 1.0 in this example) or the templated form (``<KH_MULT_MTR>``
     in this example). The alternate form may be present as a comment.
 
+Include files
+-------------
+
+In the input master YAML config, include files are allowed. Note that the include
+statement must "belong" to a keyword, e.g.::
+
+  kwlists: !include kwlists.yml
+
+This variant is not allowed::
+
+  !include something.yml
+
+However, one can use an anonymous keywords, which is any word that starts with to undescores::
+
+  __tmpword: !include something.yml
+
+
+Note here that ``__tmpword`` will not be a part of the configration. See later Johan Sverdrup
+example where this technique is applied.
+
+
+
 RMS related settings
 --------------------
 
-Horizons and zones
-~~~~~~~~~~~~~~~~~~
+Horizons, zones and kwlists
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Whithin the ``rms`` section there may be 2 significant subheadings:
+Whithin the ``rms`` section there may be 3 significant subheadings:
 
 * horizons
 * zones
+* kwlists
 
-Both of these may have the horizons list, that will usually (always?) never
+These are  reserved for Horizon, Zone or keywordd listing, and will usually (always?) never
 contain uncertainties; they are just lists to facilitate looping with RMS
 Python or IPL.
+
+Examples:
+
+.. code-block:: yaml
+
+   horizons:
+
+     TOP_RES:
+       - Top Ness
+       - Top Middle Ness
+       - Top Lower Ness
+       - Top Etive
+
+     Top_DCONV:
+       - Lista Fm.
+       - BCU
+
+   zones:
+     ZONE_RES:
+       - Upper Ness
+       - Middle Ness
+       - Lower Ness
+       - Etive
+
+   kwlists:
+
+     FACIES_NAMES:
+       OFFSHORE_VI_C:         [1, "Offshore mudstones, Viking Gp."]
+       MUDDY_SPIC_C:          [2, "Muddy spiculites"]
+       BIOSTROME_REEF_C:      [7, "Biostrome reef"]
+       SANDY_SPIC_C:          [8, "Sandy spiculites"]
+
+
 
 Freeform, with dtype and value(s)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,13 +173,29 @@ Freeform, with dtype and value(s)
 The rest of ``rms`` will be on so-called *freeform* format, where one needs to
 
 * Have a identifier or variable name in **UPPERCASE**.
-* Then specify (one indent level more) the
+* The config script will try to guess, based on the value(s), whether RMS IPL should
+  use String, Int, Bool or Float. In addition it will interpret if it is a scalar or a list
+* Optionally, if the automatics fails, one can specify (one indent level more) the
 
   - ``dtype`` (what kind of datatype; int, float, date, datepair, etc.)
   - ``value`` or ``values``: The single form ``value`` for single numbers, and the
     plural ``values`` form for lists.
 
-Example of a freeform type with uncertainty alternative:
+Examples of a freeform type with uncertainty alternative:
+
+.. code-block:: yaml
+
+  KH_MULT_MTR: 1.0 ~ <KH_MULT_MTR>  # the config script will assume dtype=Float,
+                                    # since it is a number with decimals, and uncertainty <...>
+
+  KH_MULT_MTX: 1    # the config script will assume dtype=Int, since punctuation is missing
+
+  KH_MULT_MTY: myvalue    # the config script will here assume dtype=String (text)
+
+  KH_MULT_MTZ: [1.0, 1.2, 1.3]    # the config script will here a list of dtype=Floats
+
+
+Example of a freeform typew with explicit dtype and value(s):
 
 .. code-block:: yaml
 
@@ -131,24 +203,31 @@ Example of a freeform type with uncertainty alternative:
     dtype: float
     value: 1.0 ~ <KH_MULT_MTR>
 
+  KH_MULT_MTX:
+    dtype: int
+    value: 1
 
-Freeform, simplified alternative
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  KH_MULT_MTY:
+    dtype: int
+    value: 1
 
-From version 0.0.6, ``dtype`` and ``value(s)`` are no longer required (except for dates),
-one can simply use:
+  KH_MULT_MTZ:
+    dtype: float
+    values:
+      - 1.0
+      - 1.2
+      - 1.3
+
+
+Freeform, output is always simplified
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For the output YAML or JSON format, ``dtype`` and ``value(s)`` will be stripped aways, and
+output style will always be on the form:
 
 .. code-block:: yaml
 
-  KH_MULT_MTR: 0.1 ~ <KH_MULT_MTR>
-
-The parser will then try to guess the IPL datatype from the value. When that is the case,
-use a ``.`` in the number to say that ist shall be Float, e.g.
-
-.. code-block:: yaml
-
-  KH_MULT_MTR: 1.0  # will be interpreted as a Float
-  KH_MULT_XTR: 1    # will be interpreted as an Int
+  KH_MULT_MTR: 1.0
 
 
 
@@ -165,12 +244,13 @@ for some cases.
    version: 1.0   # this is config file version
 
    global:
-     name: Name of ypur field
+     name: Name of your field
      coordsys: SOME_OW_COORDSYS_ID
 
    rms:
      horizons:
      zones:
+     kwlists:
 
      ANYVARIABLE:
        dtype:  ... float/int/string/date/datepair
