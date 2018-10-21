@@ -8,7 +8,7 @@ which is the front-end script for the user.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
+from copy import deepcopy
 import os
 from os.path import join as ojoin
 import sys
@@ -19,8 +19,9 @@ import socket
 import datetime
 import json
 
-# for ordered dicts!
 from fmu.config import _theversion
+
+# for ordered dicts!
 from fmu.config import oyaml as yaml
 
 from fmu.config._loader import Loader
@@ -56,6 +57,8 @@ class ConfigParserFMU(object):
         with open(yfile, 'r') as stream:
             self._config = yaml.load(stream, Loader=Loader)
         self._yamlfile = yfile
+
+        self._cleanify_doubleunderscores()
 
     def show(self, style='yaml'):
         """Show (print) the current configuration to STDOUT.
@@ -136,7 +139,7 @@ class ConfigParserFMU(object):
                         stream = str(col)
                         stream = self._get_required_form(stream,
                                                          template=False)
-                        print('<{}>'.format(stream))
+                        # print('<{}>'.format(stream))
                         print(str(stream) + sep, file=dest, end='')
                     print('', file=dest)
         if template:
@@ -179,7 +182,7 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both desitionation and template are None.'
+            raise ValueError('Both destination and template are None.'
                              'At least one of them has to be set!.')
 
         if createfolders:
@@ -187,10 +190,13 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
+        # remove dtype, value(s) from RMS/IPL freeform entries
+        newcfg = self._strip_rmsdtype()
+
         if tool is not None:
-            mystream = yaml.dump(self.config[tool])
+            mystream = yaml.dump(newcfg[tool])
         else:
-            mystream = yaml.dump(self.config)
+            mystream = yaml.dump(newcfg)
 
         mystream = ''.join(self._get_sysinfo()) + mystream
 
@@ -246,10 +252,13 @@ class ConfigParserFMU(object):
         else:
             self._check_folders([destination, template])
 
+        # remove dtype, value(s) from RMS/IPL freeform entries
+        newcfg = self._strip_rmsdtype()
+
         if tool is not None:
-            mycfg = self.config[tool]
+            mycfg = newcfg[tool]
         else:
-            mycfg = self.config
+            mycfg = newcfg
 
         mystream = json.dumps(mycfg, indent=4, default=str)
 
@@ -321,6 +330,37 @@ class ConfigParserFMU(object):
     # Private methods
     # =========================================================================
 
+    def _cleanify_doubleunderscores(self):
+        """Remove keys with double underscore in level 2, and
+        move data up one level.
+
+        This is done in order to allow anonymous include, e.g.::
+
+           rms:
+              __tmp1: !include facies.yml
+
+        The input in facies.yaml will then be relocated to the key 'rms',
+        up one level.
+
+        """
+
+        newcfg = deepcopy(self._config)
+
+        for key, val in newcfg.items():
+            print(type(key))
+            if isinstance(val, dict):
+
+                for subkey, subval in val.items():
+
+                    if subkey.startswith('__'):
+                        logger.info('Found temporary key %s', subkey)
+                        if isinstance(subval, dict):
+                            for subsubkey, subsubval in subval.items():
+                                newcfg[key][subsubkey] = deepcopy(subsubval)
+                        del newcfg[key][subkey]
+
+        self._config = newcfg
+
     @staticmethod
     def _get_sysinfo(commentmarker='#'):
         """Return a text string that serves as info for the outpyt styles
@@ -362,6 +402,35 @@ class ConfigParserFMU(object):
                 raise ValueError('Folder {} does not exist. It must either '
                                  'exist in advance, or the createfolders key'
                                  'must be True.'.format(folder))
+
+    def _strip_rmsdtype(self):
+        """Returns a copy of the _config dictionary so that the (e.g.)
+        FREEFORM['dtype'] and FREEFORM['value'] = x or FREEFORM['values'] = x
+        becomes simplified to FREEFORM = x
+        """
+
+        newcfg = deepcopy(self._config)
+
+        if 'rms' in self._config:
+            cfgrms = self._config['rms']
+        else:
+            return newcfg
+
+        for key, val in cfgrms.items():
+            print(key, val)
+            if isinstance(val, dict):
+                print(val.keys())
+                if 'dtype' and 'value' in val.keys():
+                    newcfg['rms'][key] = deepcopy(val['value'])
+                elif 'dtype' and 'values' in val.keys():
+                    newcfg['rms'][key] = deepcopy(val['values'])
+                elif 'dtype' in val.keys():
+                    raise RuntimeError(
+                        'Wrong input YAML?. It seems that "{}" has '
+                        '"dtype" but no "value" or "values" ({})'
+                        .format(key, val.keys()))
+
+        return newcfg
 
     @staticmethod
     def _get_required_form(stream, template=False, ipl=False):
