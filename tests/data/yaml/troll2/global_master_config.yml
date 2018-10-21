@@ -87,34 +87,24 @@ rms:
 
   # the following entries are called freeform entries:
 
-  WELLMODEL:
-    dtype: bool
-    value: Yes
+  WELLMODEL: True
 
-  SOMEXMODEL:
-    dtype: bool
-    value: No
+  SOMEXMODEL: No
 
-  FWL:
-    dtype: float
-    values: *global_fwl
+  FWL: *global_fwl
 
-  GOC:
-    dtype: float
-    values: *global_goc
+  GOC: *global_goc
 
+  # here example with dtype and value (not required)
   KH_MULT_CSAND:
     dtype: float
     value: 1.0  ~<KH_MULT_CSAND>  # in <...>: template value from ERT
 
-  KH_MULT_MTR:
-    dtype: float
-    value: 1.0 ~ <KH_MULT_MTR>
+  KH_MULT_MTR: 1.0 ~ <KH_MULT_MTR>
 
-  KH_MULT_MST:
-    dtype: float
-    value: 1.0
+  KH_MULT_MST: 1.0
 
+  # for dates, spesifying dtype is currently recommended!
   TESTSOMEDATE:
     dtype: date
     value: 2017-01-01
@@ -138,36 +128,12 @@ rms:
   #------------------------------------------------------------------------------
   # Relperm and PC related (shows use of anchors and aliases)
   #------------------------------------------------------------------------------
-  A_OIL_CSAND:
-    dtype: float
-    value: &aoilcsa 11.978799 ~ <A_OIL_CSAND>
+  A_OIL_CSAND: &aoilcsa 11.978799 ~ <A_OIL_CSAND>
 
-  A_OIL_MTR:
-    dtype: float
-    value: &aoilmtr 2.7431~<A_OIL_MTR>
+  A_OIL_MTR: &aoilmtr 2.7431~<A_OIL_MTR>
 
-  A_OIL_MST:
-    dtype: float
-    value: &aoilmst 1.4545
+  A_OIL_MST: &aoilmst 1.4545
 
-  B_OIL_CSAND:
-    dtype: float
-    value: &boilcsa -2.5000
-  B_OIL_MTR:
-    dtype: float
-    value: &boilmtr -3.8462
-  B_OIL_MST:
-    dtype: float
-    value: &boilmst -4.3478
 
   # refer to as aliases
-  AVALUE:
-    dtype: float
-    values: [*aoilcsa, *aoilmtr, *aoilmst, *aoilcsa, *aoilmtr, *aoilmst]
-
-
-xtool:
-  values:
-    - 12
-    - 14
-    - 21
+  AVALUE: [*aoilcsa, *aoilmtr, *aoilmst, *aoilcsa, *aoilmtr, *aoilmst]

@@ -39,11 +39,11 @@ Here is an example of a shell script that runs `fmuconfig` from the rms/bin fold
    --template $TMPL --tool rms
 
 
-Run from RMS python
--------------------
+Run from python inside or outside RMS
+-------------------------------------
 
-The config can also be ran from inside RMS. In that case you need to initiate the Class
-instance and run a few methods. Here is an example:
+The config can also be ran from a python script, e.g. inside RMS. In that case you
+need to initiate the Class instance and run a few methods. Here is an example:
 
 .. code-block:: python
 
