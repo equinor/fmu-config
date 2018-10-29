@@ -13,7 +13,6 @@ from fmu.config import oyaml as yaml
 # import fmu.config.fmuconfigrunner as fmurun
 
 JFILE1 = 'tests/data/yaml/jsverdrup/global_master_config.yml'
-TFILE1 = 'tests/data/yaml/troll1/global_variables.yml'
 TFILE2 = 'tests/data/yaml/troll2/global_master_config.yml'
 RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'
 
@@ -53,11 +52,11 @@ def test_basic_troll():
 
     assert isinstance(cfg, config.ConfigParserFMU)
 
-    cfg.parse(TFILE1)
+    cfg.parse(TFILE2)
 
     cfg.show()
 
-    assert len(cfg.config['horizons']) == 6
+    assert len(cfg.config['rms']['horizons']) == 6
 
 
 def test_to_yaml_troll2():

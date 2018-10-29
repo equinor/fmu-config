@@ -12,7 +12,7 @@ of all other files, such as:
 * global_variables.tmpl   (Templated IPL version; ERT will fill
   in <> variables)
 * global_variables_work.yml   (working YAML file, with numbers)
-* global_variables_tmpl.yml    (templated YAML file, with <> instaed of
+* global_variables_tmpl.yml    (templated YAML file, with <...> instead of
   numbers; for ERT to process)
 * various eclipse file stubs (both "working" and template versions)
 * Working and templated files for other tools/scrips
