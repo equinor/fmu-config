@@ -5,9 +5,13 @@ Credits
 Development Lead
 ----------------
 
-* Jan C. Rivenaes <jriv@statoil.com>
+* Jan C. Rivenaes <jriv@equinor.com>
 
-Contributors
-------------
+Contributors (code or valuable suggestions)
+-------------------------------------------
 
-None yet. Why not be the first?
+(forgive if someone is forgotten)
+
+* Trine Alsos (tral@equinor.com)
+* Håvard Berland (havb@equinor.com)
+* Per Olav Eide Svendsen (peesv@equinor.com)
