@@ -88,7 +88,7 @@ def main(args=None):
 
     cfg = fmu_config.ConfigParserFMU()
 
-    print('OK {}'.format(cfg))
+    logger.info('OK {}'.format(cfg))
 
     if isinstance(args.config, str):
         if not os.path.isfile(args.config):
@@ -96,22 +96,22 @@ def main(args=None):
         cfg.parse(args.config)
 
     if args.mode == 'ipl':
-        print('Mode is IPL')
+        logger.info('Mode is IPL')
         cfg.to_ipl(rootname=args.rootname, destination=args.destination,
                    template=args.template, tool=args.tool)
 
     elif args.mode in ('yaml', 'yml'):
-        print('Mode is YAML')
+        logger.info('Mode is YAML')
         cfg.to_yaml(rootname=args.rootname, destination=args.destination,
                     template=args.template, tool=args.tool)
 
     elif args.mode in ('json', 'jason'):
-        print('Mode is JASON')
+        logger.info('Mode is JASON')
         cfg.to_json(rootname=args.rootname, destination=args.destination,
                     template=args.template, tool=args.tool)
 
     elif args.mode == 'table':
-        print('Mode is TABLE')
+        logger.info('Mode is TABLE')
         cfg.to_table(rootname=args.rootname, destination=args.destination,
                      template=args.template, entry=args.tool, sep=args.sep)
     else:

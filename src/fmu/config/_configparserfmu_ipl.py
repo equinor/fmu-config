@@ -383,7 +383,7 @@ def _ipl_freeform_format(self, template=False):
         mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
         decl.append(mydecl)
 
-    decl.append('{}\n'.format('/' * 79))
+    decl.append('//{} {}\n\n'.format('-*- END IPL DECLARATIONS -*-', '-' * 48))
     return decl, expr
 
 

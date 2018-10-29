@@ -77,7 +77,8 @@ understand the format.
   - ``rms``: For RMS IPL compatible related settings
   - ``eclipse``: For Eclipse decks related settings
 
-* Notice the difference beteen small letters and uppercase letters
+* Notice the difference between small letters and uppercase letters
+
   - The small letters are YAML keywords with a special meaning.
   - Uppercase letters are "client" keywords (free form)
 
@@ -124,7 +125,7 @@ RMS related settings
 Horizons, zones and kwlists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Whithin the ``rms`` section there may be 3 significant subheadings:
+Whitin the ``rms`` section there may be 3 significant subheadings:
 
 * horizons
 * zones
@@ -195,7 +196,7 @@ Examples of a freeform type with uncertainty alternative:
   KH_MULT_MTZ: [1.0, 1.2, 1.3]    # the config script will here a list of dtype=Floats
 
 
-Example of a freeform typew with explicit dtype and value(s):
+Example of a freeform type with explicit dtype and value(s):
 
 .. code-block:: yaml
 
