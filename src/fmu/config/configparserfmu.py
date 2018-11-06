@@ -24,7 +24,7 @@ from fmu.config import _theversion
 # for ordered dicts!
 from fmu.config import oyaml as yaml
 
-from fmu.config._loader import Loader
+from fmu.config._loader import FmuLoader, ConstructorError
 from fmu.config import etc
 
 from fmu.config import _configparserfmu_ipl
@@ -55,7 +55,12 @@ class ConfigParserFMU(object):
         """Parsing the YAML file (reading it)."""
 
         with open(yfile, 'r') as stream:
-            self._config = yaml.load(stream, Loader=Loader)
+            try:
+                self._config = yaml.load(stream, Loader=FmuLoader)
+            except ConstructorError as errmsg:
+                xfmu.error(errmsg)
+                raise SystemExit
+
         self._yamlfile = yfile
 
         self._cleanify_doubleunderscores()

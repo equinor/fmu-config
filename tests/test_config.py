@@ -8,12 +8,15 @@ from __future__ import print_function
 import os.path
 import json
 
+import pytest
+
 import fmu.config as config
 from fmu.config import oyaml as yaml
 # import fmu.config.fmuconfigrunner as fmurun
 
 JFILE1 = 'tests/data/yaml/jsverdrup/global_master_config.yml'
 TFILE2 = 'tests/data/yaml/troll2/global_master_config.yml'
+TFILE3 = 'tests/data/yaml/troll2/global_master_config_with_dupl.yml'
 RFILE1 = 'tests/data/yaml/reek1/global_variables.yml'
 
 fmux = config.etc.Interaction()
@@ -81,6 +84,15 @@ def test_to_yaml_troll2():
 
     assert cfg_yml['KH_MULT_CSAND'] == 1.0
     assert cfg_tmpl['KH_MULT_CSAND'] == '<KH_MULT_CSAND>'
+
+
+def test_yaml_has_duplicates_troll2():
+    """The YAML file has duplicates; should raise error"""
+
+    cfg = config.ConfigParserFMU()
+
+    with pytest.raises(SystemExit):
+        cfg.parse(TFILE3)
 
 
 def test_to_json_troll2():
