@@ -51,7 +51,7 @@ class ConfigParserFMU(object):
         """The name of the input master YAML formatted file (read only)."""
         return self._yamlfile
 
-    def parse(self, yfile):
+    def parse(self, yfile, smart_braces=True):
         """Parsing the YAML file (reading it)."""
 
         with open(yfile, 'r') as stream:
@@ -63,6 +63,10 @@ class ConfigParserFMU(object):
 
         self._yamlfile = yfile
 
+        if smart_braces:
+            self._config = self._fill_empty_braces(deepcopy(self._config), 'X')
+
+        self.show()
         self._cleanify_doubleunderscores()
 
     def show(self, style='yaml'):
@@ -351,7 +355,7 @@ class ConfigParserFMU(object):
 
         newcfg = deepcopy(self._config)
 
-        for key, val in newcfg.items():
+        for key, val in self._config.items():
             print(type(key))
             if isinstance(val, dict):
 
@@ -365,6 +369,36 @@ class ConfigParserFMU(object):
                         del newcfg[key][subkey]
 
         self._config = newcfg
+
+    def _fill_empty_braces(self, stream, key):
+        """If an empty variable is given, this its hsall be replaced with
+        key name.
+
+        For example::
+
+              FLW1: 2000~<>
+
+        shall be:
+
+              FLW1: 2000~<FWL1>
+
+        This function uses recursion
+
+        Args:
+            stream: a dict or string or...
+            key: To use as <KEY>
+
+        """
+        if isinstance(stream, str):
+            return stream.replace('<>', '<' + str(key) + '>')
+        elif isinstance(stream, list):
+            return [self._fill_empty_braces(item, key + '_' + str(num))
+                    for num, item in enumerate(stream)]
+        elif isinstance(stream, dict):
+            return {key: self._fill_empty_braces(item, key)
+                    for key, item in stream.items()}
+
+        return stream
 
     @staticmethod
     def _get_sysinfo(commentmarker='#'):
