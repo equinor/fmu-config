@@ -60,20 +60,36 @@ rms:
     dtype: int
     value: 0
 
+  # the _IPL_DECLARE is for declaring additional data types (without values)
+  # NB No IPL syntax check is done here!
+  _IPL_DECLARE_STUB1: |
+    GridModel GM
+    Surface MAIN1, MAIN2
+
+  _IPL_DECLARE_STUB2: |
+    Function MYFUNCTION
+
+  # the IPL code stub is just for IPL
+  # NB No IPL syntax check is done here!
+  _IPL_CODE_STUB1: |
+    // code for something
+    FOR i FROM 1 TO 100 DO
+       Print("Hello")
+    DONE
 
   # guessing the dtype with one value
   COHIBA_MODE2: PREDICTION~<COHIBA_MODE2>
   COHIBA_MODE3: SIMULATION
   RUN_MANILA1: 1
   RUN_MANILA2: 0
-  FWL_UBER_ALLES: 1344.0
+  FWL_UBER_ALLES: 1344.0 ~ <>
   FWL_UBER_ALLES_FINAL: 1344.0 ~ <UBER_FINAL>
 
   # guessing the dtype with values
   FWL3:
     - 1234.0 ~ <FWL3_FIRST>
-    - 1236.0
-    - 1134.5
+    - 1236.0 ~ <>  # will be FWL3_1
+    - 1134.5 ~ <>  # will be FWL3_2
 
   # include some freeform variables using anonymous entry __xxx
   __xxx: !include doe_params.yml
