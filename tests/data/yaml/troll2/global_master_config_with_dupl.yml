@@ -94,6 +94,9 @@ rms:
 
   FWL: *global_fwl
 
+  # duplicate
+  FWL: 2122.0
+
   GOC: *global_goc
 
   # here example with dtype and value (not required)
