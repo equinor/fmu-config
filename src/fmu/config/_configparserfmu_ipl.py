@@ -294,6 +294,17 @@ def _ipl_freeform_format(self, template=False):
     for variable in freeform_keys:
         logger.info('Variable to process is %s', variable)
         expr.append('\n')
+
+        if variable.startswith('_IPL_STUB'):
+            logger.info('IPL code stub: %s \n%s', variable, cfg[variable])
+            expr.append(cfg[variable])
+            continue
+
+        if variable.startswith('_IPL_DECLARE'):
+            logger.info('IPL declare only: %s \n%s', variable, cfg[variable])
+            decl.append(cfg[variable])
+            continue
+
         if not isinstance(cfg[variable], dict):
             guesscfg = _guess_dtype(variable, cfg)
 

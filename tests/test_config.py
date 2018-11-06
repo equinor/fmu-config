@@ -31,12 +31,12 @@ def test_jsverdrup():
     """Test table output behaviour"""
 
     cfg = config.ConfigParserFMU()
+    cfx = config.ConfigParserFMU()
 
     assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(JFILE1)
-
-    cfg.show()
+    cfx.parse(JFILE1, smart_braces=False)
 
     cfg.to_table(rootname='JS', destination=fmux.tmpdir,
                  template=fmux.tmpdir, entry='global.FWL', sep='      ')
@@ -46,6 +46,13 @@ def test_jsverdrup():
 
     cfg.to_yaml(rootname='js_global_variables_rms', destination=fmux.tmpdir,
                 template=fmux.tmpdir, tool='rms')
+
+    cfx.to_yaml(rootname='js_global_variables_rms_nobraces',
+                destination=fmux.tmpdir,
+                template=fmux.tmpdir, tool='rms')
+
+    assert cfx.config['rms']['FWL3'][1] == '1236.0 ~ <>'
+    assert cfg.config['rms']['FWL3'][1] == '1236.0 ~ <FWL3_1>'
 
 
 def test_basic_troll():
