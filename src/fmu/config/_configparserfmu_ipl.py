@@ -295,7 +295,7 @@ def _ipl_freeform_format(self, template=False):
         logger.info('Variable to process is %s', variable)
         expr.append('\n')
 
-        if variable.startswith('_IPL_STUB'):
+        if variable.startswith('_IPL_CODE'):
             logger.info('IPL code stub: %s \n%s', variable, cfg[variable])
             expr.append(cfg[variable])
             continue
