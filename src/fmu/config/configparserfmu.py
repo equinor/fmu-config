@@ -22,6 +22,7 @@ import json
 from fmu.config import _theversion
 
 # for ordered dicts!
+from collections import OrderedDict
 from fmu.config import oyaml as yaml
 
 from fmu.config._loader import FmuLoader, ConstructorError
@@ -371,7 +372,7 @@ class ConfigParserFMU(object):
         self._config = newcfg
 
     def _fill_empty_braces(self, stream, key):
-        """If an empty variable is given, this its hsall be replaced with
+        """If an empty variable is given, this shall be replaced with
         key name.
 
         For example::
@@ -395,9 +396,8 @@ class ConfigParserFMU(object):
             return [self._fill_empty_braces(item, key + '_' + str(num))
                     for num, item in enumerate(stream)]
         elif isinstance(stream, dict):
-            return {key: self._fill_empty_braces(item, key)
-                    for key, item in stream.items()}
-
+            return OrderedDict([(xkey, self._fill_empty_braces(item, xkey))
+                                for xkey, item in stream.items()])
         return stream
 
     @staticmethod
