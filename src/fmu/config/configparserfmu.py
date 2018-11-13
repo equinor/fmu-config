@@ -18,11 +18,11 @@ import getpass
 import socket
 import datetime
 import json
+# for ordered dicts!
+from collections import OrderedDict
 
 from fmu.config import _theversion
 
-# for ordered dicts!
-from collections import OrderedDict
 from fmu.config import oyaml as yaml
 
 from fmu.config._loader import FmuLoader, ConstructorError
@@ -67,7 +67,6 @@ class ConfigParserFMU(object):
         if smart_braces:
             self._config = self._fill_empty_braces(deepcopy(self._config), 'X')
 
-        self.show()
         self._cleanify_doubleunderscores()
 
     def show(self, style='yaml'):
@@ -321,14 +320,12 @@ class ConfigParserFMU(object):
         cfg = self.config
 
         for deck in cfg['eclipse']:
-            print('Deck is %s', deck)
+            logger.info('Deck is %s', deck)
             edeck = cfg['eclipse'][deck]
 
             content = edeck['content']
             content_dest = self._get_dest_form(content)
             content_tmpl = self._get_tmpl_form(content)
-            print(content_dest)
-            print(content_tmpl)
 
             with open(edeck['destfile'], 'w') as dest:
                 dest.write(content_dest)
@@ -354,10 +351,11 @@ class ConfigParserFMU(object):
 
         """
 
+        # pylint: disable=too-many-nested-blocks
         newcfg = deepcopy(self._config)
 
         for key, val in self._config.items():
-            print(type(key))
+            logger.debug(type(key))
             if isinstance(val, dict):
 
                 for subkey, subval in val.items():
@@ -456,9 +454,9 @@ class ConfigParserFMU(object):
             return newcfg
 
         for key, val in cfgrms.items():
-            print(key, val)
+            logger.debug(key, val)
             if isinstance(val, dict):
-                print(val.keys())
+                logger.debug(val.keys())
                 if 'dtype' and 'value' in val.keys():
                     newcfg['rms'][key] = deepcopy(val['value'])
                 elif 'dtype' and 'values' in val.keys():
@@ -533,7 +531,7 @@ class ConfigParserFMU(object):
         pattern = '[a-zA-Z0-9.]+~'
 
         if isinstance(stream, list):
-            print('STREAM is a list object')
+            logger.info('STREAM is a list object')
             result = []
             for item in stream:
                 moditem = re.sub(pattern, '', item)
@@ -541,7 +539,7 @@ class ConfigParserFMU(object):
                 moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            print('STREAM is a str object - get tmpl form')
+            logger.info('STREAM is a str object - get tmpl form')
             result = re.sub(pattern, '', stream)
             result = re.sub('"', '', result)
             result = result.strip() + '\n'
@@ -558,14 +556,14 @@ class ConfigParserFMU(object):
         pattern = '~<.+?>'
 
         if isinstance(stream, list):
-            print('STREAM is a list object')
+            logger.info('STREAM is a list object')
             result = []
             for item in stream:
                 moditem = re.sub(pattern, '', item)
                 moditem = ' ' + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            print('STREAM is a str object - get dest form')
+            logger.info('STREAM is a str object - get dest form')
             result = re.sub(pattern, '', stream)
             result = result.strip() + '\n'
         else:

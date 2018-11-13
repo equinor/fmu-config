@@ -64,7 +64,7 @@ def test_basic_troll():
 
     cfg.parse(TFILE2)
 
-    cfg.show()
+    # cfg.show()
 
     assert len(cfg.config['rms']['horizons']) == 6
 
@@ -132,8 +132,8 @@ def test_ipl_troll2():
 
     cfg.parse(TFILE2)
 
-    cfg.show()
-    cfg.show(style='json')
+    # cfg.show()
+    # cfg.show(style='json')
 
     # export the config as a global variables IPL
     logger.info('Test dir is %s', fmux.tmpdir)
