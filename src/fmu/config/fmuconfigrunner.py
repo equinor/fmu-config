@@ -88,7 +88,7 @@ def main(args=None):
 
     cfg = fmu_config.ConfigParserFMU()
 
-    logger.info('OK {}'.format(cfg))
+    logger.info('OK %s', cfg)
 
     if isinstance(args.config, str):
         if not os.path.isfile(args.config):
