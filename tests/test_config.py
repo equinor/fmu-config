@@ -86,7 +86,7 @@ def test_to_yaml_troll2():
     with open(os.path.join(fmux.tmpdir, rootn + '.yml'), 'r') as stream:
         cfg_yml = yaml.load(stream)
 
-    with open(os.path.join(fmux.tmpdir, rootn + '.tmpl'), 'r') as stream:
+    with open(os.path.join(fmux.tmpdir, rootn + '.yml.tmpl'), 'r') as stream:
         cfg_tmpl = yaml.load(stream)
 
     assert cfg_yml['KH_MULT_CSAND'] == 1.0
