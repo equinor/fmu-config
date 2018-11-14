@@ -19,7 +19,7 @@ import socket
 import datetime
 import json
 # for ordered dicts!
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 from fmu.config import _theversion
 
@@ -40,6 +40,7 @@ class ConfigParserFMU(object):
     def __init__(self):
         self._config = {}
         self._yamlfile = None
+        self._runsilent = True
         logger.debug('Ran __init__')
 
     @property
@@ -69,6 +70,8 @@ class ConfigParserFMU(object):
 
         self._cleanify_doubleunderscores()
 
+        self._validate_unique_tmplkeys()
+
     def show(self, style='yaml'):
         """Show (print) the current configuration to STDOUT.
 
@@ -92,7 +95,7 @@ class ConfigParserFMU(object):
 
         Args:
             rootname: Root file name without extension. An extension
-                .txt will be added for destination, and .tmpl
+                .txt will be added for destination, and .txt.tmpl
                 for template output.
             destination: The directory path for the destination
                 file. If None, then no output will be given
@@ -152,7 +155,7 @@ class ConfigParserFMU(object):
                         print(str(stream) + sep, file=dest, end='')
                     print('', file=dest)
         if template:
-            with open(ojoin(template, rootname + '.tmpl'), 'w') as tmpl:
+            with open(ojoin(template, rootname + '.txt.tmpl'), 'w') as tmpl:
                 for row in cfg:
                     for col in row:
                         stream = str(col)
@@ -170,7 +173,7 @@ class ConfigParserFMU(object):
 
         Args:
             rootname: Root file name without extension. An extension
-                .yml will be added for destination, and .tmpl
+                .yml will be added for destination, and .yml.tmpl
                 for template output.
             destination: The directory path for the destination
                 file. If None, then no output will be given
@@ -221,7 +224,7 @@ class ConfigParserFMU(object):
                 stream.write(cfg1)
 
         if template:
-            out = os.path.join(destination, rootname + '.tmpl')
+            out = os.path.join(destination, rootname + '.yml.tmpl')
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
@@ -232,7 +235,7 @@ class ConfigParserFMU(object):
 
         Args:
             rootname: Root file name without extension. An extension
-                .json will be added for destination, and .tmpl
+                .json will be added for destination, and .json.tmpl
                 for template output.
             destination: The directory path for the destination
                 file. If None, then no output will be given
@@ -282,7 +285,7 @@ class ConfigParserFMU(object):
 
         if template:
             cfg2 = self._get_tmpl_form(mystream)
-            out = os.path.join(destination, rootname + '.tmpl')
+            out = os.path.join(destination, rootname + '.json.tmpl')
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
@@ -292,7 +295,7 @@ class ConfigParserFMU(object):
 
         Args:
             rootname (str): Root file name without extension. An extension
-                `ipl` will be added for destination, and `tmpl`
+                `.ipl` will be added for destination, and `.ipl.tmpl`
                 for template output.
             destination (str): The output file destination (folder).
             template (str): The folder for the templated version of the
@@ -369,6 +372,35 @@ class ConfigParserFMU(object):
 
         self._config = newcfg
 
+    def _validate_unique_tmplkeys(self):
+        """Collect all <...> and check that they are unique and uppercase.
+
+        Note that duplicate <xxx> may be OK, and a print should only be issued
+        if required, as information.
+
+        """
+
+        mystream = yaml.dump(self._config)
+        tlist = []
+        tmpl = re.findall('<\w+>', mystream)
+        for item in tmpl:
+            tlist.append(item)
+
+        for item in tlist:
+            wasitem = item
+            item = item.rstrip('>')
+            item = item.lstrip('<')
+            if any(char.islower() for char in item):
+                xfmu.error('Your template key contains lowercase '
+                           'letter: {}'.format(wasitem))
+
+        if len(tlist) != len(set(tlist)) and not self._runsilent:
+            xfmu.echo('Note, there are duplicates in <...> keywords')
+            counter = Counter(tlist)
+            for item, cnt in counter.items():
+                if cnt > 1:
+                    xfmu.echo('{0:30s} occurs {1:3d} times'.format(item, cnt))
+
     def _fill_empty_braces(self, stream, key):
         """If an empty variable is given, this shall be replaced with
         key name.
@@ -377,7 +409,7 @@ class ConfigParserFMU(object):
 
               FLW1: 2000~<>
 
-        shall be:
+        shall be::
 
               FLW1: 2000~<FWL1>
 
@@ -389,7 +421,11 @@ class ConfigParserFMU(object):
 
         """
         if isinstance(stream, str):
-            return stream.replace('<>', '<' + str(key) + '>')
+            if key in ('value', 'values') and '<>' in stream:
+                xfmu.warn('Empty template "<>" is not supported in "value" or '
+                          '"values" fields: {}'.format(stream))
+            else:
+                return stream.replace('<>', '<' + str(key) + '>')
         elif isinstance(stream, list):
             return [self._fill_empty_braces(item, key + '_' + str(num))
                     for num, item in enumerate(stream)]

@@ -31,7 +31,7 @@ def to_ipl(self, rootname='global_variables', destination=None,
 
     Args:
         rootname: Root file name without extension. An extension
-            .ipl will be added for destination, and .tmpl
+            .ipl will be added for destination, and .ipl.tmpl
             for template output.
         destination (str): The output file destination (folder)
         template (str): The folder for the templated version of the
@@ -97,7 +97,7 @@ def to_ipl(self, rootname='global_variables', destination=None,
 
             expressions_tmpl.extend(hlist)
 
-        tmplfile = os.path.join(template, rootname + '.tmpl')
+        tmplfile = os.path.join(template, rootname + '.ipl.tmpl')
         with open(tmplfile, 'w') as stream:
             for line in declarations:
                 stream.write(line)
