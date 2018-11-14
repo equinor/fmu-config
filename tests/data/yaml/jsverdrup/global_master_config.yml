@@ -58,7 +58,7 @@ rms:
 
   RUN_HAVANA:
     dtype: int
-    value: 0
+    value: 0 <CC>
 
   # the _IPL_DECLARE is for declaring additional data types (without values)
   # NB No IPL syntax check is done here!
