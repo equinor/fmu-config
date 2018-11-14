@@ -46,6 +46,20 @@ In practice it means that the link in the RMS IPL scripts must be changed to:
 
   ``include("../../share/config/output/global_variables.ipl")``
 
+Alternative 3, a second proposal for change
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The proposal is that all config files, both input and output,
+are stored under ``config`` on tool level (same level as rms, ert, ...)
+
+* ``config/input`` for user defined global_master_config.yml + include files if any
+* ``config/bin`` for scripts, reading from input, results to output
+* ``config/output`` for all outputs; to be machine read.
+
+In practice it means that the link in the RMS IPL scripts must be changed to:
+
+  ``include("../../config/output/global_variables.ipl")``
+
 
 File format and nested files
 ----------------------------
@@ -96,6 +110,22 @@ understand the format.
   - The files generated from this global master config, will either have the
     *work* form (e.g. 1.0 in this example) or the templated form (``<KH_MULT_MTR>``
     in this example). The alternate form may be present as a comment.
+  - Uncertainty keys shall be UPPERCASE
+
+* Note the templated files will have extesion ``.tpml``, e.g. for ``global_variables.ipl``
+  it will be ``global_variables.ipl.tmpl``
+
+* For most cases, a simple ``<>`` will default the name to key (it will not work when dtype
+  and value(s) is applied). For example
+
+  .. code-block:: yaml
+
+     FLWX: 3203.0 ~ <>
+
+     # is the same as
+
+     FLWX: 3203.0 ~ <FLWX>
+
 
 Include files
 -------------
@@ -167,7 +197,6 @@ Examples:
        SANDY_SPIC_C:          [8, "Sandy spiculites"]
 
 
-
 Freeform, with dtype and value(s)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -230,6 +259,26 @@ output style will always be on the form:
 
   KH_MULT_MTR: 1.0
 
+IPL code stubs:
+~~~~~~~~~~~~~~~
+
+IPL pure declarations can be defined as ``_IPL_DECLARE_WHATEVER``:
+
+.. code-block:: yaml
+
+   _IPL_DECLARE_STUB1: |
+     GridModel GM
+     Surface MAIN1, MAIN2
+
+Similarly, IPL code stubs can be inserted as ``_IPL_CODE_WHATEVER``:
+
+.. code-block:: yaml
+
+   _IPL_CODE_STUB1: |
+      // code for something
+      FOR i FROM 1 TO 100 DO
+         Print("Hello")
+      ENDFOR
 
 
 Summary of Reserved words
