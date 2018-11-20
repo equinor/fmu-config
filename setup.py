@@ -26,6 +26,7 @@ test_requirements = [
     'pytest',
 ]
 
+# entry points setting; not is use...
 fmuconfig_function = ('fmuconfig='
                       'fmu.config.fmuconfigrunner:main')
 # -----------------------------------------------------------------------------
@@ -86,9 +87,6 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-    entry_points={
-        'console_scripts': [fmuconfig_function]
-    },
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
