@@ -144,7 +144,8 @@ install: dist ## version to VENV install place
 	@echo "Running ${PIP} (${PYTHON_VERSION}) ..."
 	@${PIP} install --upgrade ./dist/*
 	@echo "Install run scripts..."
-	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${VIRTUAL_ENV}/bin/.; )
+	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} \
+		${VIRTUAL_ENV}/bin/.; )
 
 siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
@@ -152,15 +153,18 @@ siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	\rm -fr  ${FULLTARGET}/${APPLICATIONPKG}*
 	PYTHONUSERBASE=${TARGET} pip install --user .
 	@echo "Install run scripts..."
-	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
+	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete \
+		--chmod=a+rx -p bin/${RUNAPP} ${BININSTALL}/.; )
 
 userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATION}
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATIONPKG}*
 	@echo ${USRPYPATH}
 	PYTHONUSERBASE=${USRPYPATH} pip install --user .
-	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${MYBINDIST}/bin/.; )
+	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete --chmod=a+rx \
+		-p bin/${RUNAPP} ${MY_BINDIST}/bin/.; )
 
 
 docsinstall: docsrun
-	rsync -av --delete docs/_build/html ${DOCSINSTALL}/${APPLICATION}
+	rsync -av --delete --chmod=a+r -p docs/_build/html \
+		${DOCSINSTALL}/${APPLICATION}
