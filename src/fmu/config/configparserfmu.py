@@ -224,7 +224,7 @@ class ConfigParserFMU(object):
                 stream.write(cfg1)
 
         if template:
-            out = os.path.join(destination, rootname + '.yml.tmpl')
+            out = os.path.join(template, rootname + '.yml.tmpl')
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
@@ -285,7 +285,7 @@ class ConfigParserFMU(object):
 
         if template:
             cfg2 = self._get_tmpl_form(mystream)
-            out = os.path.join(destination, rootname + '.json.tmpl')
+            out = os.path.join(template, rootname + '.json.tmpl')
             with open(out, 'w') as stream:
                 stream.write(cfg2)
 
