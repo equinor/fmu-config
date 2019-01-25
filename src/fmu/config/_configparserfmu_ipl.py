@@ -20,7 +20,7 @@ logger = xfmu.functionlogger(__name__)
 
 
 class ConfigError(ValueError):
-    """Exception usefo config error, derived from ValueError"""
+    """Exception used for config error, derived from ValueError"""
     pass
 
 
@@ -191,6 +191,10 @@ def _cast_value(value):
                 return value
             except ValueError:
                 return value
+        elif value.lower() in ('yes', 'true'):
+            return True
+        elif value.lower() in ('no', 'false'):
+            return False
         else:
             try:
                 value = int(value)
@@ -202,7 +206,7 @@ def _cast_value(value):
 
 
 def _guess_dtype(var, entry):
-    """Guess the IPL dtype and value or values if dtype is missing.
+    """Guess the IPL dtype from value or values if dtype is missing.
 
     The entry itself will then be a scalar or a list, which need to be
     analysed. If a list, only the first value is analysed for data
@@ -244,6 +248,7 @@ def _guess_dtype(var, entry):
     for alt in ('int', 'str', 'float', 'bool'):
         if alt in str(type(checkval)):
             usekey[keyword]['dtype'] = alt
+
             break
 
     logger.info('Updated key is %s', usekey)
@@ -324,14 +329,27 @@ def _ipl_freeform_format(self, template=False):
         myvalue = usecfg.get('value')
         myvalues = usecfg.get('values')
 
-        logger.info('For %s value: %s and values: %s', variable, myvalue,
-                    myvalues)
+        logger.info('For %s value: %s and values: %s, subtype %s',
+                    variable, myvalue, myvalues, subtype)
 
         if subtype == 'Bool':
-            if myvalue is False:
-                myvalue = 'FALSE'
-            else:
-                myvalue = 'TRUE'
+            tmpvalue = str(myvalue)
+            try:
+                val, var = tmpvalue.split('~')
+                val = val.strip()
+                var = var.strip()
+            except ValueError:
+                val = tmpvalue.strip()
+                var = None
+
+            for somebool in ('True', 'yes', 'YES', 'Yes', 'true', 'TRUE'):
+                val = val.replace(somebool, 'TRUE')
+            for somebool in ('False', 'no', 'NO', 'No', 'false', 'FALSE'):
+                val = val.replace(somebool, 'FALSE')
+
+            myvalue = val
+            if var:
+                myvalue = myvalue + ' ~ ' + var
 
         if myvalue is None and myvalues is None:
             raise ConfigError('"value" or "values" is missing for RMS '
