@@ -92,6 +92,10 @@ def test_to_yaml_troll2():
     assert cfg_yml['KH_MULT_CSAND'] == 1.0
     assert cfg_tmpl['KH_MULT_CSAND'] == '<KH_MULT_CSAND>'
 
+    rootn = 'troll2_ipl'
+    cfg.to_ipl(rootname=rootn, destination=fmux.tmpdir,
+               template=fmux.tmpdir, tool='rms')
+
 
 def test_yaml_has_duplicates_troll2():
     """The YAML file has duplicates; should raise error"""

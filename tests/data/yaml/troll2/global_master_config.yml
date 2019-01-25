@@ -88,7 +88,11 @@ rms:
 
   # the following entries are called freeform entries:
 
-  WELLMODEL: true
+  WELLMODEL:
+    dtype: bool
+    value: true ~ <WELLMODEL>
+
+  WELLMODEL2: yes ~ <WELLMODEL2>
 
   SOMEXMODEL: false
 

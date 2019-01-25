@@ -43,6 +43,9 @@ rms:
 
     RUN_HAVANA: 0
 
+    # handling of bools with ERT switch
+    RUN_WHATEVER: No ~ <RUN_WHATEVER>
+
     HAVANA_FAULT_LIST: [F4]
 
     MOVE_LAT: 400.0
