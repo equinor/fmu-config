@@ -54,6 +54,7 @@ endif
 PYTHON := python${PSHORT}
 PIP := pip${PSHORT}
 
+RUNPIP := python${PSHORT} -m pip
 
 TARGET := ${SDP_BINDIST_ROOT}
 BINTARGET := ${SDP_BINDIST}
@@ -116,7 +117,7 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 develop:  ## make a development link to src
-	pip install -e .
+	${RUNPIP} install -e .
 
 docsrun: clean ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/${APPLICATIONROOT}*.rst
@@ -142,7 +143,7 @@ dist: clean  ## builds wheel package
 
 install: dist ## version to VENV install place
 	@echo "Running ${PIP} (${PYTHON_VERSION}) ..."
-	@${PIP} install --upgrade ./dist/*
+	@${RUNPIP} install --upgrade ./dist/*
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} \
 		${VIRTUAL_ENV}/bin/.; )
@@ -151,7 +152,7 @@ siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
 	\rm -fr  ${FULLTARGET}/${APPLICATION}
 	\rm -fr  ${FULLTARGET}/${APPLICATIONPKG}*
-	PYTHONUSERBASE=${TARGET} pip install --user .
+	PYTHONUSERBASE=${TARGET} ${RUNPIP} install --user .
 	@echo "Install run scripts..."
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete \
 		--chmod=a+rx -p bin/${RUNAPP} ${BININSTALL}/.; )
@@ -160,7 +161,7 @@ userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATION}
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATIONPKG}*
 	@echo ${USRPYPATH}
-	PYTHONUSERBASE=${USRPYPATH} pip install --user .
+	PYTHONUSERBASE=${USRPYPATH} ${RUNPIP} install --user .
 	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete --chmod=a+rx \
 		-p bin/${RUNAPP} ${MY_BINDIST}/bin/.; )
 
