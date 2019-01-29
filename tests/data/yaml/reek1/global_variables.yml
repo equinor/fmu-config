@@ -38,27 +38,25 @@ rms:
       - MidReek
       - LowerReek
 
-  freeform:
-    COHIBA_MODE: PREDICTION~<COHIBA_MODE>
+  COHIBA_MODE: PREDICTION~<COHIBA_MODE>
 
-    RUN_HAVANA: 0
+  RUN_HAVANA: 0
 
-    # handling of bools with ERT switch
-    RUN_WHATEVER: No ~ <RUN_WHATEVER>
+  # handling of bools with ERT switch
+  RUN_WHATEVER: No ~ <RUN_WHATEVER>
 
-    HAVANA_FAULT_LIST: [F4]
+  HAVANA_FAULT_LIST: [F4]
 
-    MOVE_LAT: 400.0
+  MOVE_LAT: 400.0
 
-    SCALE_THROW: [2~<THROW>]
+  SCALE_THROW: [2~<THROW>]
 
-    FWL1: [1705~<FWL1>, 1000]
+  FWL1: [1705~<FWL1>, 1000]
 
-  dates:
-    ECLIPSE_DATES: *global_dates
-    DATES4D: *global_dates
+  ECLIPSE_DATES: *global_dates
+  DATES4D: *global_dates
 
-    DIFF4D_DATES: *global_diff_dates
+  DIFF4D_DATES: *global_diff_dates
 
 
 eclipse:
