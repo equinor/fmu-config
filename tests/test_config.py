@@ -97,6 +97,27 @@ def test_to_yaml_troll2():
                template=fmux.tmpdir, tool='rms')
 
 
+def test_to_yaml_troll3_selfread():
+    """Test the output for the YAML files, and convert OUTPUT yaml to ipl"""
+
+    cfg = config.ConfigParserFMU()
+
+    cfg.parse(TFILE2)
+    rootn = 'troll3_yaml'
+
+    cfg.to_yaml(rootname=rootn, destination=fmux.tmpdir,
+                template=fmux.tmpdir)
+
+    newinput = os.path.join(fmux.tmpdir, rootn + '.yml')
+    newrootn = 'troll3_yaml_selfread'
+
+    cfx = config.ConfigParserFMU()
+    cfx.parse(newinput)
+
+    cfx.to_ipl(rootname=newrootn, destination=fmux.tmpdir,
+               template=fmux.tmpdir, tool='rms')
+
+
 def test_yaml_has_duplicates_troll2():
     """The YAML file has duplicates; should raise error"""
 

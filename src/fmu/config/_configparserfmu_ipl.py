@@ -184,25 +184,27 @@ def _cast_value(value):
     e.g. '1' or '34.33'
     """
 
+    logger.info('Value is of type %s', type(value))
+    result = value
     if isinstance(value, str):
         if '.' in value:
             try:
-                value = float(value)
-                return value
+                result = float(value)
             except ValueError:
-                return value
+                result = value
         elif value.lower() in ('yes', 'true'):
-            return True
+            result = True
         elif value.lower() in ('no', 'false'):
-            return False
+            result = False
         else:
             try:
-                value = int(value)
-                return value
+                result = int(value)
             except ValueError:
-                return value
+                result = value
     else:
-        return value
+        result = value
+
+    return result
 
 
 def _guess_dtype(var, entry):
@@ -217,7 +219,7 @@ def _guess_dtype(var, entry):
     """
     values = entry[var]
     keyword = var
-    logger.info('Guess dtype and value(s) for %s', entry)
+    logger.info('Guess dtype and value(s) for %s %s', var, values)
 
     usekey = OrderedDict()
     usekey[keyword] = OrderedDict()
@@ -251,6 +253,21 @@ def _guess_dtype(var, entry):
 
             break
 
+    if not usekey[keyword]['dtype']:
+        # dtype is still None; evaluate for date or datepair:
+        if isinstance(checkval, list):
+            checkval = checkval[0]
+            if isinstance(checkval, datetime.date):
+                usekey[keyword]['dtype'] = 'datepair'
+        else:
+            if isinstance(checkval, datetime.date):
+                usekey[keyword]['dtype'] = 'date'
+
+    # final check
+    if not usekey[keyword]['dtype']:
+        raise RuntimeError('Cannot find dtype')
+
+    logger.info('Updated key dtype is %s', usekey[keyword]['dtype'])
     logger.info('Updated key is %s', usekey)
     return usekey
 
@@ -318,7 +335,8 @@ def _ipl_freeform_format(self, template=False):
             usecfg = deepcopy(cfg[variable])
 
         mydtype = usecfg['dtype']
-        subtype = mydtype.capitalize()
+        if mydtype is not None:
+            subtype = mydtype.capitalize()
         if 'Str' in subtype:
             subtype = 'String'
         elif 'Date' in subtype:
@@ -358,7 +376,8 @@ def _ipl_freeform_format(self, template=False):
         logger.info('myvalue is %s for %s', myvalue, variable)
 
         if myvalue is not None:
-            logger.info('Check %s with value: %s', variable, myvalue)
+            logger.info('Check %s with value: %s of type %s',
+                        variable, myvalue, type(myvalue))
             if not isinstance(myvalue, (int, float, str, bool, datetime.date,
                                         list)):
                 raise ConfigError('"value" is of wrong type for '
@@ -370,10 +389,13 @@ def _ipl_freeform_format(self, template=False):
                                   'variable {}: {} ({})'
                                   .format(variable, myvalues, type(myvalues)))
 
-        myvalue = _fix_date_format(mydtype, myvalue, aslist=False)
-        myvalues = _fix_date_format(mydtype, myvalues, aslist=True)
+        myvalue = _fix_date_format(variable, mydtype, myvalue, aslist=False)
+        myvalues = _fix_date_format(variable, mydtype, myvalues, aslist=True)
 
-        logger.info('Check again %s with value: %s', variable, myvalue)
+        logger.info('Check again %s with value: %s and dtype %s',
+                    variable, myvalue, mydtype)
+        logger.info('Check again %s with values: %s and dtype %s',
+                    variable, myvalues, mydtype)
 
         listtype = ''
         if myvalue is not None:
@@ -416,16 +438,16 @@ def _ipl_freeform_format(self, template=False):
     return decl, expr
 
 
-def _fix_date_format(dtype, value, aslist=False):
+def _fix_date_format(var, dtype, value, aslist=False):
     """Make dateformat to acceptable RMS IPL format."""
 
-    logger.debug('Fix dates...')
+    logger.info('Fix dates...')
     if value is None:
         return None
 
-    logger.debug('Fix dates...2 dtype is %s', dtype)
+    logger.info('Fix dates...2 dtype is %s', dtype)
     if dtype not in ('date', 'datepair'):
-        logger.debug('Fix dates...2 dtype is %s RETURN', dtype)
+        logger.info('Fix dates...2 dtype is %s RETURN', dtype)
         return value
 
     values = None
@@ -434,14 +456,18 @@ def _fix_date_format(dtype, value, aslist=False):
         values = value
         value = None
 
+    result = None
     if dtype == 'date':
         logger.info('Process date ...')
         if value:
-            logger.info('Process date as ONE value')
-            if isinstance(value, (datetime.datetime, datetime.date)):
-                value = str(value)
-                value = value.replace('-', '')
-
+            raise RuntimeError('<{}>: Treating <date> as "value" is not '
+                               'possible, rather make into list "values" '
+                               'with one entry instead!'.format(var))
+            # logger.info('Process date as ONE value for %s', var)
+            # if isinstance(value, (datetime.datetime, datetime.date)):
+            #     value = str(value)
+            #     value = value.replace('-', '')
+            # result = value
         if values:
             mynewvalues = []
             logger.info('Process date as values')
@@ -450,19 +476,22 @@ def _fix_date_format(dtype, value, aslist=False):
                     val = str(val)
                     val = val.replace('-', '')
                     mynewvalues.append(val)
-            values = mynewvalues
+            result = mynewvalues
 
     if dtype == 'datepair':
         if value:
-            date1, date2 = value
-            if isinstance(date1, (datetime.datetime, datetime.date)):
-                date1 = str(date1)
-                date1 = date1.replace('-', '')
+            raise RuntimeError('<{}> Treating <datepair> as "value" is not '
+                               'possible, rather make into list "values" '
+                               'with one entry instead!'.format(var))
+            # date1, date2 = value
+            # if isinstance(date1, (datetime.datetime, datetime.date)):
+            #     date1 = str(date1)
+            #     date1 = date1.replace('-', '')
 
-            if isinstance(date2, (datetime.datetime, datetime.date)):
-                date2 = str(date2)
-                date2 = date1.replace('-', '')
-            value = date1 + '_' + date2
+            # if isinstance(date2, (datetime.datetime, datetime.date)):
+            #     date2 = str(date2)
+            #     date2 = date1.replace('-', '')
+            # result = date1 + '_' + date2
 
         if values:
             mynewvalues = []
@@ -476,9 +505,9 @@ def _fix_date_format(dtype, value, aslist=False):
                     date2 = date2.replace('-', '')
                 mynewvalues.append(date1 + '_' + date2)
 
-            values = mynewvalues
+            result = mynewvalues
 
-    return values
+    return result
 
 
 def _get_required_iplform(stream, template=False, string=False):

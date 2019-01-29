@@ -109,26 +109,30 @@ rms:
 
   KH_MULT_MST: 1.0
 
-  # for dates, spesifying dtype is currently recommended!
+  # for dates, spesifying dtype can be more safe, but not required. Ad always treat
+  # dates as "values", not "value" (since dates are complex data types)
+  # I.e. treat dates always as lists.
   TESTSOMEDATE:
     dtype: date
-    value: 2017-01-01
+    values:
+      - 2017-01-01
+
+  # this should also work.
+  TESTSOMEOTHERDATE:
+      - 2017-01-02
 
   TESTSOMEDATEPAIR:
     dtype: datepair
-    value: [2017-01-01, 2018-01-01]
+    values: [[2017-01-01, 2018-01-01]]
 
-  EDATES:
-    dtype: date
-    values: *global_dates
+  # Dates wihtout dtype/values
+  EDATES: *global_dates
 
   4D_DATES:
     dtype: date
     values: *global_dates
 
-  DIFF4D_DATES:
-    dtype: datepair
-    values: *global_diffdates
+  DIFF4D_DATES: *global_diffdates
 
   # -----------------------------------------------------------------------------
   # Relperm and PC related (shows use of anchors and aliases)
