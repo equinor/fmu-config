@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Module for basic interaction with user, including logging for debugging.
 
-This module can and should be used by other FMU modules eg. fmu.ensemble also.
+This module can and should be used by other FMU modules e.g. fmu.ensemble also.
 
 Logging is enabled by setting a environment variable::
 
@@ -78,6 +78,7 @@ class Interaction(object):
         self._lformat = None
         self._lformatlevel = 1
         self._logginglevel = 'CRITICAL'
+        self._logginglevel_fromenv = None
         self._loggingname = ''
         self._syslevel = 1
         self._test_env = True
@@ -85,13 +86,13 @@ class Interaction(object):
         self._testpath = None
 
         # a string, for Python logging:
-        logginglevel = os.environ.get('FMU_LOGGING_LEVEL')
+        self._logginglevel_fromenv = os.environ.get('FMU_LOGGING_LEVEL', None)
 
         # a number, for format, 1 is simple, 2 is more info etc
         loggingformat = os.environ.get('FMU_LOGGING_FORMAT')
 
-        if logginglevel is not None:
-            self.logginglevel = logginglevel
+        if self._logginglevel_fromenv:
+            self.logginglevel = self._logginglevel_fromenv
 
         if loggingformat is not None:
             self._lformatlevel = int(loggingformat)
@@ -187,7 +188,7 @@ class Interaction(object):
     def basiclogger(self, name, level=None):
         """Initiate the logger by some default settings."""
 
-        if level is not None:
+        if level is not None and self._logginglevel_fromenv is None:
             self.logginglevel = level
 
         fmt = self.loggingformat
