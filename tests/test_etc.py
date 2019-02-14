@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
 import pytest
 
 from fmu.config import etc
@@ -40,6 +41,25 @@ def test_info_logger(mylogger, caplog):
 
     logger.warn('This is a warning')
     assert 'This is a warning' in caplog.text
+
+
+def test_more_logging_tests(caplog):
+    """Testing on the logging levels, see that ENV variable will override
+    the basiclogger setting.
+    """
+
+    os.environ['FMU_LOGGING_LEVEL'] = 'INFO'
+
+    fmumore = etc.Interaction()  # another instance
+    locallogger = fmumore.basiclogger(__name__, level='WARNING')
+    locallogger.debug('Display debug')
+    assert caplog.text == ''  # shall be empty
+    locallogger.info('Display info')
+    assert 'info' in caplog.text  # INFO shall be shown, overrided by ENV!
+    locallogger.warning('Display warning')
+    assert 'warning' in caplog.text
+    locallogger.critical('Display critical')
+    assert 'critical' in caplog.text
 
 
 def test_timer(capsys):
