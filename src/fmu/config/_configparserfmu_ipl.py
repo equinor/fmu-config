@@ -12,8 +12,8 @@ import datetime
 
 from fmu.config import etc
 
-xfmu = etc.Interaction()
-logger = xfmu.functionlogger(__name__)
+XFMU = etc.Interaction()
+logger = XFMU.functionlogger(__name__)
 
 # pylint: disable=protected-access
 # pylint: disable=too-many-branches
@@ -21,11 +21,11 @@ logger = xfmu.functionlogger(__name__)
 
 class ConfigError(ValueError):
     """Exception used for config error, derived from ValueError"""
-    pass
 
 
-def to_ipl(self, rootname='global_variables', destination=None,
-           template=None, tool='rms'):
+def to_ipl(
+    self, rootname="global_variables", destination=None, template=None, tool="rms"
+):
     """Export the config as a global variables IPL and/or template
     form of the IPL.
 
@@ -40,30 +40,29 @@ def to_ipl(self, rootname='global_variables', destination=None,
     """
 
     if not destination and not template:
-        raise ConfigError('Both destination and template for IPL cannot '
-                          'be None.')
+        raise ConfigError("Both destination and template for IPL cannot be None.")
 
     if destination and not os.path.isdir(destination):
-        raise ConfigError('Given "destination" {} is not a directory'
-                          .format(destination))
+        raise ConfigError(
+            'Given "destination" {} is not a directory'.format(destination)
+        )
     if template and not os.path.isdir(template):
-        raise ConfigError('Given "template" {} is not a directory'
-                          .format(template))
+        raise ConfigError('Given "template" {} is not a directory'.format(template))
 
     declarations = []
     expressions_dest = []
     expressions_tmpl = []
 
-    metadata = self._get_sysinfo(commentmarker='//')
+    metadata = self._get_sysinfo(commentmarker="//")
     declarations.extend(metadata)
 
-    hdecl, hlist = _ipl_stringlist_format(self, 'horizons', tool=tool)
+    hdecl, hlist = _ipl_stringlist_format(self, "horizons", tool=tool)
     if hdecl is not None:
         declarations.extend(hdecl)
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
-    hdecl, hlist = _ipl_stringlist_format(self, 'zones', tool=tool)
+    hdecl, hlist = _ipl_stringlist_format(self, "zones", tool=tool)
     if hdecl is not None:
         declarations.extend(hdecl)
         expressions_dest.extend(hlist)
@@ -75,14 +74,15 @@ def to_ipl(self, rootname='global_variables', destination=None,
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
+    # freeform formats (most complex to handle)
     if destination:
         hdecl, hlist = _ipl_freeform_format(self)
         if hdecl is not None:
             declarations.extend(hdecl)
             expressions_dest.extend(hlist)
 
-        destfile = os.path.join(destination, rootname + '.ipl')
-        with open(destfile, 'w') as stream:
+        destfile = os.path.join(destination, rootname + ".ipl")
+        with open(destfile, "w") as stream:
             for line in declarations:
                 stream.write(line)
 
@@ -97,8 +97,8 @@ def to_ipl(self, rootname='global_variables', destination=None,
 
             expressions_tmpl.extend(hlist)
 
-        tmplfile = os.path.join(template, rootname + '.ipl.tmpl')
-        with open(tmplfile, 'w') as stream:
+        tmplfile = os.path.join(template, rootname + ".ipl.tmpl")
+        with open(tmplfile, "w") as stream:
             for line in declarations:
                 stream.write(line)
 
@@ -106,7 +106,7 @@ def to_ipl(self, rootname='global_variables', destination=None,
                 stream.write(line)
 
 
-def _ipl_stringlist_format(self, subtype, tool='rms'):
+def _ipl_stringlist_format(self, subtype, tool="rms"):
     """Process the rms horizons etc, and return declarations and values."""
 
     cfg = self.config[tool].get(subtype)
@@ -116,7 +116,7 @@ def _ipl_stringlist_format(self, subtype, tool='rms'):
     decl = []
     expr = []
     for variable in cfg:
-        mydecl = 'String {}[]\n'.format(variable)
+        mydecl = "String {}[]\n".format(variable)
         decl.append(mydecl)
 
         array = cfg[variable]
@@ -124,12 +124,12 @@ def _ipl_stringlist_format(self, subtype, tool='rms'):
             mylist = '{}[{}] = "{}"\n'.format(variable, inum + 1, element)
             expr.append(mylist)
 
-    expr.append('\n')
+    expr.append("\n")
 
     return decl, expr
 
 
-def _ipl_kwlists_format(self, tool='rms'):
+def _ipl_kwlists_format(self, tool="rms"):
     """Process the rms 'kwlists', and return declarations and values.
 
     This format is on the form::
@@ -156,25 +156,25 @@ def _ipl_kwlists_format(self, tool='rms'):
        etc
     """
 
-    cfg = self.config[tool].get('kwlists')
+    cfg = self.config[tool].get("kwlists")
     if cfg is None:
         return None, None
 
     decl = []
     expr = []
     for key, var in cfg.items():
-        mydecl = 'String {}[]\n'.format(key)
+        mydecl = "String {}[]\n".format(key)
         decl.append(mydecl)
 
         for subkey, (code, fullname) in var.items():
             logger.info(subkey, code, fullname)
-            mydecl = 'Int {} = {}\n'.format(subkey, code)
+            mydecl = "Int {} = {}\n".format(subkey, code)
             decl.append(mydecl)
 
             mylist = '{}[{}] = "{}"\n'.format(key, subkey, fullname)
             expr.append(mylist)
 
-        expr.append('\n')
+        expr.append("\n")
 
     return decl, expr
 
@@ -184,17 +184,17 @@ def _cast_value(value):
     e.g. '1' or '34.33'
     """
 
-    logger.info('Value is of type %s', type(value))
+    logger.info("Value is of type %s", type(value))
     result = value
     if isinstance(value, str):
-        if '.' in value:
+        if "." in value:
             try:
                 result = float(value)
             except ValueError:
                 result = value
-        elif value.lower() in ('yes', 'true'):
+        elif value.lower() in ("yes", "true"):
             result = True
-        elif value.lower() in ('no', 'false'):
+        elif value.lower() in ("no", "false"):
             result = False
         else:
             try:
@@ -212,67 +212,66 @@ def _guess_dtype(var, entry):
 
     The entry itself will then be a scalar or a list, which need to be
     analysed. If a list, only the first value is analysed for data
-    type.
+    type; then it is ASSUMED it is the type...
 
     Returns a dict (OrderedDict) as usekey[keyword]['dtype'] and
     usekey[keyword]['value'] or usekey[keyword]['values']
     """
+
     values = entry[var]
     keyword = var
-    logger.info('Guess dtype and value(s) for %s %s', var, values)
+    logger.info("Guess dtype and value(s) for %s %s", var, values)
 
     usekey = OrderedDict()
     usekey[keyword] = OrderedDict()
-    usekey[keyword]['dtype'] = None
-    usekey[keyword]['value'] = None   # Keep "value" if singel entry
-    usekey[keyword]['values'] = None  # Keep "values", if list
+    usekey[keyword]["dtype"] = None
+    usekey[keyword]["value"] = None  # Keep "value" if singel entry
+    usekey[keyword]["values"] = None  # Keep "values", if list
 
     if isinstance(values, list):
         checkval = values[0]
         scheckval = str(checkval)
-        if '~' in scheckval:
-            val, _xtmp = scheckval.split('~')
+        if "~" in scheckval:
+            val, _xtmp = scheckval.split("~")
             checkval = val.strip()
             checkval = _cast_value(checkval)
 
-        usekey[keyword]['values'] = values
-        del usekey[keyword]['value']
+        usekey[keyword]["values"] = values
+        del usekey[keyword]["value"]
     else:
         checkval = values
         scheckval = str(checkval)
-        if '~' in scheckval:
-            val, _xtmp = scheckval.split('~')
+        if "~" in scheckval:
+            val, _xtmp = scheckval.split("~")
             checkval = val.strip()
             checkval = _cast_value(checkval)
-        usekey[keyword]['value'] = values
-        del usekey[keyword]['values']
+        usekey[keyword]["value"] = values
+        del usekey[keyword]["values"]
 
-    for alt in ('int', 'str', 'float', 'bool'):
+    for alt in ("int", "str", "float", "bool"):
         if alt in str(type(checkval)):
-            usekey[keyword]['dtype'] = alt
-
+            usekey[keyword]["dtype"] = alt
             break
 
-    if not usekey[keyword]['dtype']:
+    if not usekey[keyword]["dtype"]:
         # dtype is still None; evaluate for date or datepair:
         if isinstance(checkval, list):
             checkval = checkval[0]
             if isinstance(checkval, datetime.date):
-                usekey[keyword]['dtype'] = 'datepair'
+                usekey[keyword]["dtype"] = "datepair"
         else:
             if isinstance(checkval, datetime.date):
-                usekey[keyword]['dtype'] = 'date'
+                usekey[keyword]["dtype"] = "date"
 
     # final check
-    if not usekey[keyword]['dtype']:
-        raise RuntimeError('Cannot find dtype')
+    if not usekey[keyword]["dtype"]:
+        raise RuntimeError("Cannot find dtype")
 
-    logger.info('Updated key dtype is %s', usekey[keyword]['dtype'])
-    logger.info('Updated key is %s', usekey)
+    logger.info("Updated key XX dtype is %s", usekey[keyword]["dtype"])
+    logger.info("Updated key XX is %s", usekey)
     return usekey
 
 
-# this function is too long...
 def _ipl_freeform_format(self, template=False):
     """Process the RMS IPL YAML config freeform types.
 
@@ -296,13 +295,11 @@ def _ipl_freeform_format(self, template=False):
         template (bool): If True, then the tvalue* are returned, if present
 
     """
-    # pylint: disable=too-many-locals
-    # pylint: disable=too-many-statements
 
-    decl = ['\n// Declare free form:\n']
-    expr = ['\n// Free form expressions:\n']
+    decl = ["\n// Declare free form:\n"]
+    expr = ["\n// Free form expressions:\n"]
 
-    cfg = self.config['rms']
+    cfg = self.config["rms"]
 
     # collect uppercase keys in 'rms'
     freeform_keys = []
@@ -314,16 +311,16 @@ def _ipl_freeform_format(self, template=False):
         return None, None
 
     for variable in freeform_keys:
-        logger.info('Variable to process is %s', variable)
-        expr.append('\n')
+        logger.info("Variable to process is %s", variable)
+        expr.append("\n")
 
-        if variable.startswith('_IPL_CODE'):
-            logger.info('IPL code stub: %s \n%s', variable, cfg[variable])
+        if variable.startswith("_IPL_CODE"):
+            logger.info("IPL code stub: %s \n%s", variable, cfg[variable])
             expr.append(cfg[variable])
             continue
 
-        if variable.startswith('_IPL_DECLARE'):
-            logger.info('IPL declare only: %s \n%s', variable, cfg[variable])
+        if variable.startswith("_IPL_DECLARE"):
+            logger.info("IPL declare only: %s \n%s", variable, cfg[variable])
             decl.append(cfg[variable])
             continue
 
@@ -334,216 +331,164 @@ def _ipl_freeform_format(self, template=False):
         else:
             usecfg = deepcopy(cfg[variable])
 
-        mydtype = usecfg['dtype']
-        if mydtype is not None:
-            subtype = mydtype.capitalize()
-        if 'Str' in subtype:
-            subtype = 'String'
-        elif 'Date' in subtype:
-            subtype = 'String'
+        mydtype = usecfg["dtype"]
+        myvalue = usecfg.get("value")
+        myvalues = usecfg.get("values")
 
-        logger.info('SUBTYPE: %s %s', variable, subtype)
-
-        myvalue = usecfg.get('value')
-        myvalues = usecfg.get('values')
-
-        logger.info('For %s value: %s and values: %s, subtype %s',
-                    variable, myvalue, myvalues, subtype)
-
-        if subtype == 'Bool':
-            tmpvalue = str(myvalue)
-            try:
-                val, var = tmpvalue.split('~')
-                val = val.strip()
-                var = var.strip()
-            except ValueError:
-                val = tmpvalue.strip()
-                var = None
-
-            for somebool in ('True', 'yes', 'YES', 'Yes', 'true', 'TRUE'):
-                val = val.replace(somebool, 'TRUE')
-            for somebool in ('False', 'no', 'NO', 'No', 'false', 'FALSE'):
-                val = val.replace(somebool, 'FALSE')
-
-            myvalue = val
-            if var:
-                myvalue = myvalue + ' ~ ' + var
+        print("XXXX DTYPE1", mydtype)
+        if mydtype in ("date", "datepair"):
+            if myvalue:
+                raise RuntimeError(
+                    '<{}>: Treating <date> as "value" is not '
+                    'possible, rather make into list "values" '
+                    "with one entry instead!".format(myvalue)
+                )
+            myvalues = _fix_date_format(variable, mydtype, myvalues, aslist=True)
+            mydtype = "str"
 
         if myvalue is None and myvalues is None:
-            raise ConfigError('"value" or "values" is missing for RMS '
-                              'variable {}'.format(variable))
+            raise ConfigError(
+                "'value' or 'values' is missing for RMS variable {}".format(variable)
+            )
 
-        logger.info('myvalue is %s for %s', myvalue, variable)
+        adecl, aexpr = _freeform_handle_entry(
+            variable, myvalue, myvalues, mydtype, template
+        )
 
-        if myvalue is not None:
-            logger.info('Check %s with value: %s of type %s',
-                        variable, myvalue, type(myvalue))
-            if not isinstance(myvalue, (int, float, str, bool, datetime.date,
-                                        list)):
-                raise ConfigError('"value" is of wrong type for '
-                                  'variable {}: {} ({})'
-                                  .format(variable, myvalue, type(myvalue)))
-        if myvalues is not None:
-            if not isinstance(myvalues, (list)):
-                raise ConfigError('"values" is of wrong type for '
-                                  'variable {}: {} ({})'
-                                  .format(variable, myvalues, type(myvalues)))
+        decl.append(adecl)
+        expr.append(aexpr)
 
-        myvalue = _fix_date_format(variable, mydtype, myvalue, aslist=False)
-        myvalues = _fix_date_format(variable, mydtype, myvalues, aslist=True)
+    decl.append("//{} {}\n\n".format("-*- END IPL DECLARATIONS -*-", "-" * 48))
 
-        logger.info('Check again %s with value: %s and dtype %s',
-                    variable, myvalue, mydtype)
-        logger.info('Check again %s with values: %s and dtype %s',
-                    variable, myvalues, mydtype)
+    return decl, expr
 
-        listtype = ''
-        if myvalue is not None:
 
-            logger.info('Working with %s', variable)
-            isstring = False
-            if subtype == 'String':
-                isstring = True
-            logger.info('Process value: %s', myvalue)
+def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
+    """Handling of any entry as single value or list in IPL.
 
-            myvalue = _get_required_iplform(str(myvalue), template=template,
-                                            string=isstring)
+    Either myvalue or myvalues shall be None!
 
-            logger.info('Returns value: %s', myvalue)
-            myexpr = '{} = {}'.format(variable, myvalue)
+    Args:
+        variable (str): Name of variable
+        myvalue (str or bool): Single value case
+        myvalues (): List of values
+        dtype (str): Type of variable on python form: "str", "float", "int", ...
 
-            expr.append(myexpr)
+    Returns:
+        (decl, expr): Declaration string and expression string
+    """
 
-        # list of values:
-        elif myvalues is not None:
-            listtype = '[]'
-            for inum, val in enumerate(myvalues):
-                fnutt = ''
-                if subtype == 'String':
-                    fnutt = '"'
-                myexpr = '{}[{}] = {}{}{}\n'.format(variable, inum + 1,
-                                                    fnutt, val, fnutt)
-                logger.info('Stream for list %s', myexpr)
-                pre, post = myexpr.split('=')
-                pre = pre.strip()
-                post = post.strip()
-                myexpr = (pre + ' = ' +
-                          _get_required_iplform(str(post), template=template))
-                expr.append(myexpr)
+    decl = ""
+    expr = ""
 
-        mydecl = '{} {}{}\n'.format(subtype, variable, listtype)
-        decl.append(mydecl)
+    subtype = None
+    if dtype is not None:
+        subtype = dtype.capitalize()
+    if "Str" in subtype:
+        subtype = "String"
 
-    decl.append('//{} {}\n\n'.format('-*- END IPL DECLARATIONS -*-', '-' * 48))
+    logger.info("SUBTYPE: %s %s", variable, subtype)
+
+    # inner function
+    def _fixtheentry(variable, myval, subtype, count=None, template=False):
+
+        tmpvalue = str(myval)
+        if "~" in tmpvalue:
+            val, var = tmpvalue.split("~")
+            val = val.strip()
+            var = var.strip()
+        else:
+            val = tmpvalue.strip()
+            var = None
+
+        if subtype == "Bool":
+            if val in ("True", "yes", "YES", "Yes", "true", "TRUE"):
+                val = "TRUE"
+            if val in ("False", "no", "NO", "No", "false", "FALSE"):
+                val = "FALSE"
+
+        if subtype == "String":
+            val = '"{}"'.format(val)
+
+        myvalue = val
+        if var:
+            myvalue = val + "  // " + var
+
+        if var and template:
+            myvalue = var + "  // " + val
+
+        counter = ""
+        if count:
+            counter = "[" + str(count) + "]"
+        expr = variable + counter + " = " + myvalue + "\n"
+
+        decltype = ""
+        if count:
+            decltype = "[]"  # e.g. Bool[] SOMEBOOL
+
+        decl = subtype + decltype + " " + variable + "\n"
+
+        return decl, expr
+
+    # single entry
+    if myvalue:
+        decl, expr = _fixtheentry(variable, myvalue, subtype, template=template)
+
+    # list entry
+    elif myvalues:
+        expr = ""
+        for icount, myval in enumerate(myvalues):
+            decl, subexpr = _fixtheentry(
+                variable, myval, subtype, count=icount + 1, template=template
+            )
+            expr += subexpr
+
     return decl, expr
 
 
 def _fix_date_format(var, dtype, value, aslist=False):
     """Make dateformat to acceptable RMS IPL format."""
 
-    logger.info('Fix dates...')
+    logger.info("Fix dates for %s", var)
     if value is None:
-        return None
+        returnv = None
 
-    logger.info('Fix dates...2 dtype is %s', dtype)
-    if dtype not in ('date', 'datepair'):
-        logger.info('Fix dates...2 dtype is %s RETURN', dtype)
+    logger.info("Fix dates... dtype is %s", dtype)
+    if dtype not in ("date", "datepair"):
+        logger.info("Fix dates... dtype is %s RETURN", dtype)
         return value
 
     values = None
     if aslist:
-        logger.debug('Dates is a list')
+        logger.debug("Dates is a list")
         values = value
         value = None
 
-    result = None
-    if dtype == 'date':
-        logger.info('Process date ...')
-        if value:
-            raise RuntimeError('<{}>: Treating <date> as "value" is not '
-                               'possible, rather make into list "values" '
-                               'with one entry instead!'.format(var))
-            # logger.info('Process date as ONE value for %s', var)
-            # if isinstance(value, (datetime.datetime, datetime.date)):
-            #     value = str(value)
-            #     value = value.replace('-', '')
-            # result = value
+    if dtype == "date":
+        logger.info("Process date ...")
         if values:
             mynewvalues = []
-            logger.info('Process date as values')
+            logger.info("Process date as values")
             for val in values:
                 if isinstance(val, (datetime.datetime, datetime.date)):
                     val = str(val)
-                    val = val.replace('-', '')
+                    val = val.replace("-", "")
                     mynewvalues.append(val)
-            result = mynewvalues
+            returnv = mynewvalues
 
-    if dtype == 'datepair':
-        if value:
-            raise RuntimeError('<{}> Treating <datepair> as "value" is not '
-                               'possible, rather make into list "values" '
-                               'with one entry instead!'.format(var))
-            # date1, date2 = value
-            # if isinstance(date1, (datetime.datetime, datetime.date)):
-            #     date1 = str(date1)
-            #     date1 = date1.replace('-', '')
-
-            # if isinstance(date2, (datetime.datetime, datetime.date)):
-            #     date2 = str(date2)
-            #     date2 = date1.replace('-', '')
-            # result = date1 + '_' + date2
-
+    if dtype == "datepair":
         if values:
             mynewvalues = []
             for val in values:
                 date1, date2 = val
                 if isinstance(date1, (datetime.datetime, datetime.date)):
                     date1 = str(date1)
-                    date1 = date1.replace('-', '')
+                    date1 = date1.replace("-", "")
                 if isinstance(date2, (datetime.datetime, datetime.date)):
                     date2 = str(date2)
-                    date2 = date2.replace('-', '')
-                mynewvalues.append(date1 + '_' + date2)
+                    date2 = date2.replace("-", "")
+                mynewvalues.append(date1 + "_" + date2)
 
-            result = mynewvalues
+            returnv = mynewvalues
 
-    return result
-
-
-def _get_required_iplform(stream, template=False, string=False):
-    """Strip a string for IPL output.
-
-    If template is True, keep the value if no ~ is present,
-    otherwise return the <...> string and the value as a comment.
-
-    If template is False, return the value with <...> as comment
-    if present.
-
-    If string is True, secure correct handling of '"' around values
-    """
-
-    if isinstance(stream, str):
-        logger.info('STREAM is a str object: %s', stream)
-    else:
-        raise NotImplementedError('Wait')
-
-    if '~' in stream:
-        val, var = stream.split('~')
-        val = val.strip()
-        var = var.strip()
-        if string:
-            val = '"' + val + '"'
-            var = '"' + var + '"'
-        if template:
-            result = var + '  // ' + val
-        else:
-            result = val + '  // ' + var
-    else:
-        result = stream.strip()
-        if string:
-            result = '"' + result + '"'
-
-    if '\n' not in result:
-        result = result + '\n'
-
-    return result
+    return returnv

@@ -96,6 +96,18 @@ rms:
 
   SOMEXMODEL: false
 
+  SOMEBOOL1:
+    - true ~ <>
+    - false ~ <>
+    - true
+
+  SOMEBOOL2:
+    dtype: bool
+    values:
+      - true
+      - false
+      - true
+
   FWL: *global_fwl
 
   GOC: *global_goc
