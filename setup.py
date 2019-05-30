@@ -18,6 +18,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
 ]
 
+# for 'python setup.py test' to work; need pytest runner:
 setup_requirements = [
     'pytest-runner',
 ]
@@ -38,12 +39,7 @@ fmuconfig_function = ('fmuconfig='
 # - micro: Added functionality and bug fixes with no expected side effects
 # - Provide a tag on the form 3.4.0 for each release!
 #
-# Also, a verymicro may _sometimes_ exist (allowed in PEP440); which can be:
-# - One single, very easy to understand, bugfixes
-# - Additions in documentations (not affecting code)
-# - These may not be tagged explicity!
-#
-# Hence, use major.minor.micro or major.minor.micro.verymicro scheme.
+# Hence, use major.minor.micro
 # -----------------------------------------------------------------------------
 
 
