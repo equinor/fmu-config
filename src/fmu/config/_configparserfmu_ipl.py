@@ -167,7 +167,7 @@ def _ipl_kwlists_format(self, tool="rms"):
         decl.append(mydecl)
 
         for subkey, (code, fullname) in var.items():
-            logger.info(subkey, code, fullname)
+            # logger.info(subkey, code, fullname)
             mydecl = "Int {} = {}\n".format(subkey, code)
             decl.append(mydecl)
 
@@ -335,9 +335,8 @@ def _ipl_freeform_format(self, template=False):
         myvalue = usecfg.get("value")
         myvalues = usecfg.get("values")
 
-        print("XXXX DTYPE1", mydtype)
         if mydtype in ("date", "datepair"):
-            if myvalue:
+            if myvalue is not None:
                 raise RuntimeError(
                     '<{}>: Treating <date> as "value" is not '
                     'possible, rather make into list "values" '
@@ -355,6 +354,7 @@ def _ipl_freeform_format(self, template=False):
             variable, myvalue, myvalues, mydtype, template
         )
 
+        logger.info("Append %s", adecl)
         decl.append(adecl)
         expr.append(aexpr)
 
@@ -387,11 +387,18 @@ def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
     if "Str" in subtype:
         subtype = "String"
 
-    logger.info("SUBTYPE: %s %s", variable, subtype)
+    logger.info(
+        "Subtype for %s is %s (myvalue is %s, dtype is %s)",
+        variable,
+        subtype,
+        myvalue,
+        dtype,
+    )
 
     # inner function
     def _fixtheentry(variable, myval, subtype, count=None, template=False):
 
+        logger.info("Fix freeform entry %s", variable)
         tmpvalue = str(myval)
         if "~" in tmpvalue:
             val, var = tmpvalue.split("~")
@@ -409,6 +416,8 @@ def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
 
         if subtype == "String":
             val = '"{}"'.format(val)
+            if var:
+                var = '"{}"'.format(var)
 
         myvalue = val
         if var:
@@ -424,18 +433,18 @@ def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
 
         decltype = ""
         if count:
-            decltype = "[]"  # e.g. Bool[] SOMEBOOL
+            decltype = "[]"  # e.g. Bool SOMEBOOL[]
 
-        decl = subtype + decltype + " " + variable + "\n"
+        decl = subtype + " " + variable + decltype + "\n"
 
         return decl, expr
 
     # single entry
-    if myvalue:
+    if myvalue is not None:
         decl, expr = _fixtheentry(variable, myvalue, subtype, template=template)
 
     # list entry
-    elif myvalues:
+    elif myvalues is not None:
         expr = ""
         for icount, myval in enumerate(myvalues):
             decl, subexpr = _fixtheentry(
