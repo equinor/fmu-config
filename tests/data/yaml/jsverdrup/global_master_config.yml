@@ -85,14 +85,14 @@ rms:
   FWL_UBER_ALLES: 1344.0 ~ <>
   FWL_UBER_ALLES_FINAL: 1344.0 ~ <UBER_FINAL>
 
+  # include some freeform variables using anonymous entry __xxx
+  __xxx: !include doe_params.yml
+
   # guessing the dtype with values
   FWL3:
     - 1234.0 ~ <FWL3_FIRST>
     - 1236.0 ~ <>  # will be FWL3_1
     - 1134.5 ~ <>  # will be FWL3_2
-
-  # include some freeform variables using anonymous entry __xxx
-  __xxx: !include doe_params.yml
 
 
 eclipse:

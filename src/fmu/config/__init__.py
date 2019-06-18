@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
 """Top-level package for fmu_config"""
 
-from ._theversion import theversion
-__version__ = theversion()
+try:
+    from ._theversion import version
+    __version__ = version
+except ImportError:
+    __version__ = "0.0.0"
 
-del theversion
 
 from .configparserfmu import ConfigParserFMU  # noqa
