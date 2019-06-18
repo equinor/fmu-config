@@ -9,26 +9,36 @@ from glob import glob
 
 from setuptools import setup, find_packages
 
+
+def parse_requirements(filename):
+    """Load requirements from a pip requirements file"""
+    try:
+        lineiter = (line.strip() for line in open(filename))
+        return [line for line in lineiter if line and not line.startswith("#")]
+    except IOError:
+        return []
+
+
+def src(x):
+    root = os.path.dirname(__file__)
+    return os.path.abspath(os.path.join(root, x))
+
+
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = []
+requirements = parse_requirements("requirements.txt")
 
 # for 'python setup.py test' to work; need pytest runner:
-setup_requirements = ["pytest-runner", "setuptools_scm>=3.2.0"]
+setup_requirements = ["pytest-runner", "setuptools_scm>=3.2.0", "wheel"]
 
 test_requirements = ["pytest"]
 
 # entry points setting
 fmuconfig_runner = "fmuconfig=" "fmu.config.fmuconfigrunner:main"
-
-
-def src(x):
-    root = os.path.dirname(__file__)
-    return os.path.abspath(os.path.join(root, x))
 
 
 setup(
