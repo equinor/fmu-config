@@ -18,6 +18,7 @@ import getpass
 import socket
 import datetime
 import json
+
 # for ordered dicts!
 from collections import OrderedDict, Counter
 
@@ -44,7 +45,7 @@ class ConfigParserFMU(object):
         self._config = {}
         self._yamlfile = None
         self._runsilent = True
-        logger.debug('Ran __init__')
+        logger.debug("Ran __init__")
 
     @property
     def config(self):
@@ -59,7 +60,7 @@ class ConfigParserFMU(object):
     def parse(self, yfile, smart_braces=True):
         """Parsing the YAML file (reading it)."""
 
-        with open(yfile, 'r') as stream:
+        with open(yfile, "r") as stream:
             try:
                 self._config = yaml.load(stream, Loader=FmuLoader)
             except ConstructorError as errmsg:
@@ -69,27 +70,34 @@ class ConfigParserFMU(object):
         self._yamlfile = yfile
 
         if smart_braces:
-            self._config = self._fill_empty_braces(deepcopy(self._config), 'X')
+            self._config = self._fill_empty_braces(deepcopy(self._config), "X")
 
         self._cleanify_doubleunderscores()
 
         self._validate_unique_tmplkeys()
 
-    def show(self, style='yaml'):
+    def show(self, style="yaml"):
         """Show (print) the current configuration to STDOUT.
 
         Args:
             style: Choose between 'yaml' (default), or 'json'"""
 
-        xfmu.echo('Output of configuration:')
-        if style in ('yaml', 'yml'):
+        xfmu.echo("Output of configuration:")
+        if style in ("yaml", "yml"):
             yaml.dump(self.config, stream=sys.stdout)
-        elif style in ('json', 'jason'):
+        elif style in ("json", "jason"):
             stream = json.dumps(self.config, indent=4, default=str)
             print(stream)
 
-    def to_table(self, rootname='myconfig', destination=None, template=None,
-                 entry=None, createfolders=False, sep=','):
+    def to_table(
+        self,
+        rootname="myconfig",
+        destination=None,
+        template=None,
+        entry=None,
+        createfolders=False,
+        sep=",",
+    ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
 
@@ -122,19 +130,20 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both destination and template are None.'
-                             'At least one of them has to be set!.')
+            raise ValueError(
+                "Both destination and template are None."
+                "At least one of them has to be set!."
+            )
 
         if entry is None:
-            raise ValueError('The entry is None; need a value, '
-                             'e.g. "global.FWL"')
+            raise ValueError("The entry is None; need a value, " 'e.g. "global.FWL"')
 
         if createfolders:
             self._force_create_folders([destination, template])
         else:
             self._check_folders([destination, template])
 
-        keys = entry.split('.')
+        keys = entry.split(".")
 
         if len(keys) == 1:
             cfg = self.config[keys[0]]
@@ -145,30 +154,34 @@ class ConfigParserFMU(object):
         elif len(keys) == 4:
             cfg = self.config[keys[0]][keys[1]][keys[2]][keys[3]]
         else:
-            raise ValueError('Entry with more that 4 sublevels, not supported')
+            raise ValueError("Entry with more that 4 sublevels, not supported")
 
         if destination:
-            with open(ojoin(destination, rootname + '.txt'), 'w') as dest:
+            with open(ojoin(destination, rootname + ".txt"), "w") as dest:
                 for row in cfg:
                     for col in row:
                         stream = str(col)
-                        stream = self._get_required_form(stream,
-                                                         template=False)
+                        stream = self._get_required_form(stream, template=False)
                         # print('<{}>'.format(stream))
-                        print(str(stream) + sep, file=dest, end='')
-                    print('', file=dest)
+                        print(str(stream) + sep, file=dest, end="")
+                    print("", file=dest)
         if template:
-            with open(ojoin(template, rootname + '.txt.tmpl'), 'w') as tmpl:
+            with open(ojoin(template, rootname + ".txt.tmpl"), "w") as tmpl:
                 for row in cfg:
                     for col in row:
                         stream = str(col)
-                        stream = self._get_required_form(stream,
-                                                         template=True)
-                        print(str(stream) + sep, file=tmpl, end='')
-                    print('', file=tmpl)
+                        stream = self._get_required_form(stream, template=True)
+                        print(str(stream) + sep, file=tmpl, end="")
+                    print("", file=tmpl)
 
-    def to_yaml(self, rootname='myconfig', destination=None, template=None,
-                tool=None, createfolders=False):
+    def to_yaml(
+        self,
+        rootname="myconfig",
+        destination=None,
+        template=None,
+        tool=None,
+        createfolders=False,
+    ):
         # pylint: disable=too-many-arguments
 
         """Export the config as YAML files; one with true values and
@@ -197,8 +210,10 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both destination and template are None.'
-                             'At least one of them has to be set!.')
+            raise ValueError(
+                "Both destination and template are None."
+                "At least one of them has to be set!."
+            )
 
         if createfolders:
             self._force_create_folders([destination, template])
@@ -213,26 +228,27 @@ class ConfigParserFMU(object):
         else:
             mystream = yaml.dump(newcfg)
 
-        mystream = ''.join(self._get_sysinfo()) + mystream
+        mystream = "".join(self._get_sysinfo()) + mystream
 
-        mystream = re.sub(r'\s+~', '~', mystream)
-        mystream = re.sub(r'~\s+', '~', mystream)
+        mystream = re.sub(r"\s+~", "~", mystream)
+        mystream = re.sub(r"~\s+", "~", mystream)
 
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
 
         if destination:
-            out = os.path.join(destination, rootname + '.yml')
-            with open(out, 'w') as stream:
+            out = os.path.join(destination, rootname + ".yml")
+            with open(out, "w") as stream:
                 stream.write(cfg1)
 
         if template:
-            out = os.path.join(template, rootname + '.yml.tmpl')
-            with open(out, 'w') as stream:
+            out = os.path.join(template, rootname + ".yml.tmpl")
+            with open(out, "w") as stream:
                 stream.write(cfg2)
 
-    def to_json(self, rootname, destination=None, template=None,
-                createfolders=False, tool=None):
+    def to_json(
+        self, rootname, destination=None, template=None, createfolders=False, tool=None
+    ):
         """Export the config as JSON files; one with true values and
         one with templated variables.
 
@@ -259,8 +275,10 @@ class ConfigParserFMU(object):
         """
 
         if not destination and not template:
-            raise ValueError('Both destionation and template are None.'
-                             'At least one of them has to be set!.')
+            raise ValueError(
+                "Both destionation and template are None."
+                "At least one of them has to be set!."
+            )
 
         if createfolders:
             self._force_create_folders([destination, template])
@@ -277,23 +295,29 @@ class ConfigParserFMU(object):
 
         mystream = json.dumps(mycfg, indent=4, default=str)
 
-        mystream = re.sub(r'\s+~', '~', mystream)
-        mystream = re.sub(r'~\s+', '~', mystream)
+        mystream = re.sub(r"\s+~", "~", mystream)
+        mystream = re.sub(r"~\s+", "~", mystream)
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
-            out = os.path.join(destination, rootname + '.json')
-            with open(out, 'w') as stream:
+            out = os.path.join(destination, rootname + ".json")
+            with open(out, "w") as stream:
                 stream.write(cfg1)
 
         if template:
             cfg2 = self._get_tmpl_form(mystream)
-            out = os.path.join(template, rootname + '.json.tmpl')
-            with open(out, 'w') as stream:
+            out = os.path.join(template, rootname + ".json.tmpl")
+            with open(out, "w") as stream:
                 stream.write(cfg2)
 
-    def to_ipl(self, rootname='global_variables', destination=None,
-               template=None, createfolders=False, tool='rms'):
+    def to_ipl(
+        self,
+        rootname="global_variables",
+        destination=None,
+        template=None,
+        createfolders=False,
+        tool="rms",
+    ):
         """Export the config as a global variables IPL and/or template.
 
         Args:
@@ -315,28 +339,31 @@ class ConfigParserFMU(object):
             self._check_folders([destination, template])
 
         # keep most code in separate file ( a bit lengthy)
-        _configparserfmu_ipl.to_ipl(self, rootname=rootname,
-                                    destination=destination,
-                                    template=template,
-                                    tool=tool)
+        _configparserfmu_ipl.to_ipl(
+            self,
+            rootname=rootname,
+            destination=destination,
+            template=template,
+            tool=tool,
+        )
 
     def to_eclipse(self):
         """Export the config templates and actuals under `eclipse`"""
 
         cfg = self.config
 
-        for deck in cfg['eclipse']:
-            logger.info('Deck is %s', deck)
-            edeck = cfg['eclipse'][deck]
+        for deck in cfg["eclipse"]:
+            logger.info("Deck is %s", deck)
+            edeck = cfg["eclipse"][deck]
 
-            content = edeck['content']
+            content = edeck["content"]
             content_dest = self._get_dest_form(content)
             content_tmpl = self._get_tmpl_form(content)
 
-            with open(edeck['destfile'], 'w') as dest:
+            with open(edeck["destfile"], "w") as dest:
                 dest.write(content_dest)
 
-            with open(edeck['tmplfile'], 'w') as tmpl:
+            with open(edeck["tmplfile"], "w") as tmpl:
                 tmpl.write(content_tmpl)
 
     # =========================================================================
@@ -355,23 +382,36 @@ class ConfigParserFMU(object):
         The input in facies.yaml will then be relocated to the key 'rms',
         up one level.
 
+        .. versionchanged:: 1.0.1 secure same order of __xxx keys
+
         """
 
         # pylint: disable=too-many-nested-blocks
         newcfg = deepcopy(self._config)
 
         for key, val in self._config.items():
-            logger.debug(type(key))
+
             if isinstance(val, dict):
+                subkeyorder = []
+                _tmps = {}
 
                 for subkey, subval in val.items():
 
-                    if subkey.startswith('__'):
-                        logger.info('Found temporary key %s', subkey)
+                    if subkey.startswith("__"):
                         if isinstance(subval, dict):
                             for subsubkey, subsubval in subval.items():
-                                newcfg[key][subsubkey] = deepcopy(subsubval)
+                                _tmps[subsubkey] = deepcopy(subsubval)
+                                subkeyorder.append(subsubkey)
                         del newcfg[key][subkey]
+                    else:
+                        subkeyorder.append(subkey)
+                        _tmps[subkey] = subval
+
+                # order
+                ordered = OrderedDict()
+                for kw in subkeyorder:
+                    ordered[kw] = _tmps[kw]
+                newcfg[key] = ordered
 
         self._config = newcfg
 
@@ -385,24 +425,25 @@ class ConfigParserFMU(object):
 
         mystream = yaml.dump(self._config)
         tlist = []
-        tmpl = re.findall('<\w+>', mystream)
+        tmpl = re.findall("<\w+>", mystream)
         for item in tmpl:
             tlist.append(item)
 
         for item in tlist:
             wasitem = item
-            item = item.rstrip('>')
-            item = item.lstrip('<')
+            item = item.rstrip(">")
+            item = item.lstrip("<")
             if any(char.islower() for char in item):
-                xfmu.error('Your template key contains lowercase '
-                           'letter: {}'.format(wasitem))
+                xfmu.error(
+                    "Your template key contains lowercase " "letter: {}".format(wasitem)
+                )
 
         if len(tlist) != len(set(tlist)) and not self._runsilent:
-            xfmu.echo('Note, there are duplicates in <...> keywords')
+            xfmu.echo("Note, there are duplicates in <...> keywords")
             counter = Counter(tlist)
             for item, cnt in counter.items():
                 if cnt > 1:
-                    xfmu.echo('{0:30s} occurs {1:3d} times'.format(item, cnt))
+                    xfmu.echo("{0:30s} occurs {1:3d} times".format(item, cnt))
 
     def _fill_empty_braces(self, stream, key):
         """If an empty variable is given, this shall be replaced with
@@ -424,21 +465,29 @@ class ConfigParserFMU(object):
 
         """
         if isinstance(stream, str):
-            if key in ('value', 'values') and '<>' in stream:
-                xfmu.warn('Empty template "<>" is not supported in "value" or '
-                          '"values" fields: {}'.format(stream))
+            if key in ("value", "values") and "<>" in stream:
+                xfmu.warn(
+                    'Empty template "<>" is not supported in "value" or '
+                    '"values" fields: {}'.format(stream)
+                )
             else:
-                return stream.replace('<>', '<' + str(key) + '>')
+                return stream.replace("<>", "<" + str(key) + ">")
         elif isinstance(stream, list):
-            return [self._fill_empty_braces(item, key + '_' + str(num))
-                    for num, item in enumerate(stream)]
+            return [
+                self._fill_empty_braces(item, key + "_" + str(num))
+                for num, item in enumerate(stream)
+            ]
         elif isinstance(stream, dict):
-            return OrderedDict([(xkey, self._fill_empty_braces(item, xkey))
-                                for xkey, item in stream.items()])
+            return OrderedDict(
+                [
+                    (xkey, self._fill_empty_braces(item, xkey))
+                    for xkey, item in stream.items()
+                ]
+            )
         return stream
 
     @staticmethod
-    def _get_sysinfo(commentmarker='#'):
+    def _get_sysinfo(commentmarker="#"):
         """Return a text string that serves as info for the outpyt styles
         that support comments."""
 
@@ -448,10 +497,13 @@ class ConfigParserFMU(object):
         ver = theversion
         cmt = commentmarker
 
-        meta = ['{} Autogenerated from global configuration.\n'.format(cmt),
-                '{} DO NOT EDIT THIS FILE MANUALLY!\n'.format(cmt),
-                '{} Machine {} by user {}, at {}, using fmu.config ver. {}\n'
-                .format(cmt, host, user, now, ver)]
+        meta = [
+            "{} Autogenerated from global configuration.\n".format(cmt),
+            "{} DO NOT EDIT THIS FILE MANUALLY!\n".format(cmt),
+            "{} Machine {} by user {}, at {}, using fmu.config ver. {}\n".format(
+                cmt, host, user, now, ver
+            ),
+        ]
 
         return meta
 
@@ -475,9 +527,11 @@ class ConfigParserFMU(object):
                 continue
 
             if not os.path.exists(folder):
-                raise ValueError('Folder {} does not exist. It must either '
-                                 'exist in advance, or the createfolders key'
-                                 'must be True.'.format(folder))
+                raise ValueError(
+                    "Folder {} does not exist. It must either "
+                    "exist in advance, or the createfolders key"
+                    "must be True.".format(folder)
+                )
 
     def _strip_rmsdtype(self):
         """Returns a copy of the _config dictionary so that the (e.g.)
@@ -487,8 +541,8 @@ class ConfigParserFMU(object):
 
         newcfg = deepcopy(self._config)
 
-        if 'rms' in self._config:
-            cfgrms = self._config['rms']
+        if "rms" in self._config:
+            cfgrms = self._config["rms"]
         else:
             return newcfg
 
@@ -496,15 +550,17 @@ class ConfigParserFMU(object):
             logger.debug(key, val)
             if isinstance(val, dict):
                 logger.debug(val.keys())
-                if 'dtype' and 'value' in val.keys():
-                    newcfg['rms'][key] = deepcopy(val['value'])
-                elif 'dtype' and 'values' in val.keys():
-                    newcfg['rms'][key] = deepcopy(val['values'])
-                elif 'dtype' in val.keys():
+                if "dtype" and "value" in val.keys():
+                    newcfg["rms"][key] = deepcopy(val["value"])
+                elif "dtype" and "values" in val.keys():
+                    newcfg["rms"][key] = deepcopy(val["values"])
+                elif "dtype" in val.keys():
                     raise RuntimeError(
                         'Wrong input YAML?. It seems that "{}" has '
-                        '"dtype" but no "value" or "values" ({})'
-                        .format(key, val.keys()))
+                        '"dtype" but no "value" or "values" ({})'.format(
+                            key, val.keys()
+                        )
+                    )
 
         return newcfg
 
@@ -532,7 +588,7 @@ class ConfigParserFMU(object):
             ipl (bool): If IPL mode
         """
 
-        if '~' not in stream:
+        if "~" not in stream:
             return stream
 
         result = None
@@ -541,16 +597,16 @@ class ConfigParserFMU(object):
             pass
         elif isinstance(stream, str):
 
-            if '~' in stream:
-                value, tvalue = stream.split('~')
+            if "~" in stream:
+                value, tvalue = stream.split("~")
                 value = value.strip()
                 tvalue = tvalue.strip()
 
                 if ipl:
                     if template:
-                        result = tvalue + '  // ' + value
+                        result = tvalue + "  // " + value
                     else:
-                        result = value + '  // ' + tvalue
+                        result = value + "  // " + tvalue
                 else:
                     if template:
                         result = tvalue
@@ -558,8 +614,7 @@ class ConfigParserFMU(object):
                         result = value
 
         else:
-            raise ValueError('Input for templateconversion neither string '
-                             'or list')
+            raise ValueError("Input for templateconversion neither string " "or list")
 
         return result
 
@@ -567,24 +622,23 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Get template form (<...> if present, not numbers)."""
 
-        pattern = '[a-zA-Z0-9.]+~'
+        pattern = "[a-zA-Z0-9.]+~"
 
         if isinstance(stream, list):
-            logger.info('STREAM is a list object')
+            logger.info("STREAM is a list object")
             result = []
             for item in stream:
-                moditem = re.sub(pattern, '', item)
-                moditem = re.sub('"', '', moditem)
-                moditem = ' ' + moditem.strip()
+                moditem = re.sub(pattern, "", item)
+                moditem = re.sub('"', "", moditem)
+                moditem = " " + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            logger.info('STREAM is a str object - get tmpl form')
-            result = re.sub(pattern, '', stream)
-            result = re.sub('"', '', result)
-            result = result.strip() + '\n'
+            logger.info("STREAM is a str object - get tmpl form")
+            result = re.sub(pattern, "", stream)
+            result = re.sub('"', "", result)
+            result = result.strip() + "\n"
         else:
-            raise ValueError('Input for templateconversion neither string '
-                             'or list')
+            raise ValueError("Input for templateconversion neither string " "or list")
 
         return result
 
@@ -592,21 +646,20 @@ class ConfigParserFMU(object):
     def _get_dest_form(stream):
         """Get destination form (numbers, not <...>)"""
 
-        pattern = '~<.+?>'
+        pattern = "~<.+?>"
 
         if isinstance(stream, list):
-            logger.info('STREAM is a list object')
+            logger.info("STREAM is a list object")
             result = []
             for item in stream:
-                moditem = re.sub(pattern, '', item)
-                moditem = ' ' + moditem.strip()
+                moditem = re.sub(pattern, "", item)
+                moditem = " " + moditem.strip()
                 result.append(moditem)
         elif isinstance(stream, str):
-            logger.info('STREAM is a str object - get dest form')
-            result = re.sub(pattern, '', stream)
-            result = result.strip() + '\n'
+            logger.info("STREAM is a str object - get dest form")
+            result = re.sub(pattern, "", stream)
+            result = result.strip() + "\n"
         else:
-            raise ValueError('Input for templateconversion neither string '
-                             'or list')
+            raise ValueError("Input for templateconversion neither string " "or list")
 
         return result
