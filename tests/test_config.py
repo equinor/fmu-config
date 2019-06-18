@@ -84,10 +84,10 @@ def test_to_yaml_troll2():
 
     # now read the files again to assert tests
     with open(os.path.join(fmux.tmpdir, rootn + '.yml'), 'r') as stream:
-        cfg_yml = yaml.load(stream)
+        cfg_yml = yaml.safe_load(stream)
 
     with open(os.path.join(fmux.tmpdir, rootn + '.yml.tmpl'), 'r') as stream:
-        cfg_tmpl = yaml.load(stream)
+        cfg_tmpl = yaml.safe_load(stream)
 
     assert cfg_yml['KH_MULT_CSAND'] == 1.0
     assert cfg_tmpl['KH_MULT_CSAND'] == '<KH_MULT_CSAND>'

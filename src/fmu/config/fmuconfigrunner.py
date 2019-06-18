@@ -10,10 +10,14 @@ import os.path
 
 import fmu.config as fmu_config
 
-from fmu.config import _version
+try:
+    from fmu.config._theversion import version as theversion
+except ImportError:
+    theversion = "0.0.0"
+
 from fmu.config import etc
 
-__version__ = _version.get_versions()['version']
+__version__ = theversion
 
 xfmu = etc.Interaction()
 logger = xfmu.basiclogger(__name__)
