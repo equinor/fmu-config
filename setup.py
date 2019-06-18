@@ -23,7 +23,7 @@ setup_requirements = ["pytest-runner", "setuptools_scm>=3.2.0"]
 test_requirements = ["pytest"]
 
 # entry points setting
-fmuconfig_function = "fmuconfig=" "fmu.config.fmuconfigrunner:main"
+fmuconfig_runner = "fmuconfig=" "fmu.config.fmuconfigrunner:main"
 
 
 def src(x):
@@ -45,6 +45,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
+    entry_points={"console_scripts": [fmuconfig_runner]},
     keywords="fmu, config",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
