@@ -142,11 +142,8 @@ dist: clean  ## builds wheel package
 
 
 install: dist ## version to VENV install place
-	@echo "Running ${PIP} (${PYTHON_VERSION}) ..."
-	@${RUNPIP} install --upgrade ./dist/*
-	@echo "Install run scripts..."
-	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} \
-		${VIRTUAL_ENV}/bin/.; )
+	@${PIP} install --upgrade .
+
 
 siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	@echo $(HOST)
