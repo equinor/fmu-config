@@ -155,6 +155,8 @@ rms:
 
   A_OIL_MST: &aoilmst 1.4545
 
+  BOIL: -20.99 ~ <BOIL>
+
   # A_OIL_MST: bull
 
   # refer to as aliases
