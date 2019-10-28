@@ -622,7 +622,7 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Get template form (<...> if present, not numbers)."""
 
-        pattern = "[a-zA-Z0-9.]+~"
+        pattern = "-*[a-zA-Z0-9.]+~"
 
         if isinstance(stream, list):
             logger.info("STREAM is a list object")
