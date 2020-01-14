@@ -11,7 +11,7 @@ Below is a presentation of Troll config files
 Troll example config
 --------------------
 
-Troll has a large number of surfaces, and for convinience these lists
+Troll has a large number of surfaces, and for convenience these lists
 are places into separate files.
 
 
@@ -45,7 +45,7 @@ is used, which perhaps should be the preferred form.
 .. literalinclude:: ../tests/data/yaml/jsverdrup/global_master_config.yml
    :language: yaml
 
-The includeded file:
+The included file:
 
 .. literalinclude:: ../tests/data/yaml/jsverdrup/fwl2.yml
    :language: yaml
