@@ -23,6 +23,7 @@ Here is an example of a shell script that runs `fmuconfig` from the rms/bin fold
    # from a common global config
    #
    source /project/res/SDP_bashrc
+   source /project/res/komodo/stable/enable
 
    MASTER="../../share/config/input/global_master_config.yml"
    DEST="../input/global_variables"
