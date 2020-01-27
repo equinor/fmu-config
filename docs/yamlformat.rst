@@ -7,13 +7,13 @@ To summarize:
 * YAML file endings is .yml
 
 * Within the YAML master config file, the *small letters* headings are *"reserved"* words, while
-  *uppercase* letters means som kind of freeform variable.
+  *uppercase* letters mean some kind of freeform variable.
 
 
 Folder structure
 ----------------
 
-This issue is *under discussion*!
+The folder structure is *under discussion* and might change.
 
 Alternative 1, close to compatible with current
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,14 +65,15 @@ File format and nested files
 ----------------------------
 
 The master config file itself is a YAML formatted file. It follows the standard
-YAML spesification, with *one major exception*, and that is that
+YAML specification, with *one major exception*, and that is that
 *file nesting* is allowed. This allows for placing various parts of
 the CONFIG into separate subfiles, which improves the overview.
 
 The *derived* YAML files to e.g. be used by RMS Python will not allow nesting;
 they will follow the YAML standard.
 
-What will be a good practice regarding nesting of the master config remains to see.
+What will be a good practice regarding nesting of the master config remains to be
+seen.
 
 Some conventions
 ----------------
@@ -96,7 +97,7 @@ understand the format.
   - The small letters are YAML keywords with a special meaning.
   - Uppercase letters are "client" keywords (free form)
 
-* The dates format shall be `ISO 8601`_ complient, on the form ``YYYY-MM-DD``.
+* The dates format shall be `ISO 8601`_ compliant, on the form ``YYYY-MM-DD``.
   For file naming and IPL that date will be usually be compressed to
   the ``YYYYMMDD`` form, which is still in accordance with the ISO standard.
 
@@ -139,12 +140,12 @@ This variant is not allowed::
 
   !include something.yml
 
-However, one can use an anonymous keywords, which is any word that starts with to undescores::
+However, one can use an anonymous keywords, which is any word that starts with to underscores::
 
   __tmpword: !include something.yml
 
 
-Note here that ``__tmpword`` will not be a part of the configration. See later Johan Sverdrup
+Note here that ``__tmpword`` will not be a part of the configuration. See later Johan Sverdrup
 example where this technique is applied.
 
 
@@ -155,13 +156,13 @@ RMS related settings
 Horizons, zones and kwlists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Whitin the ``rms`` section there may be 3 significant subheadings:
+Within the ``rms`` section there may be 3 significant subheadings:
 
 * horizons
 * zones
 * kwlists
 
-These are  reserved for Horizon, Zone or keywordd listing, and will usually (always?) never
+These are reserved for Horizon, Zone or keyword listing, and will usually (always?) never
 contain uncertainties; they are just lists to facilitate looping with RMS
 Python or IPL.
 
@@ -202,9 +203,9 @@ Freeform, with dtype and value(s)
 
 The rest of ``rms`` will be on so-called *freeform* format, where one needs to
 
-* Have a identifier or variable name in **UPPERCASE**.
+* Have an identifier or variable name in **UPPERCASE**.
 * The config script will try to guess, based on the value(s), whether RMS IPL should
-  use String, Int, Bool or Float. In addition it will interpret if it is a scalar or a list
+  use String, Int, Bool or Float. In addition it will interpret if it is a scalar or a list.
 * Optionally, if the automatics fails, one can specify (one indent level more) the
 
   - ``dtype`` (what kind of datatype; int, float, date, datepair, etc.)
@@ -284,7 +285,7 @@ Similarly, IPL code stubs can be inserted as ``_IPL_CODE_WHATEVER``:
 Summary of Reserved words
 --------------------------
 
-Here is an ovwerview of reserved words (small letters), and the data values are also described
+Here is an overview of reserved words (small letters), and the data values are also described
 for some cases.
 
 .. code-block:: yaml
