@@ -58,6 +58,8 @@ rms:
 
   DIFF4D_DATES: *global_diff_dates
 
+  SMALLFLOAT1: 1.0E-6
+  SMALLFLOAT2: 1.0E-6 ~ <>
 
 eclipse:
   RELPERM: |

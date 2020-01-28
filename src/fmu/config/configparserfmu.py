@@ -19,6 +19,8 @@ import socket
 import datetime
 import json
 
+import pdb
+
 # for ordered dicts!
 from collections import OrderedDict, Counter
 
@@ -208,7 +210,7 @@ class ConfigParserFMU(object):
 
             >>> config.to_yaml('global_variables', destination='../')
         """
-
+        logger.info("To YAML")
         if not destination and not template:
             raise ValueError(
                 "Both destination and template are None."
@@ -232,6 +234,8 @@ class ConfigParserFMU(object):
 
         mystream = re.sub(r"\s+~", "~", mystream)
         mystream = re.sub(r"~\s+", "~", mystream)
+
+        # pdb.set_trace()
 
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
@@ -622,7 +626,9 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Get template form (<...> if present, not numbers)."""
 
-        pattern = "-*[a-zA-Z0-9.]+~"
+        pattern = "\\-*[\\-a-zA-Z0-9.]+~"
+
+        # pdb.set_trace()
 
         if isinstance(stream, list):
             logger.info("STREAM is a list object")
@@ -646,7 +652,8 @@ class ConfigParserFMU(object):
     def _get_dest_form(stream):
         """Get destination form (numbers, not <...>)"""
 
-        pattern = "~<.+?>"
+        logger.info("TRY DEST %s", stream)
+        pattern = "~.*<.+?>"
 
         if isinstance(stream, list):
             logger.info("STREAM is a list object")
@@ -662,4 +669,5 @@ class ConfigParserFMU(object):
         else:
             raise ValueError("Input for templateconversion neither string " "or list")
 
+        logger.info("DEST %s", result)
         return result
