@@ -398,7 +398,7 @@ def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
     # inner function
     def _fixtheentry(variable, myval, subtype, count=None, template=False):
 
-        logger.info("Fix freeform entry %s", variable)
+        logger.info("Fix freeform entry %s (subtype %s)", variable, subtype)
         tmpvalue = str(myval)
         if "~" in tmpvalue:
             val, var = tmpvalue.split("~")
@@ -413,6 +413,13 @@ def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
                 val = "TRUE"
             if val in ("False", "no", "NO", "No", "false", "FALSE"):
                 val = "FALSE"
+
+        if subtype == "Float":
+            logger.info("Input float value is %s (%s)", val, variable)
+            if "e" in str(val).lower():
+                val = "{0:E}".format(float(val))
+
+            logger.info("Updated float value is %s (%s)", val, variable)
 
         if subtype == "String":
             val = '"{}"'.format(val)
