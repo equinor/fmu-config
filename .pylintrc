@@ -34,4 +34,3 @@ disable=
     import-outside-toplevel,
     import-error,
     no-name-in-module
-    
