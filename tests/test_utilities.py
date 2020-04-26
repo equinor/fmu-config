@@ -7,12 +7,13 @@ from __future__ import print_function
 
 import fmu.config as config
 from fmu.config import utilities as utils
+
 # import fmu.config.fmuconfigrunner as fmurun
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
-REEK = 'tests/data/yaml/reek1/global_variables.yml'
+REEK = "tests/data/yaml/reek1/global_variables.yml"
 
 # always this statement
 if not fmux.testsetup():
@@ -24,4 +25,4 @@ def test_basic_tools():
 
     cfg = utils.yaml_load(REEK)
 
-    assert cfg['global']['name'] == 'Reek'
+    assert cfg["global"]["name"] == "Reek"
