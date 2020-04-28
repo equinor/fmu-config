@@ -474,7 +474,7 @@ class ConfigParserFMU(object):
                 return stream.replace("<>", "<" + str(key) + ">")
         elif isinstance(stream, list):
             return [
-                self._fill_empty_braces(item, key + "_" + str(num))
+                self._fill_empty_braces(item, str(key) + "_" + str(num))
                 for num, item in enumerate(stream)
             ]
         elif isinstance(stream, dict):
@@ -622,7 +622,7 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Get template form (<...> if present, not numbers)."""
 
-        pattern = "-*[a-zA-Z0-9.]+~"
+        pattern = "-*[a-zA-Z0-9._]+~"
 
         if isinstance(stream, list):
             logger.info("STREAM is a list object")
