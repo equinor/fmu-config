@@ -1,4 +1,0 @@
-# principal test
-ADICT_WITH_SCALAR_OR_LISTS:
-  1: ascalar
-  3: [item1, item2, 33, 44.0]
