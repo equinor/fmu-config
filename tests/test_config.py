@@ -6,11 +6,13 @@ from __future__ import division
 from __future__ import print_function
 
 import os.path
+from os.path import join
 import json
 
 import pytest
 
 import fmu.config as config
+from fmu.config import utilities as ut
 from fmu.config import oyaml as yaml
 
 # import fmu.config.fmuconfigrunner as fmurun
@@ -20,12 +22,17 @@ TFILE2 = "tests/data/yaml/troll2/global_master_config.yml"
 TFILE3 = "tests/data/yaml/troll2/global_master_config_with_dupl.yml"
 RFILE1 = "tests/data/yaml/reek1/global_variables.yml"
 
+# result may be compared with data stored here
+TCMP = "tests/data/yaml/test_compare"
+
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
 # always this statement
 if not fmux.testsetup():
     raise SystemExit()
+
+TMPD = fmux.tmpdir
 
 
 def test_jsverdrup():
@@ -60,6 +67,17 @@ def test_jsverdrup():
         template=fmux.tmpdir,
         tool="rms",
     )
+
+    status1 = ut.compare_yaml_files(
+        join(TMPD, "js_global_variables_rms.yml"),
+        join(TCMP, "js_global_variables_rms.yml"),
+    )
+    status2 = ut.compare_yaml_files(
+        join(TMPD, "js_global_variables_rms.yml.tmpl"),
+        join(TCMP, "js_global_variables_rms.yml.tmpl"),
+    )
+    assert status1 is True
+    assert status2 is True
 
     cfx.to_yaml(
         rootname="js_global_variables_rms_nobraces",

@@ -28,9 +28,9 @@ def yaml_load(filename, safe=True, tool=None):
     """
 
     if not os.path.isfile(filename):
-        raise IOError('File {} cannot be read'.format(filename))
+        raise IOError("File {} cannot be read".format(filename))
 
-    with open(filename, 'r') as stream:
+    with open(filename, "r") as stream:
         if safe:
             cfg = yaml.safe_load(stream)
         else:
@@ -41,7 +41,27 @@ def yaml_load(filename, safe=True, tool=None):
             newcfg = cfg[tool]
             cfg = newcfg
         except Exception as exc:  # pylint: disable=broad-except
-            print('Cannot import: {}'.format(exc))
+            print("Cannot import: {}".format(exc))
             return None
 
     return cfg
+
+
+def compare_yaml_files(file1, file2):
+    """Compare two YAML files and return True if they are equal
+
+    Args:
+        file1 (str): Path to file1
+        file2 (str): Path to file2
+    """
+
+    cfg1 = yaml_load(file1)
+    cfg2 = yaml_load(file2)
+
+    cfg1txt = yaml.dump(cfg1)
+    cfg2txt = yaml.dump(cfg2)
+
+    if cfg1txt == cfg2txt:
+        return True
+
+    return False
