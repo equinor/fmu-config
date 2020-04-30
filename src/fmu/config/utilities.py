@@ -13,7 +13,10 @@ from fmu.config import oyaml as yaml
 
 
 def yaml_load(filename, safe=True, tool=None):
-    """Load as YAML file, return a dictionary which is the config.
+    """Load as YAML file, return a dictionary of type OrderedDict which is the config.
+
+    Returning an ordered dictionary is a main feature of this loader. It makes it much
+    easier to compare the dictionaries returned.
 
     Args:
         filename (str): Name of file (YAML formatted)
@@ -62,6 +65,36 @@ def compare_yaml_files(file1, file2):
     cfg2txt = yaml.dump(cfg2)
 
     if cfg1txt == cfg2txt:
+        return True
+
+    return False
+
+
+def compare_text_files(file1, file2, comments="//"):
+    """Compare two text files, e.g. IPL and return True if they are equal
+
+    Lines starting with comments indicator will be discarded
+
+    Args:
+        file1 (str): Path to file1
+        file2 (str): Path to file2
+        comments (str): How comment lines are indicated, e.g. "//" for IPL
+    """
+
+    text1 = ""
+    text2 = ""
+
+    with open(file1, "r") as fil1:
+        for line in fil1:
+            if not line.startswith(comments):
+                text1 += line
+
+    with open(file2, "r") as fil2:
+        for line in fil2:
+            if not line.startswith(comments):
+                text2 += line
+
+    if text1 == text2:
         return True
 
     return False
