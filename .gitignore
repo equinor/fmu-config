@@ -70,3 +70,5 @@ src/fmu/config/_theversion.py
 # other
 .idea/
 .projectile
+.vscode/
+

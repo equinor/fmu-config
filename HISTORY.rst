@@ -2,4 +2,4 @@
 History
 =======
 
-See https://git.statoil.no/fmu-utilities/fmu_config
+See https://github.com/equinor/fmu_config
