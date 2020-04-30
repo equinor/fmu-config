@@ -128,10 +128,29 @@ def test_to_yaml_troll2():
     assert cfg_yml["KH_MULT_CSAND"] == 1.0
     assert cfg_tmpl["KH_MULT_CSAND"] == "<KH_MULT_CSAND>"
 
+    status1 = ut.compare_yaml_files(
+        join(TMPD, rootn + ".yml"), join(TCMP, rootn + ".yml"),
+    )
+    status2 = ut.compare_yaml_files(
+        join(TMPD, rootn + ".yml.tmpl"), join(TCMP, rootn + ".yml.tmpl"),
+    )
+    assert status1 is True
+    assert status2 is True
+
+    # IPL version
     rootn = "troll2_ipl"
     cfg.to_ipl(
         rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
     )
+
+    status1 = ut.compare_text_files(
+        join(TMPD, rootn + ".ipl"), join(TCMP, rootn + ".ipl"),
+    )
+    status2 = ut.compare_text_files(
+        join(TMPD, rootn + ".ipl.tmpl"), join(TCMP, rootn + ".ipl.tmpl"),
+    )
+    assert status1 is True
+    assert status2 is True
 
 
 def test_to_yaml_troll3_selfread():
