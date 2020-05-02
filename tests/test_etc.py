@@ -15,6 +15,7 @@ logger = fmux.basiclogger(__name__)
 
 logger.info("Running tests...")
 
+
 # always this statement
 if not fmux.testsetup():
     raise SystemExit()
