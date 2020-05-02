@@ -19,8 +19,6 @@ import socket
 import datetime
 import json
 
-import pdb
-
 # for ordered dicts!
 from collections import OrderedDict, Counter
 
@@ -413,8 +411,8 @@ class ConfigParserFMU(object):
 
                 # order
                 ordered = OrderedDict()
-                for kw in subkeyorder:
-                    ordered[kw] = _tmps[kw]
+                for keyw in subkeyorder:
+                    ordered[keyw] = _tmps[keyw]
                 newcfg[key] = ordered
 
         self._config = newcfg
@@ -429,7 +427,7 @@ class ConfigParserFMU(object):
 
         mystream = yaml.dump(self._config)
         tlist = []
-        tmpl = re.findall("<\w+>", mystream)
+        tmpl = re.findall(r"<\w+>", mystream)
         for item in tmpl:
             tlist.append(item)
 
