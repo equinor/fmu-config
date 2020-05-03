@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
-import fmu.config as fcfg
+from os.path import join
 
+import fmu.config as fcfg
 from fmu.config import utilities as ut
 
 fmux = fcfg.etc.Interaction()
@@ -23,11 +24,12 @@ def test_dict_with_scalar_and_lists1(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with open(target, "wb") as out:
-        out.write(inp)
+
+    with target.open("w") as out:
+        out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
-    cfg.parse(target)
+    cfg.parse(str(target.resolve()))
 
     assert cfg._config["global"]["ADICT_WITH_SCALAR_OR_LISTS"][1] == "ascalar"
     assert cfg._config["global"]["ADICT_WITH_SCALAR_OR_LISTS"][3][2] == 33
@@ -45,11 +47,12 @@ def test_dict_with_scalar_and_lists2(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with open(target, "wb") as out:
-        out.write(inp)
+
+    with target.open("w") as out:
+        out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
-    cfg.parse(target)
+    cfg.parse(str(target.resolve()))
 
     assert cfg._config["global"]["ACOMPLICATED"][1] == "ascalar"
     assert cfg._config["global"]["ACOMPLICATED"][3][0] == 2
@@ -65,22 +68,22 @@ def test_process_value1(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with open(target, "wb") as out:
-        out.write(inp)
+    with target.open("w") as out:
+        out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
-    cfg.parse(target)
+    cfg.parse(str(target.resolve()))
 
     outfolder = tmp_path
-    out = outfolder.resolve()
+    out = str(outfolder.resolve())
 
     cfg.to_yaml(rootname="s03", destination=out, template=out)
 
-    actual = ut.yaml_load(outfolder / "s03.yml")
+    actual = ut.yaml_load(join(out, "s03.yml"))
 
     assert actual["global"]["WELLCONCEPT"] == "REV1_A15"
 
-    tmpl = ut.yaml_load(outfolder / "s03.yml.tmpl")
+    tmpl = ut.yaml_load(join(out, "s03.yml.tmpl"))
 
     assert tmpl["global"]["WELLCONCEPT"] == "<WELL_CONS>"
 
@@ -96,23 +99,21 @@ def test_process_value2(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with open(target, "wb") as out:
-        out.write(inp)
+    with target.open("w") as out:
+        out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
-    cfg.parse(target)
+    cfg.parse(str(target))
 
-    out = tmp_path.resolve()
+    out = str(tmp_path.resolve())
 
     cfg.to_yaml(rootname="s04", destination=out, template=out)
 
-    actual = ut.yaml_load(tmp_path / "s04.yml")
-    print(actual)
+    actual = ut.yaml_load(join(out, "s04.yml"))
 
     assert actual["global"]["WHATEVER"] == "ONX"
     assert actual["global"]["NUMBER1"] == 2.0
 
-    tmpl = ut.yaml_load(tmp_path / "s04.yml.tmpl")
-    print(tmpl)
+    tmpl = ut.yaml_load(join(out, "s04.yml.tmpl"))
 
     assert tmpl["global"]["WHATEVER"] == "<ONX>"
