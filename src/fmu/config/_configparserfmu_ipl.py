@@ -12,6 +12,7 @@ import datetime
 
 from fmu.config import etc
 
+
 XFMU = etc.Interaction()
 logger = XFMU.functionlogger(__name__)
 
@@ -363,7 +364,9 @@ def _ipl_freeform_format(self, template=False):
     return decl, expr
 
 
-def _freeform_handle_entry(variable, myvalue, myvalues, dtype, template):
+def _freeform_handle_entry(
+    variable, myvalue, myvalues, dtype, template
+):  # pylint: disable=too-many-statements
     """Handling of any entry as single value or list in IPL.
 
     Either myvalue or myvalues shall be None!
