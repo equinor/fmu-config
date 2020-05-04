@@ -3,11 +3,76 @@
 
 """The setup script."""
 import os
-from os.path import basename
-from os.path import splitext
+from os.path import basename, splitext, exists
 from glob import glob
+from shutil import rmtree
+from distutils.command.clean import clean as _clean
 
+import fnmatch
 from setuptools import setup, find_packages
+
+
+class CleanUp(_clean, object):
+    """
+    Custom implementation of ``clean`` distutils/setuptools command.
+    Overriding clean in order to get rid if "dist" folder and etc
+    """
+
+    CLEANFOLDERS = (
+        "TMP",
+        "__pycache__",
+        "pip-wheel-metadata",
+        ".eggs",
+        "dist",
+        "sdist",
+        "wheel",
+        ".pytest_cache",
+        "docs/apiref",
+        "docs/_build",
+        "htmlcov",
+    )
+
+    CLEANFOLDERSRECURSIVE = ["__pycache__", "_tmp_*", "*.egg-info"]
+    CLEANFILESRECURSIVE = ["*.pyc", "*.pyo", ".coverage", "coverage.xml"]
+
+    @staticmethod
+    def ffind(pattern, path):
+        result = []
+        for root, _dirs, files in os.walk(path):
+            for name in files:
+                if fnmatch.fnmatch(name, pattern):
+                    result.append(os.path.join(root, name))
+        return result
+
+    @staticmethod
+    def dfind(pattern, path):
+        result = []
+        for root, dirs, _files in os.walk(path):
+            for name in dirs:
+                if fnmatch.fnmatch(name, pattern):
+                    result.append(os.path.join(root, name))
+        return result
+
+    def run(self):
+        """After calling the super class implementation, this function removes
+        the directories/files specific above"""
+        super(CleanUp, self).run()
+
+        for dir_ in CleanUp.CLEANFOLDERS:
+            if exists(dir_):
+                print("Removing: {}".format(dir_))
+            if not self.dry_run and exists(dir_):
+                rmtree(dir_)
+
+        for dir_ in CleanUp.CLEANFOLDERSRECURSIVE:
+            for pdir in self.dfind(dir_, "."):
+                print("Remove folder {}".format(pdir))
+                rmtree(pdir)
+
+        for fil_ in CleanUp.CLEANFILESRECURSIVE:
+            for pfil in self.ffind(fil_, "."):
+                print("Remove file {}".format(pfil))
+                os.unlink(pfil)
 
 
 def parse_requirements(filename):
@@ -44,6 +109,7 @@ FMUCONFIG_RUNNER = "fmuconfig=" "fmu.config.fmuconfigrunner:main"
 
 setup(
     name="fmu_config",
+    cmdclass={"clean": CleanUp},
     use_scm_version={"root": src(""), "write_to": src("src/fmu/config/_theversion.py")},
     description="Library for various config scripts in FMU scope",
     long_description=README + "\n\n" + HISTORY,
