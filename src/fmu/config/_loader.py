@@ -19,6 +19,7 @@ class FmuLoader(yaml.Loader):
     Code is borrowed from David Hall:
     https://davidchall.github.io/yaml-includes.html
     """
+
     # pylint: disable=too-many-ancestors
 
     def __init__(self, stream):
@@ -26,11 +27,11 @@ class FmuLoader(yaml.Loader):
         super(FmuLoader, self).__init__(stream)
 
         FmuLoader.add_constructor(
-            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-            FmuLoader.construct_mapping)
+            yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, FmuLoader.construct_mapping
+        )
 
-        FmuLoader.add_constructor('!include', FmuLoader.include)
-        FmuLoader.add_constructor('!import', FmuLoader.include)
+        FmuLoader.add_constructor("!include", FmuLoader.include)
+        FmuLoader.add_constructor("!import", FmuLoader.include)
 
     def include(self, node):
         """Include method"""
@@ -50,7 +51,7 @@ class FmuLoader(yaml.Loader):
                 result[knum] = self.extract_file(val)
 
         else:
-            print('Error:: unrecognised node type in !include statement')
+            print("Error:: unrecognised node type in !include statement")
             raise yaml.constructor.ConstructorError
 
         return result
@@ -59,7 +60,7 @@ class FmuLoader(yaml.Loader):
         """Extract file method"""
 
         filepath = os.path.join(self._root, filename)
-        with open(filepath, 'r') as yfile:
+        with open(filepath, "r") as yfile:
             return yaml.load(yfile, FmuLoader)
 
     # from https://gist.github.com/pypt/94d747fe5180851196eb
@@ -67,8 +68,11 @@ class FmuLoader(yaml.Loader):
     def construct_mapping(self, node, deep=False):
         if not isinstance(node, MappingNode):
             raise ConstructorError(
-                None, None, 'Expected a mapping node, but found %s' % node.id,
-                node.start_mark)
+                None,
+                None,
+                "Expected a mapping node, but found %s" % node.id,
+                node.start_mark,
+            )
 
         mapping = OrderedDict()
         for key_node, value_node in node.value:
@@ -77,12 +81,16 @@ class FmuLoader(yaml.Loader):
                 hash(key)
             except TypeError as exc:
                 raise ConstructorError(
-                    'While constructing a mapping', node.start_mark,
-                    'found unacceptable key (%s)' % exc, key_node.start_mark)
+                    "While constructing a mapping",
+                    node.start_mark,
+                    "found unacceptable key (%s)" % exc,
+                    key_node.start_mark,
+                )
             # check for duplicate keys
             if key in mapping:
-                raise ConstructorError('Found duplicate key <{}> ... {}'
-                                       .format(key, key_node.start_mark))
+                raise ConstructorError(
+                    "Found duplicate key <{}> ... {}".format(key, key_node.start_mark)
+                )
             value = self.construct_object(value_node, deep=deep)
             mapping[key] = value
         return mapping
