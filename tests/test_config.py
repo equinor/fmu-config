@@ -17,13 +17,13 @@ from fmu.config import oyaml as yaml
 
 # import fmu.config.fmuconfigrunner as fmurun
 
-JFILE1 = "tests/data/yaml/jsverdrup/global_master_config.yml"
-TFILE2 = "tests/data/yaml/troll2/global_master_config.yml"
-TFILE3 = "tests/data/yaml/troll2/global_master_config_with_dupl.yml"
-RFILE1 = "tests/data/yaml/reek1/global_variables.yml"
+JFILE1 = "tests/data/yml/vinstre/global_master_config.yml"
+TFILE2 = "tests/data/yml/ogre/global_master_config.yml"
+TFILE3 = "tests/data/yml/ogre/global_master_config_with_dupl.yml"
+RFILE1 = "tests/data/yml/reek/global_variables.yml"
 
 # result may be compared with data stored here
-TCMP = "tests/data/yaml/test_compare"
+TCMP = "tests/data/yml/test_compare"
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -35,7 +35,7 @@ if not fmux.testsetup():
 TMPD = fmux.tmpdir
 
 
-def test_jsverdrup():
+def test_vinstre():
     """Test table output behaviour"""
 
     cfg = config.ConfigParserFMU()
@@ -47,7 +47,7 @@ def test_jsverdrup():
     cfx.parse(JFILE1, smart_braces=False)
 
     cfg.to_table(
-        rootname="JS",
+        rootname="VI",
         destination=fmux.tmpdir,
         template=fmux.tmpdir,
         entry="global.FWL",
@@ -55,32 +55,32 @@ def test_jsverdrup():
     )
 
     cfg.to_ipl(
-        rootname="js_global_variables",
+        rootname="vinstre_global_variables",
         destination=fmux.tmpdir,
         template=fmux.tmpdir,
         tool="rms",
     )
 
     cfg.to_yaml(
-        rootname="js_global_variables_rms",
+        rootname="vinstre_global_variables_rms",
         destination=fmux.tmpdir,
         template=fmux.tmpdir,
         tool="rms",
     )
 
     status1 = ut.compare_yaml_files(
-        join(TMPD, "js_global_variables_rms.yml"),
-        join(TCMP, "js_global_variables_rms.yml"),
+        join(TMPD, "vinstre_global_variables_rms.yml"),
+        join(TCMP, "vinstre_global_variables_rms.yml"),
     )
     status2 = ut.compare_yaml_files(
-        join(TMPD, "js_global_variables_rms.yml.tmpl"),
-        join(TCMP, "js_global_variables_rms.yml.tmpl"),
+        join(TMPD, "vinstre_global_variables_rms.yml.tmpl"),
+        join(TCMP, "vinstre_global_variables_rms.yml.tmpl"),
     )
     assert status1 is True
     assert status2 is True
 
     cfx.to_yaml(
-        rootname="js_global_variables_rms_nobraces",
+        rootname="vinstre_global_variables_rms_nobraces",
         destination=fmux.tmpdir,
         template=fmux.tmpdir,
         tool="rms",
@@ -90,7 +90,7 @@ def test_jsverdrup():
     assert cfg.config["rms"]["FWL3"][1] == "1236.0 ~ <FWL3_1>"
 
 
-def test_basic_troll():
+def test_basic_ogre():
     """Test basic behaviour"""
 
     cfg = config.ConfigParserFMU()
@@ -104,7 +104,7 @@ def test_basic_troll():
     assert len(cfg.config["rms"]["horizons"]) == 6
 
 
-def test_to_yaml_troll2():
+def test_to_yaml_ogre():
     """Test the output for the YAML files, both templated and normal for rms"""
 
     cfg = config.ConfigParserFMU()
@@ -112,7 +112,7 @@ def test_to_yaml_troll2():
     assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(TFILE2)
-    rootn = "troll2_yaml"
+    rootn = "ogre_yaml"
 
     cfg.to_yaml(
         rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
@@ -138,7 +138,7 @@ def test_to_yaml_troll2():
     assert status2 is True
 
     # IPL version
-    rootn = "troll2_ipl"
+    rootn = "ogre_ipl"
     cfg.to_ipl(
         rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
     )
@@ -153,18 +153,18 @@ def test_to_yaml_troll2():
     assert status2 is True
 
 
-def test_to_yaml_troll3_selfread():
+def test_to_yaml_ogre_selfread():
     """Test the output for the YAML files, and convert OUTPUT yaml to ipl"""
 
     cfg = config.ConfigParserFMU()
 
     cfg.parse(TFILE2)
-    rootn = "troll3_yaml"
+    rootn = "ogre_yaml"
 
     cfg.to_yaml(rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir)
 
     newinput = os.path.join(fmux.tmpdir, rootn + ".yml")
-    newrootn = "troll3_yaml_selfread"
+    newrootn = "ogre_yaml_selfread"
 
     cfx = config.ConfigParserFMU()
     cfx.parse(newinput)
@@ -174,7 +174,7 @@ def test_to_yaml_troll3_selfread():
     )
 
 
-def test_yaml_has_duplicates_troll2():
+def test_yaml_has_duplicates_ogre():
     """The YAML file has duplicates; should raise error"""
 
     cfg = config.ConfigParserFMU()
@@ -183,7 +183,7 @@ def test_yaml_has_duplicates_troll2():
         cfg.parse(TFILE3)
 
 
-def test_to_json_troll2():
+def test_to_json_ogre():
     """Test the output for the JSON files, both templated and normal for
     rms section.
     """
@@ -193,7 +193,7 @@ def test_to_json_troll2():
     assert isinstance(cfg, config.ConfigParserFMU)
 
     cfg.parse(TFILE2)
-    rootn = "troll2_json"
+    rootn = "ogre_json"
 
     cfg.to_json(
         rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
@@ -205,7 +205,7 @@ def test_to_json_troll2():
     assert cfg_json["KH_MULT_CSAND"] == str(1.0)
 
 
-def test_ipl_troll2():
+def test_ipl_ogre():
     """Test basic behaviour"""
 
     cfg = config.ConfigParserFMU()
