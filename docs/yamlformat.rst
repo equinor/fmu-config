@@ -140,12 +140,13 @@ This variant is not allowed::
 
   !include something.yml
 
-However, one can use an anonymous keywords, which is any word that starts with to underscores::
+However, one can use an anonymous keywords, which is any word that starts with to
+underscores::
 
   __tmpword: !include something.yml
 
 
-Note here that ``__tmpword`` will not be a part of the configuration. See later Johan Sverdrup
+Note here that ``__tmpword`` will not be a part of the configuration. See later Vinstre
 example where this technique is applied.
 
 
@@ -162,8 +163,8 @@ Within the ``rms`` section there may be 3 significant subheadings:
 * zones
 * kwlists
 
-These are reserved for Horizon, Zone or keyword listing, and will usually (always?) never
-contain uncertainties; they are just lists to facilitate looping with RMS
+These are reserved for Horizon, Zone or keyword listing, and will usually (always?)
+never contain uncertainties; they are just lists to facilitate looping with RMS
 Python or IPL.
 
 Examples:
