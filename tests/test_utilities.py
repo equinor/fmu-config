@@ -13,7 +13,7 @@ from fmu.config import utilities as utils
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
-REEK = "tests/data/yaml/reek1/global_variables.yml"
+REEK = "tests/data/yml/reek/global_variables.yml"
 
 # always this statement
 if not fmux.testsetup():
