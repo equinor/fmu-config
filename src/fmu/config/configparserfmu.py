@@ -624,7 +624,7 @@ class ConfigParserFMU(object):
     def _get_tmpl_form(stream):
         """Get template form (<...> if present, not numbers)."""
 
-        pattern = "\\-*[\\-a-zA-Z0-9._]+~"
+        pattern = "\\-*[\\-a-zA-Z0-9._/]+~"
 
         # pdb.set_trace()
 

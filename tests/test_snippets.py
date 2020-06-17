@@ -117,3 +117,31 @@ def test_process_value2(tmp_path):
     tmpl = ut.yaml_load(join(out, "s04.yml.tmpl"))
 
     assert tmpl["global"]["WHATEVER"] == "<ONX>"
+
+
+def test_filepath(tmp_path):
+    """Test when filepath is present as substitute, s05"""
+
+    inp = b"""
+    global:
+        MYFILE: /tmp/fil ~ <FILE>
+    """
+
+    target = tmp_path / "generic.yml"
+    with target.open("w") as out:
+        out.write(inp.decode("utf-8"))
+
+    cfg = fcfg.ConfigParserFMU()
+    cfg.parse(str(target))
+
+    out = str(tmp_path.resolve())
+
+    cfg.to_yaml(rootname="s05", destination=out, template=out)
+
+    actual = ut.yaml_load(join(out, "s05.yml"))
+
+    assert actual["global"]["MYFILE"] == "/tmp/fil"
+
+    tmpl = ut.yaml_load(join(out, "s05.yml.tmpl"))
+
+    assert tmpl["global"]["MYFILE"] == "<FILE>"
