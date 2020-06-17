@@ -2,6 +2,8 @@
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
 from os.path import join
 
+import pytest
+
 import fmu.config as fcfg
 from fmu.config import utilities as ut
 
@@ -117,6 +119,43 @@ def test_process_value2(tmp_path):
     tmpl = ut.yaml_load(join(out, "s04.yml.tmpl"))
 
     assert tmpl["global"]["WHATEVER"] == "<ONX>"
+
+
+@pytest.mark.parametrize("exponent", range(0, 16))
+def test_small_float(tmp_path, exponent):
+    """Test for issue 1, small floats in input yaml can give non-compliant
+    formats in output IPL (IPL does not support Pythons scientific format)
+
+    IPL accepts 1.0E-4, 1.0e-4, 1.0e-04, but NOT 1E-3 or 1e-4, i.e. there must be
+    a dot after '1'"""
+
+    inp = """
+    rms:
+        SMALLFLOAT: 1.0E-""" + str(
+        exponent
+    )
+
+    target = tmp_path / "generic.yml"
+    with target.open("w") as out:
+        out.write(inp)
+
+    cfg = fcfg.ConfigParserFMU()
+    cfg.parse(str(target))
+
+    out = str(tmp_path.resolve())
+
+    cfg.to_ipl(rootname="foo", destination=out, template=out)
+    ipl_lines = [
+        line
+        for line in open(join(tmp_path, "foo.ipl")).readlines()
+        if line.startswith("SMALLFLOAT")
+    ]
+    significand = ipl_lines[0].split(" = ")[1].split("E")[0].split("e")[0]
+
+    # Verify we have a floating point significand if we have written exponential notation
+    if "e" in ipl_lines[0].lower():
+        assert len(significand) > 1
+        assert "." in significand
 
 
 def test_filepath(tmp_path):
