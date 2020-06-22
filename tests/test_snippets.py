@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
 from os.path import join
+import io
 
 import pytest
 
@@ -129,14 +130,15 @@ def test_small_float(tmp_path, exponent):
     IPL accepts 1.0E-4, 1.0e-4, 1.0e-04, but NOT 1E-3 or 1e-4, i.e. there must be
     a dot after '1'"""
 
-    inp = """
+    inp = (
+        b"""
     rms:
-        SMALLFLOAT: 1.0E-""" + str(
-        exponent
+        SMALLFLOAT: 1.0E-%d"""
+        % exponent
     )
 
     target = tmp_path / "generic.yml"
-    with target.open("w") as out:
+    with io.open(str(target.resolve()), "wb") as out:
         out.write(inp)
 
     cfg = fcfg.ConfigParserFMU()
@@ -147,12 +149,13 @@ def test_small_float(tmp_path, exponent):
     cfg.to_ipl(rootname="foo", destination=out, template=out)
     ipl_lines = [
         line
-        for line in open(join(tmp_path, "foo.ipl")).readlines()
+        for line in open(join(str(tmp_path.resolve()), "foo.ipl")).readlines()
         if line.startswith("SMALLFLOAT")
     ]
     significand = ipl_lines[0].split(" = ")[1].split("E")[0].split("e")[0]
 
-    # Verify we have a floating point significand if we have written exponential notation
+    # Verify we have a floating point significand if we have written
+    # exponential notation
     if "e" in ipl_lines[0].lower():
         assert len(significand) > 1
         assert "." in significand
