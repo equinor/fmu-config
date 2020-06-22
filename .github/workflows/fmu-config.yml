@@ -1,0 +1,35 @@
+name: fmu-config
+
+on:
+  push:
+  release:
+    types:
+      - published
+  pull_request:
+    types: [created, synchronize]
+
+jobs:
+  fmu-config:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['2.7', '3.6', '3.7', '3.8']
+
+    steps:
+
+    - name: Checkout commit locally
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install requirements
+      run: |
+        pip install -r requirements.txt
+        pip install -r requirements_dev.txt
+        pip install .
+        
+    - name: Run tests
+      run: pytest ./tests
