@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
 from os.path import join
+import io
 
 import pytest
 
@@ -136,7 +137,7 @@ def test_small_float(tmp_path, exponent):
     )
 
     target = tmp_path / "generic.yml"
-    with target.open("w") as out:
+    with io.open(target, "w", encoding="utf-8") as out:
         out.write(inp)
 
     cfg = fcfg.ConfigParserFMU()
@@ -152,7 +153,8 @@ def test_small_float(tmp_path, exponent):
     ]
     significand = ipl_lines[0].split(" = ")[1].split("E")[0].split("e")[0]
 
-    # Verify we have a floating point significand if we have written exponential notation
+    # Verify we have a floating point significand if we have written
+    # exponential notation
     if "e" in ipl_lines[0].lower():
         assert len(significand) > 1
         assert "." in significand
