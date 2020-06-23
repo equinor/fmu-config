@@ -1,6 +1,4 @@
-===============================
-The script library *fmu.config*
-===============================
+# The script library *fmu.config #
 
 
 FMU config is a small LGPL'ed licensed Python library to facilitate a configuration of global variables in FMU.
@@ -17,7 +15,7 @@ of all other files, such as:
 * Various eclipse file stubs (both "working" and template versions)
 * Working and templated files for other tools/scrips
 
-The global_config file shall be in YAML_ format, with extension ``.yml``
+The global_config file shall be in YAML format, with extension ``.yml``
 
 For the FMU users, the front end script to run is ``fmuconfig``
 
@@ -25,5 +23,3 @@ This software is released under LGPLv3.
 
 Copyright 2018-2020 Equinor ASA.
 
-
-.. _YAML: https://en.wikipedia.org/wiki/YAML
