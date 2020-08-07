@@ -20,6 +20,7 @@ from fmu.config import oyaml as yaml
 JFILE1 = "tests/data/yml/vinstre/global_master_config.yml"
 TFILE2 = "tests/data/yml/ogre/global_master_config.yml"
 TFILE3 = "tests/data/yml/ogre/global_master_config_with_dupl.yml"
+TFILE4 = "tests/data/yml/ogre/global_master_config_with_merge.yml"
 RFILE1 = "tests/data/yml/reek/global_variables.yml"
 
 # result may be compared with data stored here
@@ -159,6 +160,27 @@ def test_to_yaml_ogre_selfread():
     cfg = config.ConfigParserFMU()
 
     cfg.parse(TFILE2)
+    rootn = "ogre_yaml"
+
+    cfg.to_yaml(rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir)
+
+    newinput = os.path.join(fmux.tmpdir, rootn + ".yml")
+    newrootn = "ogre_yaml_selfread"
+
+    cfx = config.ConfigParserFMU()
+    cfx.parse(newinput)
+
+    cfx.to_ipl(
+        rootname=newrootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
+    )
+
+
+def test_ogre_to_yaml_merge():
+    """Test the output for the YAML files, and convert OUTPUT yaml to ipl"""
+
+    cfg = config.ConfigParserFMU()
+
+    cfg.parse(TFILE4)
     rootn = "ogre_yaml"
 
     cfg.to_yaml(rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir)
