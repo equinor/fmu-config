@@ -1,20 +1,24 @@
 Welcome to fmu-config's documentation!
 ======================================
 
-Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   readme
    installation
    yamlformat
    usage
    examples
-   modules
    contributing
    authors
    history
+
+API
+===
+
+.. toctree::
+
+   fmu.config/fmu.config
 
 Indices and tables
 ==================
