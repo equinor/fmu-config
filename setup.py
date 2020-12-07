@@ -11,6 +11,15 @@ from distutils.command.clean import clean as _clean
 import fnmatch
 from setuptools import setup, find_packages
 
+try:
+    from sphinx.setup_command import BuildDoc
+
+    CMDCLASS = {"build_sphinx": BuildDoc}
+except ImportError:
+    # sphinx not installed - do not provide build_sphinx cmd
+    CMDCLASS = {}
+
+
 
 class CleanUp(_clean, object):
     """
@@ -106,6 +115,7 @@ TEST_REQUIREMENTS = ["pytest"]
 # entry points setting
 FMUCONFIG_RUNNER = "fmuconfig=" "fmu.config.fmuconfigrunner:main"
 
+CMDCLASS.update({"clean": CleanUp})
 
 setup(
     name="fmu_config",
@@ -115,7 +125,7 @@ setup(
     long_description=README + "\n\n" + HISTORY,
     author="Jan C. Rivenaes",
     author_email="jriv@equinor.com",
-    url="https://git.equinor.com/fmu-utilities/fmu-config",
+    url="https://github.com/equinor/fmu-config",
     packages=find_packages("src"),
     package_dir={"": "src"},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
