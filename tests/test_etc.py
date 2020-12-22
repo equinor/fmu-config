@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
 """Testing the classes/functions in in the etc module."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import pytest
 

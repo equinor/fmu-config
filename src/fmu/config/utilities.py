@@ -1,11 +1,5 @@
-# -*- coding: utf-8 -*-
 """Module with some simple functions, e.g. for parsing for YAML into RMS
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 
 # for ordered dicts!

@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
 """Module for parsing global configuration for FMU.
 
 This module will normally be ran from the `fmuconfig` script,
 which is the front-end script for the user.
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 from copy import deepcopy
 import os
 from os.path import join as ojoin

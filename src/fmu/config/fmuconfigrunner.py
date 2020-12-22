@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """Script for converting the global config to various flavours of suiteble
 flavours."""
-
-from __future__ import division, print_function, absolute_import
 
 import argparse
 import sys

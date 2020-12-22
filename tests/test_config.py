@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
 """Testing fmu-config."""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os.path
 from os.path import join
 import json
@@ -130,10 +124,12 @@ def test_to_yaml_ogre():
     assert cfg_tmpl["KH_MULT_CSAND"] == "<KH_MULT_CSAND>"
 
     status1 = ut.compare_yaml_files(
-        join(TMPD, rootn + ".yml"), join(TCMP, rootn + ".yml"),
+        join(TMPD, rootn + ".yml"),
+        join(TCMP, rootn + ".yml"),
     )
     status2 = ut.compare_yaml_files(
-        join(TMPD, rootn + ".yml.tmpl"), join(TCMP, rootn + ".yml.tmpl"),
+        join(TMPD, rootn + ".yml.tmpl"),
+        join(TCMP, rootn + ".yml.tmpl"),
     )
     assert status1 is True
     assert status2 is True
@@ -145,10 +141,12 @@ def test_to_yaml_ogre():
     )
 
     status1 = ut.compare_text_files(
-        join(TMPD, rootn + ".ipl"), join(TCMP, rootn + ".ipl"),
+        join(TMPD, rootn + ".ipl"),
+        join(TCMP, rootn + ".ipl"),
     )
     status2 = ut.compare_text_files(
-        join(TMPD, rootn + ".ipl.tmpl"), join(TCMP, rootn + ".ipl.tmpl"),
+        join(TMPD, rootn + ".ipl.tmpl"),
+        join(TCMP, rootn + ".ipl.tmpl"),
     )
     assert status1 is True
     assert status2 is True

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """The setup script."""
 import os
@@ -18,7 +17,6 @@ try:
 except ImportError:
     # sphinx not installed - do not provide build_sphinx cmd
     CMDCLASS = {}
-
 
 
 class CleanUp(_clean, object):
