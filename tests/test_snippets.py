@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
 from os.path import join
 import io
