@@ -2,77 +2,106 @@
 Usage
 =====
 
+Folder structure
+----------------
+
+A recommended folder structure in Equinor is (assuming the revision folder is 21.2.0
+in this example):
+
+.. code-block:: bash
+
+   21.2.0/fmuconfig/input
+                   /bin
+                   /output
+
+The ``input`` has a file ``global_master_config.yml`` a possibly a few include files,
+and these are edited by users.
+
+The ``bin`` has shell scripts that process the input to a set of YAML and/or IPL
+which is stored at ``output``. The files in output shall never be edited by hand.
+
+
 Run from script
 ---------------
 
-The fmu.config module is accessed through a script, which is run like this::
+The ``fmu.config`` module is accessed through a script, and assuming the file structure
+above, is to be run like this:
 
-  fmuconfig global_master_config.yml <options...>
+.. code-block:: shell
 
-The global master config *shall* be placed at ``rNNN/share/config`` or
-``rNNN/share/config/input``, where *rNNN* is
-the revision number.
+   # go to fmuconfig/bin
+   fmuconfig ../input/global_master_config.yml <options...>
 
-Here is an example of a shell script that runs `fmuconfig` from the rms/bin folder:
+Here is an example of a shell script that runs `fmuconfig` from the ``bin`` folder:
 
 .. code-block:: bash
 
    #!/bin/bash
-   #
-   # Run the global configuration for RMS, both making IPL and YAML versions
-   # from a common global config
-   #
-   source /project/res/SDP_bashrc
-   source /project/res/komodo/stable/enable
 
-   MASTER="../../share/config/input/global_master_config.yml"
-   DEST="../input/global_variables"
-   TMPL="../../ert/input/templates"
-   ROOTIPL="global_variables"
-   ROOTYML="global_variables_rms"
+   MASTER="../../fmuconfig/input/global_master_config.yml"  # all updates here
+   OUTFOLDER="../../fmuconfig/output"                       # location of result files
+   ROOTNAME="global_variables"                              # root name of result files
 
-   # run command for IPL version
-   fmuconfig $MASTER --rootname $ROOTIPL --mode ipl --destination $DEST \
-   --template $TMPL --tool rms
+   # clean up (be careful with syntax)
+   rm -f ${OUTFOLDER}/ROOTNAME*
 
-   # run command for YAML version
-   fmuconfig $MASTER --rootname $ROOTYML --mode yml --destination $DEST \
-   --template $TMPL --tool rms
+   # run command for creating YAML version (+ ert tmpl version; yml.tmpl)
+   fmuconfig $MASTER --rootname $ROOTNAME --mode yml --destination $OUTFOLDER \
+         --template $OUTFOLDER
+
+   # optional!
+   # run command for creating IPL version if needed (+ ert tmpl version; ipl.tmpl)
+   fmuconfig $MASTER --rootname $ROOTNAME --mode ipl --destination $OUTFOLDER \
+         --template $OUTFOLDER --tool rms
 
 
 Run from python inside or outside RMS
 -------------------------------------
 
-The config can also be ran from a python script, e.g. inside RMS. In that case you
+In RMS there are two options to run global variables:
+
+* Run shell script above using system command (recommended)
+* Run from RMS python
+
+For shell script for RMS, use a system command job as this:
+
+.. code-block:: shell
+
+   cd ../../fmuconfig/bin; run_external sh global_variables_update.sh
+
+The config can also be run from a python script inside RMS. In that case you
 need to initiate the Class instance and run a few methods. Here is an example:
 
 .. code-block:: python
 
+   """Run global config in RMS python."""
+   from pathlib import Path
    import fmu.config
 
-   cfg = fmu.config.ConfigParserFMU()
 
-   global_master = '../../share/config/input/global_master_config.yml'
-   path_ipl = '../input/global_variables'
-   path_ipl_tmpl = '../../ert/input/templates'
-   root_ipl = 'global_variables'
+   MASTER = "../../fmuconfig/input/global_master_config.yml"
+   OUTPUT = "../../fmuconfig/output"
+   ROOT = "global_variables"
 
-   root_yml = 'global_variables_rms'  # to avoid name conflict
-
-   cfg.parse(global_master)
-
-   # make IPL
-   cfg.to_ipl(rootname=root_ipl, destination=path_ipl, template=path_ipl_tmpl,
-              tool='rms')
-   cfg.to_yaml(rootname=root_yml, destination=path_ipl, template=path_ipl_tmpl,
-               tool='rms')
-
-   print('\n\nGlobal IPL and YML are updated')
+   def cleanup():
+      for file in Path(OUTPUT).glob(ROOT + "*"):
+         file.unlink()
+         print(f"Removed old {file}")
 
 
+   def main():
+      cfg = fmu.config.ConfigParserFMU()
+      cfg.parse(MASTER)
+
+      # make IPL, optional!
+      cfg.to_ipl(rootname=ROOT, destination=OUTPUT, template=OUTPUT, tool="rms")
+
+      # YAML
+      cfg.to_yaml(rootname=ROOT, destination=OUTPUT, template=OUTPUT)
+
+      print("\n\nGlobal IPL and YML are updated")
 
 
-Learn by examples!
-------------------
-
-Learn the format by studying the following examples.
+   if __name__ == "__main__":
+      cleanup()
+      main()

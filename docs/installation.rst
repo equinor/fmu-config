@@ -10,8 +10,7 @@ For FMU users
 **A normal user will not need to install anything!**
 
 The stable and bleeding release of the scripts is distributed
-within Equinor, either through
-/project/res or Komodo. The front-end to run is the ``fmuconfig`` script:
+within Equinor through Komodo. The front-end to run is the ``fmuconfig`` script:
 
 .. code-block:: console
 
