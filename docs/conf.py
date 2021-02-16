@@ -46,7 +46,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
-    "autoapi.sphinx",
 ]
 
 autoapi_modules = {"fmu.config": None}
