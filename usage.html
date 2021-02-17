@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Usage &mdash; fmu-config 0.1.dev1+g6aee329 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples to learn from" href="examples.html" />
+    <link rel="prev" title="YAML file and folders conventions" href="yamlformat.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> fmu-config
+          
+
+          
+            
+            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.dev1+g6aee329
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yamlformat.html">YAML file and folders conventions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#folder-structure">Folder structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-from-script">Run from script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-from-python-inside-or-outside-rms">Run from python inside or outside RMS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples to learn from</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-config</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="folder-structure">
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this headline">¶</a></h2>
+<p>A recommended folder structure in Equinor is (assuming the revision folder is 21.2.0
+in this example):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">21</span>.2.0/fmuconfig/input
+                /bin
+                /output
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">input</span></code> has a file <code class="docutils literal notranslate"><span class="pre">global_master_config.yml</span></code> a possibly a few include files,
+and these are edited by users.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">bin</span></code> has shell scripts that process the input to a set of YAML and/or IPL
+which is stored at <code class="docutils literal notranslate"><span class="pre">output</span></code>. The files in output shall never be edited by hand.</p>
+</div>
+<div class="section" id="run-from-script">
+<h2>Run from script<a class="headerlink" href="#run-from-script" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">fmu.config</span></code> module is accessed through a script, and assuming the file structure
+above, is to be run like this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to fmuconfig/bin</span>
+fmuconfig ../input/global_master_config.yml &lt;options...&gt;
+</pre></div>
+</div>
+<p>Here is an example of a shell script that runs <cite>fmuconfig</cite> from the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nv">MASTER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span>  <span class="c1"># all updates here</span>
+<span class="nv">OUTFOLDER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/output&quot;</span>                       <span class="c1"># location of result files</span>
+<span class="nv">ROOTNAME</span><span class="o">=</span><span class="s2">&quot;global_variables&quot;</span>                              <span class="c1"># root name of result files</span>
+
+<span class="c1"># clean up (be careful with syntax)</span>
+rm -f <span class="si">${</span><span class="nv">OUTFOLDER</span><span class="si">}</span>/ROOTNAME*
+
+<span class="c1"># run command for creating YAML version (+ ert tmpl version; yml.tmpl)</span>
+fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME</span> --mode yml --destination <span class="nv">$OUTFOLDER</span> <span class="se">\</span>
+      --template <span class="nv">$OUTFOLDER</span>
+
+<span class="c1"># optional!</span>
+<span class="c1"># run command for creating IPL version if needed (+ ert tmpl version; ipl.tmpl)</span>
+fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME</span> --mode ipl --destination <span class="nv">$OUTFOLDER</span> <span class="se">\</span>
+      --template <span class="nv">$OUTFOLDER</span> --tool rms
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-from-python-inside-or-outside-rms">
+<h2>Run from python inside or outside RMS<a class="headerlink" href="#run-from-python-inside-or-outside-rms" title="Permalink to this headline">¶</a></h2>
+<p>In RMS there are two options to run global variables:</p>
+<ul class="simple">
+<li><p>Run shell script above using system command (recommended)</p></li>
+<li><p>Run from RMS python</p></li>
+</ul>
+<p>For shell script for RMS, use a system command job as this:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ../../fmuconfig/bin<span class="p">;</span> run_external sh global_variables_update.sh
+</pre></div>
+</div>
+<p>The config can also be run from a python script inside RMS. In that case you
+need to initiate the Class instance and run a few methods. Here is an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Run global config in RMS python.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">fmu.config</span>
+
+
+<span class="n">MASTER</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span>
+<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/output&quot;</span>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="s2">&quot;global_variables&quot;</span>
+
+<span class="k">def</span> <span class="nf">cleanup</span><span class="p">():</span>
+   <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">OUTPUT</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">):</span>
+      <span class="n">file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed old </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+   <span class="n">cfg</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">ConfigParserFMU</span><span class="p">()</span>
+   <span class="n">cfg</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">MASTER</span><span class="p">)</span>
+
+   <span class="c1"># make IPL, optional!</span>
+   <span class="n">cfg</span><span class="o">.</span><span class="n">to_ipl</span><span class="p">(</span><span class="n">rootname</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="s2">&quot;rms&quot;</span><span class="p">)</span>
+
+   <span class="c1"># YAML</span>
+   <span class="n">cfg</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="n">rootname</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">)</span>
+
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Global IPL and YML are updated&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+   <span class="n">cleanup</span><span class="p">()</span>
+   <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples to learn from" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="yamlformat.html" class="btn btn-neutral float-left" title="YAML file and folders conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+  </style>
+
+
+</body>
+</html>

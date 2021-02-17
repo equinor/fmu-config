@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>YAML file and folders conventions &mdash; fmu-config 0.1.dev1+g6aee329 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> fmu-config
+          
+
+          
+            
+            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.dev1+g6aee329
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">YAML file and folders conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#folder-structure">Folder structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#alternative-1-close-to-compatible-with-current">Alternative 1, close to compatible with current</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alternative-2-a-proposal-for-change">Alternative 2, a proposal for change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alternative-3-a-second-proposal-for-change">Alternative 3, a second proposal for change</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#file-format-and-nested-files">File format and nested files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#some-conventions">Some conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#include-files">Include files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rms-related-settings">RMS related settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#horizons-zones-and-kwlists">Horizons, zones and kwlists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#freeform-with-dtype-and-value-s">Freeform, with dtype and value(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#freeform-output-is-always-simplified">Freeform, output is always simplified</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipl-code-stubs">IPL code stubs:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-of-reserved-words">Summary of Reserved words</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples to learn from</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-config</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>YAML file and folders conventions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/yamlformat.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="yaml-file-and-folders-conventions">
+<h1>YAML file and folders conventions<a class="headerlink" href="#yaml-file-and-folders-conventions" title="Permalink to this headline">¶</a></h1>
+<p>To summarize:</p>
+<ul class="simple">
+<li><p>YAML file endings is .yml</p></li>
+<li><p>Within the YAML master config file, the <em>small letters</em> headings are <em>“reserved”</em> words, while
+<em>uppercase</em> letters mean some kind of freeform variable.</p></li>
+</ul>
+<div class="section" id="folder-structure">
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this headline">¶</a></h2>
+<p>The folder structure is <em>under discussion</em> and might change.</p>
+<div class="section" id="alternative-1-close-to-compatible-with-current">
+<h3>Alternative 1, close to compatible with current<a class="headerlink" href="#alternative-1-close-to-compatible-with-current" title="Permalink to this headline">¶</a></h3>
+<p>To make it compatible with current FMU setups:</p>
+<ul class="simple">
+<li><p>Place the global_master_config.yml under <code class="docutils literal notranslate"><span class="pre">share/config</span></code></p></li>
+<li><p>Place shell scripts which runs fmuconfig under tool/bin, e.g. <code class="docutils literal notranslate"><span class="pre">rms/bin</span></code></p></li>
+<li><p>Output result to current standards, e.g. global_variables.ipl to
+<code class="docutils literal notranslate"><span class="pre">rms/input/global_variables/global_variables.ipl</span></code> and
+the templated version to <code class="docutils literal notranslate"><span class="pre">ert/input/templates/global_variables.tmpl</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="alternative-2-a-proposal-for-change">
+<h3>Alternative 2, a proposal for change<a class="headerlink" href="#alternative-2-a-proposal-for-change" title="Permalink to this headline">¶</a></h3>
+<p>The proposal is that all config files, both input and output,
+are stored under <code class="docutils literal notranslate"><span class="pre">share/config</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">share/config/input</span></code> for user defined global_master_config.yml + include files if any</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">share/config/bin</span></code> for scripts, reading from input, results to output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">share/config/output</span></code> for all outputs; to be machine read.</p></li>
+</ul>
+<p>It would then be a good practice to delete all files on output everytime the
+fmuconfig script is ran.</p>
+<p>In practice it means that the link in the RMS IPL scripts must be changed to:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">include(&quot;../../share/config/output/global_variables.ipl&quot;)</span></code></p>
+</div></blockquote>
+</div>
+<div class="section" id="alternative-3-a-second-proposal-for-change">
+<h3>Alternative 3, a second proposal for change<a class="headerlink" href="#alternative-3-a-second-proposal-for-change" title="Permalink to this headline">¶</a></h3>
+<p>The proposal is that all config files, both input and output,
+are stored under <code class="docutils literal notranslate"><span class="pre">config</span></code> on tool level (same level as rms, ert, …)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config/input</span></code> for user defined global_master_config.yml + include files if any</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config/bin</span></code> for scripts, reading from input, results to output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config/output</span></code> for all outputs; to be machine read.</p></li>
+</ul>
+<p>In practice it means that the link in the RMS IPL scripts must be changed to:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">include(&quot;../../config/output/global_variables.ipl&quot;)</span></code></p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="file-format-and-nested-files">
+<h2>File format and nested files<a class="headerlink" href="#file-format-and-nested-files" title="Permalink to this headline">¶</a></h2>
+<p>The master config file itself is a YAML formatted file. It follows the standard
+YAML specification, with <em>one major exception</em>, and that is that
+<em>file nesting</em> is allowed. This allows for placing various parts of
+the CONFIG into separate subfiles, which improves the overview.</p>
+<p>The <em>derived</em> YAML files to e.g. be used by RMS Python will not allow nesting;
+they will follow the YAML standard.</p>
+<p>What will be a good practice regarding nesting of the master config remains to be
+seen.</p>
+</div>
+<div class="section" id="some-conventions">
+<h2>Some conventions<a class="headerlink" href="#some-conventions" title="Permalink to this headline">¶</a></h2>
+<p>The examples section (next) should be studied in detail in order to
+understand the format.</p>
+<ul>
+<li><p>The preferred name of the input global config is <code class="docutils literal notranslate"><span class="pre">global_master_config.yml</span></code>.</p></li>
+<li><p>YAML is a indent based file type; which means changing the indentation
+may change the whole meaning of the file!</p></li>
+<li><p>The first level indentation is important. Important sections are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">global</span></code>: For general settings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rms</span></code>: For RMS IPL compatible related settings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eclipse</span></code>: For Eclipse decks related settings</p></li>
+</ul>
+</li>
+<li><p>Notice the difference between small letters and uppercase letters</p>
+<ul class="simple">
+<li><p>The small letters are YAML keywords with a special meaning.</p></li>
+<li><p>Uppercase letters are “client” keywords (free form)</p></li>
+</ul>
+</li>
+<li><p>The dates format shall be <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> compliant, on the form <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code>.
+For file naming and IPL that date will be usually be compressed to
+the <code class="docutils literal notranslate"><span class="pre">YYYYMMDD</span></code> form, which is still in accordance with the ISO standard.</p></li>
+<li><p>Uncertainties are placed within numbers as these examples show:
+<code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">~</span> <span class="pre">&lt;KH_MULT_MTR&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">1.0~&lt;KH_MULT_MTR&gt;</span></code>. Notice that</p>
+<ul class="simple">
+<li><p>First entry is the number that shall be used when running tests outside ERT,
+i.e. the <em>work</em> mode.</p></li>
+<li><p>A tilde <code class="docutils literal notranslate"><span class="pre">~</span></code> is used to separate this number with an uncertainty identifier,
+which will be on the form <code class="docutils literal notranslate"><span class="pre">&lt;XXX&gt;</span></code>, also called the <em>template</em> mode.</p></li>
+<li><p>The files generated from this global master config, will either have the
+<em>work</em> form (e.g. 1.0 in this example) or the templated form (<code class="docutils literal notranslate"><span class="pre">&lt;KH_MULT_MTR&gt;</span></code>
+in this example). The alternate form may be present as a comment.</p></li>
+<li><p>Uncertainty keys shall be UPPERCASE</p></li>
+</ul>
+</li>
+<li><p>Note the templated files will have extesion <code class="docutils literal notranslate"><span class="pre">.tpml</span></code>, e.g. for <code class="docutils literal notranslate"><span class="pre">global_variables.ipl</span></code>
+it will be <code class="docutils literal notranslate"><span class="pre">global_variables.ipl.tmpl</span></code></p></li>
+<li><p>For most cases, a simple <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code> will default the name to key (it will not work when dtype
+and value(s) is applied). For example</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">FLWX</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3203.0 ~ &lt;&gt;</span>
+
+<span class="c1"># is the same as</span>
+
+<span class="nt">FLWX</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3203.0 ~ &lt;FLWX&gt;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="include-files">
+<h2>Include files<a class="headerlink" href="#include-files" title="Permalink to this headline">¶</a></h2>
+<p>In the input master YAML config, include files are allowed. Note that the include
+statement must “belong” to a keyword, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>kwlists: !include kwlists.yml
+</pre></div>
+</div>
+<p>This variant is not allowed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!include something.yml
+</pre></div>
+</div>
+<p>However, one can use an anonymous keywords, which is any word that starts with to
+underscores:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>__tmpword: !include something.yml
+</pre></div>
+</div>
+<p>Note here that <code class="docutils literal notranslate"><span class="pre">__tmpword</span></code> will not be a part of the configuration. See later Vinstre
+example where this technique is applied.</p>
+</div>
+<div class="section" id="rms-related-settings">
+<h2>RMS related settings<a class="headerlink" href="#rms-related-settings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="horizons-zones-and-kwlists">
+<h3>Horizons, zones and kwlists<a class="headerlink" href="#horizons-zones-and-kwlists" title="Permalink to this headline">¶</a></h3>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">rms</span></code> section there may be 3 significant subheadings:</p>
+<ul class="simple">
+<li><p>horizons</p></li>
+<li><p>zones</p></li>
+<li><p>kwlists</p></li>
+</ul>
+<p>These are reserved for Horizon, Zone or keyword listing, and will usually (always?)
+never contain uncertainties; they are just lists to facilitate looping with RMS
+Python or IPL.</p>
+<p>Examples:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">horizons</span><span class="p">:</span>
+
+  <span class="nt">TOP_RES</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Top Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Top Middle Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Top Lower Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Top Etive</span>
+
+  <span class="nt">Top_DCONV</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Lista Fm.</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BCU</span>
+
+<span class="nt">zones</span><span class="p">:</span>
+  <span class="nt">ZONE_RES</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Upper Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Middle Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Lower Ness</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Etive</span>
+
+<span class="nt">kwlists</span><span class="p">:</span>
+
+  <span class="nt">FACIES_NAMES</span><span class="p">:</span>
+    <span class="nt">OFFSHORE_VI_C</span><span class="p">:</span>         <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="s">&quot;Offshore</span><span class="nv"> </span><span class="s">mudstones,</span><span class="nv"> </span><span class="s">Viking</span><span class="nv"> </span><span class="s">Gp.&quot;</span><span class="p p-Indicator">]</span>
+    <span class="nt">MUDDY_SPIC_C</span><span class="p">:</span>          <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="s">&quot;Muddy</span><span class="nv"> </span><span class="s">spiculites&quot;</span><span class="p p-Indicator">]</span>
+    <span class="nt">BIOSTROME_REEF_C</span><span class="p">:</span>      <span class="p p-Indicator">[</span><span class="nv">7</span><span class="p p-Indicator">,</span> <span class="s">&quot;Biostrome</span><span class="nv"> </span><span class="s">reef&quot;</span><span class="p p-Indicator">]</span>
+    <span class="nt">SANDY_SPIC_C</span><span class="p">:</span>          <span class="p p-Indicator">[</span><span class="nv">8</span><span class="p p-Indicator">,</span> <span class="s">&quot;Sandy</span><span class="nv"> </span><span class="s">spiculites&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="freeform-with-dtype-and-value-s">
+<h3>Freeform, with dtype and value(s)<a class="headerlink" href="#freeform-with-dtype-and-value-s" title="Permalink to this headline">¶</a></h3>
+<p>The rest of <code class="docutils literal notranslate"><span class="pre">rms</span></code> will be on so-called <em>freeform</em> format, where one needs to</p>
+<ul class="simple">
+<li><p>Have an identifier or variable name in <strong>UPPERCASE</strong>.</p></li>
+<li><p>The config script will try to guess, based on the value(s), whether RMS IPL should
+use String, Int, Bool or Float. In addition it will interpret if it is a scalar or a list.</p></li>
+<li><p>Optionally, if the automatics fails, one can specify (one indent level more) the</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> (what kind of datatype; int, float, date, datepair, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> or <code class="docutils literal notranslate"><span class="pre">values</span></code>: The single form <code class="docutils literal notranslate"><span class="pre">value</span></code> for single numbers, and the
+plural <code class="docutils literal notranslate"><span class="pre">values</span></code> form for lists.</p></li>
+</ul>
+</li>
+</ul>
+<p>Examples of a freeform type with uncertainty alternative:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">KH_MULT_MTR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0 ~ &lt;KH_MULT_MTR&gt;</span>  <span class="c1"># the config script will assume dtype=Float,</span>
+                                  <span class="c1"># since it is a number with decimals, and uncertainty &lt;...&gt;</span>
+
+<span class="nt">KH_MULT_MTX</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>    <span class="c1"># the config script will assume dtype=Int, since punctuation is missing</span>
+
+<span class="nt">KH_MULT_MTY</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">myvalue</span>    <span class="c1"># the config script will here assume dtype=String (text)</span>
+
+<span class="nt">KH_MULT_MTZ</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.2</span><span class="p p-Indicator">,</span> <span class="nv">1.3</span><span class="p p-Indicator">]</span>    <span class="c1"># the config script will here a list of dtype=Floats</span>
+</pre></div>
+</div>
+<p>Example of a freeform type with explicit dtype and value(s):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">KH_MULT_MTR</span><span class="p">:</span>
+  <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+  <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0 ~ &lt;KH_MULT_MTR&gt;</span>
+
+<span class="nt">KH_MULT_MTX</span><span class="p">:</span>
+  <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+  <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">KH_MULT_MTY</span><span class="p">:</span>
+  <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+  <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">KH_MULT_MTZ</span><span class="p">:</span>
+  <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+  <span class="nt">values</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1.2</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1.3</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="freeform-output-is-always-simplified">
+<h3>Freeform, output is always simplified<a class="headerlink" href="#freeform-output-is-always-simplified" title="Permalink to this headline">¶</a></h3>
+<p>For the output YAML or JSON format, <code class="docutils literal notranslate"><span class="pre">dtype</span></code> and <code class="docutils literal notranslate"><span class="pre">value(s)</span></code> will be stripped aways, and
+output style will always be on the form:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">KH_MULT_MTR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ipl-code-stubs">
+<h3>IPL code stubs:<a class="headerlink" href="#ipl-code-stubs" title="Permalink to this headline">¶</a></h3>
+<p>IPL pure declarations can be defined as <code class="docutils literal notranslate"><span class="pre">_IPL_DECLARE_WHATEVER</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_IPL_DECLARE_STUB1</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">GridModel GM</span>
+  <span class="no">Surface MAIN1, MAIN2</span>
+</pre></div>
+</div>
+<p>Similarly, IPL code stubs can be inserted as <code class="docutils literal notranslate"><span class="pre">_IPL_CODE_WHATEVER</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_IPL_CODE_STUB1</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">// code for something</span>
+   <span class="no">FOR i FROM 1 TO 100 DO</span>
+      <span class="no">Print(&quot;Hello&quot;)</span>
+   <span class="no">ENDFOR</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="summary-of-reserved-words">
+<h2>Summary of Reserved words<a class="headerlink" href="#summary-of-reserved-words" title="Permalink to this headline">¶</a></h2>
+<p>Here is an overview of reserved words (small letters), and the data values are also described
+for some cases.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">authors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;shortname1&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;shortname2&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>   <span class="c1"># this is config file version</span>
+
+<span class="nt">global</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Name of your field</span>
+  <span class="nt">coordsys</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SOME_OW_COORDSYS_ID</span>
+
+<span class="nt">rms</span><span class="p">:</span>
+  <span class="nt">horizons</span><span class="p">:</span>
+  <span class="nt">zones</span><span class="p">:</span>
+  <span class="nt">kwlists</span><span class="p">:</span>
+
+  <span class="nt">ANYVARIABLE</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span>  <span class="l l-Scalar l-Scalar-Plain">... float/int/string/date/datepair</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a_scalar</span>
+    <span class="nt">values</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">...list...</span><span class="p p-Indicator">]</span>
+
+<span class="nt">eclipse</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Changes may occur!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+  </style>
+
+
+</body>
+</html>

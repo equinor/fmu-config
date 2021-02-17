@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Examples to learn from &mdash; fmu-config 0.1.dev1+g6aee329 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> fmu-config
+          
+
+          
+            
+            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.dev1+g6aee329
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yamlformat.html">YAML file and folders conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples to learn from</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ogre-example-config">Ogre example config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-main-global-config-file">The main global config file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-include-files">The include files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#vinstre-example-config">Vinstre example config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-config-in-rms-ipl-and-python">Using the config in RMS, IPL and Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ipl-example">IPL example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-example">Python example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-config</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Examples to learn from</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="examples-to-learn-from">
+<h1>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Permalink to this headline">¶</a></h1>
+<p>Below is a presentation of Ogre config files</p>
+<div class="section" id="ogre-example-config">
+<h2>Ogre example config<a class="headerlink" href="#ogre-example-config" title="Permalink to this headline">¶</a></h2>
+<p>Ogre has a large number of surfaces, and for convenience these lists
+are places into separate files. Note that these data are fake data.</p>
+<div class="section" id="the-main-global-config-file">
+<h3>The main global config file<a class="headerlink" href="#the-main-global-config-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># Master global config for Ogre</span>
+<span class="c1"># Prototype by JRIV</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># Global settings</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+<span class="nt">global</span><span class="p">:</span>
+
+  <span class="nt">DATES</span><span class="p">:</span> <span class="nl">&amp;global_dates</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1991-07-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2001-07-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2003-07-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2005-07-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2010-07-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2013-06-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2016-07-01</span>
+
+  <span class="nt">DIFFDATES</span><span class="p">:</span> <span class="nl">&amp;global_diffdates</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2001-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2003-07-01</span><span class="p p-Indicator">,</span> <span class="nv">2001-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2005-07-01</span><span class="p p-Indicator">,</span> <span class="nv">2003-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2007-07-01</span><span class="p p-Indicator">,</span> <span class="nv">2005-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2010-07-01</span><span class="p p-Indicator">,</span> <span class="nv">2007-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2013-06-01</span><span class="p p-Indicator">,</span> <span class="nv">2010-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2016-07-01</span><span class="p p-Indicator">,</span> <span class="nv">2013-06-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2003-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2005-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2007-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2010-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2013-06-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2016-07-01</span><span class="p p-Indicator">,</span> <span class="nv">1991-07-01</span><span class="p p-Indicator">]</span>
+
+  <span class="nt">FWL</span><span class="p">:</span> <span class="nl">&amp;global_fwl</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3953.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3960.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3955.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3953.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3952.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3957.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3968.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3967.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3968.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3967.5</span>
+
+  <span class="nt">GOC</span><span class="p">:</span> <span class="nl">&amp;global_goc</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3943.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3945.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3942.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3946.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3946.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3942.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3945.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3944.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3941.0</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3941.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3942.5</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">3946.0</span>
+
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># RMS settings</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="nt">rms</span><span class="p">:</span>
+  <span class="nt">horizons</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">rms_horizons.yml</span>
+  <span class="nt">zones</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">rms_zones.yml</span>
+
+  <span class="c1"># the following entries are called freeform entries:</span>
+
+  <span class="nt">WELLMODEL</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bool</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true ~ &lt;WELLMODEL&gt;</span>
+
+  <span class="nt">WELLMODEL2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes ~ &lt;WELLMODEL2&gt;</span>
+
+  <span class="nt">SOMEXMODEL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+
+  <span class="nt">SOMEBOOL1</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">true ~ &lt;&gt;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">false ~ &lt;&gt;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="nt">SOMEBOOL2</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bool</span>
+    <span class="nt">values</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+  <span class="nt">FWL</span><span class="p">:</span> <span class="nv">*global_fwl</span>
+
+  <span class="nt">GOC</span><span class="p">:</span> <span class="nv">*global_goc</span>
+
+  <span class="c1"># here example with dtype and value (not required)</span>
+  <span class="nt">KH_MULT_CSAND</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0  ~&lt;KH_MULT_CSAND&gt;</span>  <span class="c1"># in &lt;...&gt;: template value from ERT</span>
+
+  <span class="nt">KH_MULT_MTR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0 ~ &lt;KH_MULT_MTR&gt;</span>
+
+  <span class="nt">KH_MULT_MST</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>
+
+  <span class="c1"># for dates, spesifying dtype can be more safe, but not required. Ad always treat</span>
+  <span class="c1"># dates as &quot;values&quot;, not &quot;value&quot; (since dates are complex data types)</span>
+  <span class="c1"># I.e. treat dates always as lists.</span>
+  <span class="nt">TESTSOMEDATE</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date</span>
+    <span class="nt">values</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2017-01-01</span>
+
+  <span class="c1"># this should also work.</span>
+  <span class="nt">TESTSOMEOTHERDATE</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2017-01-02</span>
+
+  <span class="nt">TESTSOMEDATEPAIR</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">datepair</span>
+    <span class="nt">values</span><span class="p">:</span> <span class="p p-Indicator">[[</span><span class="nv">2017-01-01</span><span class="p p-Indicator">,</span> <span class="nv">2018-01-01</span><span class="p p-Indicator">]]</span>
+
+  <span class="c1"># Dates wihtout dtype/values</span>
+  <span class="nt">EDATES</span><span class="p">:</span> <span class="nv">*global_dates</span>
+
+  <span class="nt">4D_DATES</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">date</span>
+    <span class="nt">values</span><span class="p">:</span> <span class="nv">*global_dates</span>
+
+  <span class="nt">DIFF4D_DATES</span><span class="p">:</span> <span class="nv">*global_diffdates</span>
+
+  <span class="c1"># -----------------------------------------------------------------------------</span>
+  <span class="c1"># Relperm and PC related (shows use of anchors and aliases)</span>
+  <span class="c1"># -----------------------------------------------------------------------------</span>
+  <span class="nt">A_OIL_CSAND</span><span class="p">:</span> <span class="nl">&amp;aoilcsa</span> <span class="l l-Scalar l-Scalar-Plain">11.978799 ~ &lt;A_OIL_CSAND&gt;</span>
+
+  <span class="nt">A_OIL_MTR</span><span class="p">:</span> <span class="nl">&amp;aoilmtr</span> <span class="l l-Scalar l-Scalar-Plain">2.7431~&lt;A_OIL_MTR&gt;</span>
+
+  <span class="nt">A_OIL_MST</span><span class="p">:</span> <span class="nl">&amp;aoilmst</span> <span class="l l-Scalar l-Scalar-Plain">1.4545</span>
+
+  <span class="nt">BOIL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-20.99 ~ &lt;BOIL&gt;</span>
+
+  <span class="c1"># A_OIL_MST: bull</span>
+
+  <span class="c1"># refer to as aliases</span>
+  <span class="nt">AVALUE</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">*aoilcsa</span><span class="p p-Indicator">,</span> <span class="nv">*aoilmtr</span><span class="p p-Indicator">,</span> <span class="nv">*aoilmst</span><span class="p p-Indicator">,</span> <span class="nv">*aoilcsa</span><span class="p p-Indicator">,</span> <span class="nv">*aoilmtr</span><span class="p p-Indicator">,</span> <span class="nv">*aoilmst</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-include-files">
+<h3>The include files<a class="headerlink" href="#the-include-files" title="Permalink to this headline">¶</a></h3>
+<p>Note that the include files starts on indent level “zero”.</p>
+<p>rms_horizons.yml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># All the static HORIZONS and ZONES definitions to be accessed via IPL or YAML/Python</span>
+<span class="c1">#</span>
+
+<span class="nt">DCONF_SURF</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SEABED</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BaseQUAT</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BasePLIO</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62_flatspot</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS63_flatspot</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopBRENT</span>
+
+<span class="nt">TOP_EROSION</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">BCU</span><span class="p p-Indicator">]</span>
+<span class="nt">BCU</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">BCU</span><span class="p p-Indicator">]</span>
+
+<span class="nt">TOP_RES</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopDRAUPNE</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopHEATHERC</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO61</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO53</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO44</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO43</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO42</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO41</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO34</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO33</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO32</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO31</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO22</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO21</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS63</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS61</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS4</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS3</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS2</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS1</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopKROSS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopHEATHERA</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopBRENT</span>
+
+<span class="nt">TOP_MAINRES</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS63</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopBRENT</span>
+
+<span class="nt">TOP_PARAS</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO44</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO43</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO42</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO41</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO34</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO33</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO32</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO31</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO22</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO21</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS63</span>
+</pre></div>
+</div>
+<p>rms_zones.yml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">MAIN_ZONES</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO62_TopSO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO45_TopSO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSO36_TopFENS63</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopFENS63_TopBRENT</span>
+
+<span class="nt">OVERBURDEN</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">MSL_TopSO62</span><span class="p p-Indicator">]</span>
+
+<span class="nt">ZONE_RES</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">DRAUPNE</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">HEATHERC</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO61</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO53</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO44</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO43</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO42</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO41</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO34</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO33</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO32</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO31</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO22</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO21</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS63</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS61</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS4</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS3</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS2</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FENS1</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">KROSS</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">HEATHERA</span>
+
+<span class="nt">ZONE_PARAS</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO62</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO52</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO51</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO45</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO44</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO43</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO42</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO41</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO36</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO34</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO33</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO32</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO31</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO22</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SO21</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="vinstre-example-config">
+<h2>Vinstre example config<a class="headerlink" href="#vinstre-example-config" title="Permalink to this headline">¶</a></h2>
+<p>Note that these data are fake data. In this example, a simplified version of the
+FREE IPL variables is used, which perhaps should be the preferred form.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Master FMU global config inspired by J Sverdrup setup, but fake numbers</span>
+
+<span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<span class="nt">authors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">jriv</span><span class="p p-Indicator">,</span> <span class="nv">peesv</span><span class="p p-Indicator">,</span> <span class="nv">xman</span><span class="p p-Indicator">]</span>
+
+<span class="c1">#-------------------------------------------------------------------------</span>
+<span class="c1"># GLOBAL</span>
+<span class="c1">#-------------------------------------------------------------------------</span>
+<span class="nt">global</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Vinstre</span>
+  <span class="nt">coordsys</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ST_SOMEWHAT_COORDSYS</span>
+
+  <span class="nt">DATES</span><span class="p">:</span> <span class="nl">&amp;global_dates</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2030-01-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2031-06-01</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2033-01-01</span>
+
+  <span class="nt">DIFFDATES</span><span class="p">:</span> <span class="nl">&amp;global_diff_dates</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2031-06-01</span><span class="p p-Indicator">,</span> <span class="nv">2030-01-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2033-01-01</span><span class="p p-Indicator">,</span> <span class="nv">2031-06-01</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2033-01-01</span><span class="p p-Indicator">,</span> <span class="nv">2030-01-01</span><span class="p p-Indicator">]</span>
+
+  <span class="c1"># an example of a table input, which may be output as a table file (a text file)</span>
+  <span class="nt">FWL</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">Zone</span><span class="p p-Indicator">,</span> <span class="nv">Region1</span><span class="p p-Indicator">,</span> <span class="nv">Region2</span><span class="p p-Indicator">,</span> <span class="nv">Region3</span><span class="p p-Indicator">,</span> <span class="nv">Region4</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_GEIT_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPS_DRAUP&gt;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPS_DRAUP&gt;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_GEIT_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1010.0~&lt;FWL_GEIT_XRAPU&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">5</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1010.0~&lt;FWL_GEIT_XRAPU&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+
+  <span class="c1"># also possible to just include the table as a file</span>
+  <span class="nt">FWL2</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">fwl2.yml</span>
+
+<span class="c1">#-------------------------------------------------------------------------</span>
+<span class="c1"># RMS</span>
+<span class="c1">#-------------------------------------------------------------------------</span>
+<span class="nt">rms</span><span class="p">:</span>
+  <span class="nt">horizons</span><span class="p">:</span>
+    <span class="nt">TOPNAME</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopSverdrup</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">TopZverdrup</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BaseZverdrup</span>
+
+  <span class="nt">zones</span><span class="p">:</span>
+    <span class="nt">ISONAME</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Sverdrup</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Zverdrup</span>
+
+  <span class="c1"># include kwlists which is a special format for keyname, code, fullname:</span>
+  <span class="nt">kwlists</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">kwlists.yml</span>
+
+
+  <span class="nt">COHIBA_MODE</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PREDICTION~&lt;COHIBA_MODE&gt;</span>
+
+
+  <span class="nt">RUN_HAVANA</span><span class="p">:</span>
+    <span class="nt">dtype</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+    <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 &lt;CC&gt;</span>
+
+  <span class="c1"># the _IPL_DECLARE is for declaring additional data types (without values)</span>
+  <span class="c1"># NB No IPL syntax check is done here!</span>
+  <span class="nt">_IPL_DECLARE_STUB1</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">GridModel GM</span>
+    <span class="no">Surface MAIN1, MAIN2</span>
+
+  <span class="nt">_IPL_DECLARE_STUB2</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">Function MYFUNCTION</span>
+
+  <span class="c1"># the IPL code stub is just for IPL</span>
+  <span class="c1"># NB No IPL syntax check is done here!</span>
+  <span class="nt">_IPL_CODE_STUB1</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">// code for something</span>
+    <span class="no">FOR i FROM 1 TO 100 DO</span>
+       <span class="no">Print(&quot;Hello&quot;)</span>
+    <span class="no">DONE</span>
+
+  <span class="c1"># guessing the dtype with one value</span>
+  <span class="nt">COHIBA_MODE2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PREDICTION~&lt;COHIBA_MODE2&gt;</span>
+  <span class="nt">COHIBA_MODE3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SIMULATION</span>
+  <span class="nt">RUN_MANILA1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+  <span class="nt">RUN_MANILA2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+  <span class="nt">FWL_UBER_ALLES</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1344.0 ~ &lt;&gt;</span>
+  <span class="nt">FWL_UBER_ALLES_FINAL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1344.0 ~ &lt;UBER_FINAL&gt;</span>
+
+  <span class="c1"># include some freeform variables using anonymous entry __xxx</span>
+  <span class="nt">__xxx</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">doe_params.yml</span>
+
+  <span class="c1"># guessing the dtype with values</span>
+  <span class="nt">FWL3</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1234.0 ~ &lt;FWL3_FIRST&gt;</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1236.0 ~ &lt;&gt;</span>  <span class="c1"># will be FWL3_1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1134.5 ~ &lt;&gt;</span>  <span class="c1"># will be FWL3_2</span>
+
+  <span class="nt">SMALLFLOAT1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0E-6</span>
+  <span class="nt">SMALLFLOAT2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0E-6 ~ &lt;&gt;</span>
+  <span class="nt">SMALLFLOAT3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0E-06</span>
+  <span class="nt">SMALLFLOAT4</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0e-06</span>
+  <span class="nt">SMALLFLOAT5</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.000001</span>
+  <span class="nt">SMALLFLOAT5A</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.000001 ~ &lt;&gt;</span>
+  <span class="nt">SMALLFLOAT6</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-0.000001 ~ &lt;&gt;</span>
+  <span class="nt">SMALLFLOAT7</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-0.000001</span>
+  <span class="nt">SMALLFLOAT8</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1.0e-6 ~ &lt;&gt;</span>
+  <span class="nt">SMALLFLOAT9</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1.0e-6</span>
+
+
+<span class="nt">eclipse</span><span class="p">:</span>
+  <span class="nt">MULTFLT</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">MULTFLT</span>
+      <span class="no">&#39;F1&#39;   0.12~&lt;MULTFLT_F1&gt; /</span>
+      <span class="no">&#39;F2&#39;   0.01~&lt;MULTFLT_F2&gt; /</span>
+      <span class="no">&#39;F3&#39;   0.04~&lt;MULTFLT_F3&gt; /</span>
+      <span class="no">&#39;F4&#39;   0.12~&lt;MULTFLT_F4&gt; /</span>
+      <span class="no">&#39;F5&#39;   0.06~&lt;MULTFLT_F5&gt; /</span>
+      <span class="no">/</span>
+</pre></div>
+</div>
+<p>The included file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># FWL2:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">Zone</span><span class="p p-Indicator">,</span> <span class="nv">Region1</span><span class="p p-Indicator">,</span> <span class="nv">Region2</span><span class="p p-Indicator">,</span> <span class="nv">Region3</span><span class="p p-Indicator">,</span> <span class="nv">Region4</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_GEIT_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPS_DRAUP&gt;</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_GEIT_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPS_DRAUP&gt;</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_GEIT_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1010.0~&lt;FWL_GEIT_XRAPU&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="nv">5</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_TONJ_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1010.0~&lt;FWL_GEIT_XRAPU&gt;</span><span class="p p-Indicator">,</span> <span class="nv">1001.0~&lt;FWL_ESPN_DRAUP&gt;</span><span class="p p-Indicator">,</span> <span class="nv">2021.0~&lt;FWL_ESPS_CAVE&gt;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-config-in-rms-ipl-and-python">
+<h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ipl-example">
+<h3>IPL example<a class="headerlink" href="#ipl-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Include(&quot;../input/global_variables/global_variables.ipl&quot;)
+
+FOR i FROM 1 TO TOP_LOBE.length DO
+    Print(&quot;Reading &quot;, TOP_LOBE[i])
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-example">
+<h3>Python example<a class="headerlink" href="#python-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.config.utilities</span> <span class="k">as</span> <span class="nn">utils</span>
+
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s1">&#39;../input/global_variables/global_variables_rms.yml&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">toplobe</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;horizons&#39;</span><span class="p">][</span><span class="s1">&#39;TOP_LOBE&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Working with </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toplobe</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+  </style>
+
+
+</body>
+</html>
