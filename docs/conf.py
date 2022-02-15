@@ -63,8 +63,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"fmu-config"
-copyright = u"Equinor"
+project = "fmu-config"
+copyright = "Equinor"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -222,8 +222,8 @@ latex_documents = [
     (
         "index",
         "fmu-config.tex",
-        u"fmu-config Documentation",
-        u"Jan C. Rivenaes",
+        "fmu-config Documentation",
+        "Jan C. Rivenaes",
         "manual",
     ),
 ]
@@ -254,7 +254,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ("index", "fmu-config", u"fmu-config Documentation", [u"Jan C. Rivenaes"], 1)
+    ("index", "fmu-config", "fmu-config Documentation", ["Jan C. Rivenaes"], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -270,8 +270,8 @@ texinfo_documents = [
     (
         "index",
         "fmu-config",
-        u"fmu-config Documentation",
-        u"Jan C. Rivenaes",
+        "fmu-config Documentation",
+        "Jan C. Rivenaes",
         "fmu-config",
         "One line description of project.",
         "Miscellaneous",
