@@ -244,6 +244,53 @@ def test_ipl_ogre():
     )
 
 
+def test_special_chars():
+    """Test that special characters are carried through to produced files.
+
+    When using non-ascii in source global_variables or include files, they shall not be
+    converted to hex.
+    """
+
+    cfg = config.ConfigParserFMU()
+    cfg.parse(JFILE1)
+    cfg.to_yaml(
+        rootname="special_chars_global_variables",
+        destination=fmux.tmpdir,
+        template=fmux.tmpdir,
+    )
+    cfg.to_json(
+        rootname="special_chars_global_variables",
+        destination=fmux.tmpdir,
+    )
+
+    # test assumption
+    assert cfg.config["_special_chars"]["norwegian_letters"] == "æøåÆØÅ"
+
+    # YAML
+    outpath_yml = join(TMPD, "special_chars_global_variables.yml")
+    assert os.path.isfile(outpath_yml)
+
+    # open with yaml reader (which handles ÆØÅ)
+    with open(outpath_yml, "r") as stream:
+        outcontent = yaml.safe_load(stream)
+    assert outcontent["_special_chars"]["norwegian_letters"] == "æøåÆØÅ"
+
+    # confirm correct encoding in raw txt
+    with open(outpath_yml, "r", encoding="utf-8") as stream:
+        outcontent_yaml_raw = stream.read()
+    assert "_special_chars:" in outcontent_yaml_raw  # test assumption
+    assert "æøåÆØÅ" in outcontent_yaml_raw
+
+    # JSON
+    outpath_json = join(TMPD, "special_chars_global_variables.json")
+    assert os.path.isfile(outpath_json)
+
+    # confirm correct encoding in raw txt
+    with open(outpath_json, "r", encoding="utf-8") as stream:
+        outcontent_json_raw = stream.read()
+    assert "æøåÆØÅ" in outcontent_json_raw
+
+
 # def test_basic_reek():
 #     """Test basic behaviour, Reek setup"""
 
