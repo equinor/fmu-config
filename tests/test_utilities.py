@@ -2,6 +2,8 @@
 import fmu.config as config
 from fmu.config import utilities as utils
 
+import pytest
+
 # import fmu.config.fmuconfigrunner as fmurun
 
 fmux = config.etc.Interaction()
@@ -20,3 +22,6 @@ def test_basic_tools():
     cfg = utils.yaml_load(REEK)
 
     assert cfg["global"]["name"] == "Reek"
+
+    with pytest.raises(FileNotFoundError):
+        utils.yaml_load("not_a_file.xyz")
