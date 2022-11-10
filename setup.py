@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 """The setup script."""
-import os
-from os.path import basename, splitext, exists
-from glob import glob
-from shutil import rmtree
-from distutils.command.clean import clean as _clean
-
 import fnmatch
-from setuptools import setup, find_packages
+import os
+from distutils.command.clean import clean as _clean
+from glob import glob
+from os.path import basename, exists, splitext
+from shutil import rmtree
+
+from setuptools import find_packages, setup
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -106,7 +106,12 @@ with open("HISTORY.rst") as history_file:
 REQUIREMENTS = parse_requirements("requirements.txt")
 
 # for 'python setup.py test' to work; need pytest runner:
-SETUP_REQUIREMENTS = ["pytest-runner", "setuptools_scm>=3.2.0", "wheel"]
+SETUP_REQUIREMENTS = [
+    "pytest-runner",
+    "setuptools_scm<7.0; python_version < '3.7'",
+    "setuptools_scm; python_version >= '3.7'",
+    "wheel",
+]
 
 TEST_REQUIREMENTS = ["pytest"]
 
