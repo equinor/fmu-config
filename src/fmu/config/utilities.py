@@ -1,6 +1,5 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS
 """
-import os
 
 # for ordered dicts!
 from fmu.config import oyaml as yaml
