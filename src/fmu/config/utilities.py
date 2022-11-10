@@ -24,9 +24,6 @@ def yaml_load(filename, safe=True, tool=None):
 
     """
 
-    if not os.path.isfile(filename):
-        raise FileNotFoundError(filename)
-
     with open(filename, "r") as stream:
         if safe:
             cfg = yaml.safe_load(stream)
