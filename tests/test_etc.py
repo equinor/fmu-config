@@ -1,5 +1,6 @@
 """Testing the classes/functions in in the etc module."""
 import os
+
 import pytest
 
 from fmu.config import etc
@@ -65,12 +66,12 @@ def test_timer(capsys):
     for inum in range(100000):
         inum += 1
 
-    fmux.echo("Used time was {}".format(fmux.timer(time1)))
+    fmux.echo(f"Used time was {fmux.timer(time1)}")
     captured = capsys.readouterr()
     assert "Used time was" in captured[0]
     # repeat to see on screen
     fmux.echo("")
-    fmux.warn("Used time was {}".format(fmux.timer(time1)))
+    fmux.warn(f"Used time was {fmux.timer(time1)}")
 
 
 def test_print_fmu_header():
