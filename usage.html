@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; fmu-config 0.1.dev1+g65e7ace documentation</title>
+  <title>Usage &mdash; fmu-config 0.1.dev1+g3a02849 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,7 +33,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.dev1+g65e7ace
+                0.1.dev1+g3a02849
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -69,8 +71,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Usage</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,9 +83,9 @@
            <div itemprop="articleBody">
              
   <section id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h1>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
 <section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this headline"></a></h2>
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading"></a></h2>
 <p>A recommended folder structure in Equinor is (assuming the revision folder is 21.2.0
 in this example):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">21</span>.2.0/fmuconfig/input
@@ -97,7 +99,7 @@ and these are edited by users.</p>
 which is stored at <code class="docutils literal notranslate"><span class="pre">output</span></code>. The files in output shall never be edited by hand.</p>
 </section>
 <section id="run-from-script">
-<h2>Run from script<a class="headerlink" href="#run-from-script" title="Permalink to this headline"></a></h2>
+<h2>Run from script<a class="headerlink" href="#run-from-script" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">fmu.config</span></code> module is accessed through a script, and assuming the file structure
 above, is to be run like this:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to fmuconfig/bin</span>
@@ -126,7 +128,7 @@ fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME<
 </div>
 </section>
 <section id="run-from-python-inside-or-outside-rms">
-<h2>Run from python inside or outside RMS<a class="headerlink" href="#run-from-python-inside-or-outside-rms" title="Permalink to this headline"></a></h2>
+<h2>Run from python inside or outside RMS<a class="headerlink" href="#run-from-python-inside-or-outside-rms" title="Permalink to this heading"></a></h2>
 <p>In RMS there are two options to run global variables:</p>
 <ul class="simple">
 <li><p>Run shell script above using system command (recommended)</p></li>

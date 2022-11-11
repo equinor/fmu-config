@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples to learn from &mdash; fmu-config 0.1.dev1+g65e7ace documentation</title>
+  <title>Examples to learn from &mdash; fmu-config 0.1.dev1+g3a02849 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,7 +33,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.dev1+g65e7ace
+                0.1.dev1+g3a02849
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -77,8 +79,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Examples to learn from</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Examples to learn from</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,14 +91,14 @@
            <div itemprop="articleBody">
              
   <section id="examples-to-learn-from">
-<h1>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Permalink to this headline"></a></h1>
+<h1>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Permalink to this heading"></a></h1>
 <p>Below is a presentation of Ogre config files</p>
 <section id="ogre-example-config">
-<h2>Ogre example config<a class="headerlink" href="#ogre-example-config" title="Permalink to this headline"></a></h2>
+<h2>Ogre example config<a class="headerlink" href="#ogre-example-config" title="Permalink to this heading"></a></h2>
 <p>Ogre has a large number of surfaces, and for convenience these lists
 are places into separate files. Note that these data are fake data.</p>
 <section id="the-main-global-config-file">
-<h3>The main global config file<a class="headerlink" href="#the-main-global-config-file" title="Permalink to this headline"></a></h3>
+<h3>The main global config file<a class="headerlink" href="#the-main-global-config-file" title="Permalink to this heading"></a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
 <span class="c1"># Master global config for Ogre</span><span class="w"></span>
 <span class="c1"># Prototype by JRIV</span><span class="w"></span>
@@ -264,7 +266,7 @@ are places into separate files. Note that these data are fake data.</p>
 </div>
 </section>
 <section id="the-include-files">
-<h3>The include files<a class="headerlink" href="#the-include-files" title="Permalink to this headline"></a></h3>
+<h3>The include files<a class="headerlink" href="#the-include-files" title="Permalink to this heading"></a></h3>
 <p>Note that the include files starts on indent level “zero”.</p>
 <p>rms_horizons.yml</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span><span class="w"></span>
@@ -404,7 +406,7 @@ are places into separate files. Note that these data are fake data.</p>
 </section>
 </section>
 <section id="vinstre-example-config">
-<h2>Vinstre example config<a class="headerlink" href="#vinstre-example-config" title="Permalink to this headline"></a></h2>
+<h2>Vinstre example config<a class="headerlink" href="#vinstre-example-config" title="Permalink to this heading"></a></h2>
 <p>Note that these data are fake data. In this example, a simplified version of the
 FREE IPL variables is used, which perhaps should be the preferred form.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Master FMU global config inspired by J Sverdrup setup, but fake numbers</span><span class="w"></span>
@@ -538,9 +540,9 @@ FREE IPL variables is used, which perhaps should be the preferred form.</p>
 </div>
 </section>
 <section id="using-the-config-in-rms-ipl-and-python">
-<h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Permalink to this headline"></a></h2>
+<h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Permalink to this heading"></a></h2>
 <section id="ipl-example">
-<h3>IPL example<a class="headerlink" href="#ipl-example" title="Permalink to this headline"></a></h3>
+<h3>IPL example<a class="headerlink" href="#ipl-example" title="Permalink to this heading"></a></h3>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Include(&quot;../input/global_variables/global_variables.ipl&quot;)
 
 FOR i FROM 1 TO TOP_LOBE.length DO
@@ -549,7 +551,7 @@ FOR i FROM 1 TO TOP_LOBE.length DO
 </div>
 </section>
 <section id="python-example">
-<h3>Python example<a class="headerlink" href="#python-example" title="Permalink to this headline"></a></h3>
+<h3>Python example<a class="headerlink" href="#python-example" title="Permalink to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.config.utilities</span> <span class="k">as</span> <span class="nn">utils</span>
 
 <span class="n">cfg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s1">&#39;../input/global_variables/global_variables_rms.yml&#39;</span><span class="p">)</span>
