@@ -1,6 +1,5 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS
 """
-import os
 
 # for ordered dicts!
 from fmu.config import oyaml as yaml
@@ -23,9 +22,6 @@ def yaml_load(filename, safe=True, tool=None):
         >>> cfg = utils.yaml_load('somefile.yml')
 
     """
-
-    if not os.path.isfile(filename):
-        raise IOError("File {} cannot be read".format(filename))
 
     with open(filename, "r") as stream:
         if safe:
