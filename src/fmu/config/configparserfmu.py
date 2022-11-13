@@ -219,9 +219,9 @@ class ConfigParserFMU(object):
         newcfg = self._strip_rmsdtype()
 
         if tool is not None:
-            mystream = yaml.dump(newcfg[tool])
+            mystream = yaml.dump(newcfg[tool], allow_unicode=True)
         else:
-            mystream = yaml.dump(newcfg)
+            mystream = yaml.dump(newcfg, allow_unicode=True)
 
         mystream = "".join(self._get_sysinfo()) + mystream
 
@@ -235,12 +235,12 @@ class ConfigParserFMU(object):
 
         if destination:
             out = os.path.join(destination, rootname + ".yml")
-            with open(out, "w") as stream:
+            with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg1)
 
         if template:
             out = os.path.join(template, rootname + ".yml.tmpl")
-            with open(out, "w") as stream:
+            with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg2)
 
     def to_json(
@@ -290,7 +290,7 @@ class ConfigParserFMU(object):
         else:
             mycfg = newcfg
 
-        mystream = json.dumps(mycfg, indent=4, default=str)
+        mystream = json.dumps(mycfg, indent=4, default=str, ensure_ascii=False)
 
         mystream = re.sub(r"\s+~", "~", mystream)
         mystream = re.sub(r"~\s+", "~", mystream)
@@ -298,13 +298,13 @@ class ConfigParserFMU(object):
         if destination:
             cfg1 = self._get_dest_form(mystream)
             out = os.path.join(destination, rootname + ".json")
-            with open(out, "w") as stream:
+            with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg1)
 
         if template:
             cfg2 = self._get_tmpl_form(mystream)
             out = os.path.join(template, rootname + ".json.tmpl")
-            with open(out, "w") as stream:
+            with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg2)
 
     def to_ipl(

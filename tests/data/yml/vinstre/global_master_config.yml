@@ -115,3 +115,5 @@ eclipse:
       'F4'   0.12~<MULTFLT_F4> /
       'F5'   0.06~<MULTFLT_F5> /
       /
+
+_special_chars: !include special_chars.yml
