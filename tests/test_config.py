@@ -1,13 +1,13 @@
 """Testing fmu-config."""
+import json
 import os.path
 from os.path import join
-import json
 
 import pytest
 
 import fmu.config as config
-from fmu.config import utilities as ut
 from fmu.config import oyaml as yaml
+from fmu.config import utilities as ut
 
 # import fmu.config.fmuconfigrunner as fmurun
 
@@ -114,10 +114,14 @@ def test_to_yaml_ogre():
     )
 
     # now read the files again to assert tests
-    with open(os.path.join(fmux.tmpdir, rootn + ".yml"), "r") as stream:
+    with open(
+        os.path.join(fmux.tmpdir, rootn + ".yml"), "r", encoding="utf-8"
+    ) as stream:
         cfg_yml = yaml.safe_load(stream)
 
-    with open(os.path.join(fmux.tmpdir, rootn + ".yml.tmpl"), "r") as stream:
+    with open(
+        os.path.join(fmux.tmpdir, rootn + ".yml.tmpl"), "r", encoding="utf-8"
+    ) as stream:
         cfg_tmpl = yaml.safe_load(stream)
 
     assert cfg_yml["KH_MULT_CSAND"] == 1.0
@@ -219,7 +223,9 @@ def test_to_json_ogre():
         rootname=rootn, destination=fmux.tmpdir, template=fmux.tmpdir, tool="rms"
     )
 
-    with open(os.path.join(fmux.tmpdir, rootn + ".json"), "r") as myfile:
+    with open(
+        os.path.join(fmux.tmpdir, rootn + ".json"), "r", encoding="utf-8"
+    ) as myfile:
         cfg_json = json.load(myfile)
 
     assert cfg_json["KH_MULT_CSAND"] == str(1.0)
@@ -271,7 +277,7 @@ def test_special_chars():
     assert os.path.isfile(outpath_yml)
 
     # open with yaml reader (which handles ÆØÅ)
-    with open(outpath_yml, "r") as stream:
+    with open(outpath_yml, "r", encoding="utf-8") as stream:
         outcontent = yaml.safe_load(stream)
     assert outcontent["_special_chars"]["norwegian_letters"] == "æøåÆØÅ"
 

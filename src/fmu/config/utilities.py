@@ -23,7 +23,7 @@ def yaml_load(filename, safe=True, tool=None):
 
     """
 
-    with open(filename, "r") as stream:
+    with open(filename, "r", encoding="utf-8") as stream:
         if safe:
             cfg = yaml.safe_load(stream)
         else:
@@ -74,12 +74,12 @@ def compare_text_files(file1, file2, comments="//"):
     text1 = ""
     text2 = ""
 
-    with open(file1, "r") as fil1:
+    with open(file1, "r", encoding="utf-8") as fil1:
         for line in fil1:
             if not line.startswith(comments):
                 text1 += line
 
-    with open(file2, "r") as fil2:
+    with open(file2, "r", encoding="utf-8") as fil2:
         for line in fil2:
             if not line.startswith(comments):
                 text2 += line

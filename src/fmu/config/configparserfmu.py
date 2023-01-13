@@ -3,31 +3,28 @@
 This module will normally be ran from the `fmuconfig` script,
 which is the front-end script for the user.
 """
-from copy import deepcopy
-import os
-from os.path import join as ojoin
-import sys
-import errno
-import re
-import getpass
-import socket
 import datetime
+import errno
+import getpass
 import json
+import os
+import re
+import socket
+import sys
 
 # for ordered dicts!
-from collections import OrderedDict, Counter
+from collections import Counter, OrderedDict
+from copy import deepcopy
+from os.path import join as ojoin
 
 try:
     from fmu.config._theversion import version as theversion
 except ImportError:
     theversion = "0.0.0"
 
+from fmu.config import _configparserfmu_ipl, etc
 from fmu.config import oyaml as yaml
-
-from fmu.config._loader import FmuLoader, ConstructorError
-from fmu.config import etc
-
-from fmu.config import _configparserfmu_ipl
+from fmu.config._loader import ConstructorError, FmuLoader
 
 xfmu = etc.Interaction()
 logger = xfmu.functionlogger(__name__)
@@ -55,7 +52,7 @@ class ConfigParserFMU(object):
     def parse(self, yfile, smart_braces=True):
         """Parsing the YAML file (reading it)."""
 
-        with open(yfile, "r") as stream:
+        with open(yfile, "r", encoding="utf-8") as stream:
             try:
                 self._config = yaml.load(stream, Loader=FmuLoader)
             except ConstructorError as errmsg:
@@ -152,7 +149,9 @@ class ConfigParserFMU(object):
             raise ValueError("Entry with more that 4 sublevels, not supported")
 
         if destination:
-            with open(ojoin(destination, rootname + ".txt"), "w") as dest:
+            with open(
+                ojoin(destination, rootname + ".txt"), "w", encoding="utf-8"
+            ) as dest:
                 for row in cfg:
                     for col in row:
                         stream = str(col)
@@ -161,7 +160,9 @@ class ConfigParserFMU(object):
                         print(str(stream) + sep, file=dest, end="")
                     print("", file=dest)
         if template:
-            with open(ojoin(template, rootname + ".txt.tmpl"), "w") as tmpl:
+            with open(
+                ojoin(template, rootname + ".txt.tmpl"), "w", encoding="utf-8"
+            ) as tmpl:
                 for row in cfg:
                     for col in row:
                         stream = str(col)
@@ -357,10 +358,10 @@ class ConfigParserFMU(object):
             content_dest = self._get_dest_form(content)
             content_tmpl = self._get_tmpl_form(content)
 
-            with open(edeck["destfile"], "w") as dest:
+            with open(edeck["destfile"], "w", encoding="utf-8") as dest:
                 dest.write(content_dest)
 
-            with open(edeck["tmplfile"], "w") as tmpl:
+            with open(edeck["tmplfile"], "w", encoding="utf-8") as tmpl:
                 tmpl.write(content_tmpl)
 
     # =========================================================================
