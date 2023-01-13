@@ -1,12 +1,10 @@
 """Addon to configparser.py. Focus on IPL handling"""
-from copy import deepcopy
-from collections import OrderedDict
-
-import os
 import datetime
+import os
+from collections import OrderedDict
+from copy import deepcopy
 
 from fmu.config import etc
-
 
 XFMU = etc.Interaction()
 logger = XFMU.functionlogger(__name__)
@@ -78,7 +76,7 @@ def to_ipl(
             expressions_dest.extend(hlist)
 
         destfile = os.path.join(destination, rootname + ".ipl")
-        with open(destfile, "w") as stream:
+        with open(destfile, "w", encoding="utf-8") as stream:
             for line in declarations:
                 stream.write(line)
 
@@ -94,7 +92,7 @@ def to_ipl(
             expressions_tmpl.extend(hlist)
 
         tmplfile = os.path.join(template, rootname + ".ipl.tmpl")
-        with open(tmplfile, "w") as stream:
+        with open(tmplfile, "w", encoding="utf-8") as stream:
             for line in declarations:
                 stream.write(line)
 

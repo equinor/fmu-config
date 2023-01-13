@@ -1,6 +1,6 @@
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
-from os.path import join
 import io
+from os.path import join
 
 import pytest
 
@@ -27,7 +27,7 @@ def test_dict_with_scalar_and_lists1(tmp_path):
 
     target = tmp_path / "generic.yml"
 
-    with target.open("w") as out:
+    with target.open("w", encoding="utf-8") as out:
         out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
@@ -50,7 +50,7 @@ def test_dict_with_scalar_and_lists2(tmp_path):
 
     target = tmp_path / "generic.yml"
 
-    with target.open("w") as out:
+    with target.open("w", encoding="utf-8") as out:
         out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
@@ -70,7 +70,7 @@ def test_process_value1(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with target.open("w") as out:
+    with target.open("w", encoding="utf-8") as out:
         out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
@@ -101,7 +101,7 @@ def test_process_value2(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with target.open("w") as out:
+    with target.open("w", encoding="utf-8") as out:
         out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()
@@ -148,7 +148,9 @@ def test_small_float(tmp_path, exponent):
     cfg.to_ipl(rootname="foo", destination=out, template=out)
     ipl_lines = [
         line
-        for line in open(join(str(tmp_path.resolve()), "foo.ipl")).readlines()
+        for line in open(
+            join(str(tmp_path.resolve()), "foo.ipl"), encoding="utf-8"
+        ).readlines()
         if line.startswith("SMALLFLOAT")
     ]
     significand = ipl_lines[0].split(" = ")[1].split("E")[0].split("e")[0]
@@ -169,7 +171,7 @@ def test_filepath(tmp_path):
     """
 
     target = tmp_path / "generic.yml"
-    with target.open("w") as out:
+    with target.open("w", encoding="utf-8") as out:
         out.write(inp.decode("utf-8"))
 
     cfg = fcfg.ConfigParserFMU()

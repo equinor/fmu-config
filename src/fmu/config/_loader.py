@@ -54,7 +54,7 @@ class FmuLoader(yaml.Loader):
         """Extract file method"""
 
         filepath = os.path.join(self._root, filename)
-        with open(filepath, "r") as yfile:
+        with open(filepath, "r", encoding="utf-8") as yfile:
             return yaml.load(yfile, FmuLoader)
 
     # from https://gist.github.com/pypt/94d747fe5180851196eb

@@ -97,10 +97,10 @@ def src(fil):
     return os.path.abspath(os.path.join(root, fil))
 
 
-with open("README.md") as readme_file:
+with open("README.md", encoding="utf-8") as readme_file:
     README = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
+with open("HISTORY.rst", encoding="utf-8") as history_file:
     HISTORY = history_file.read()
 
 REQUIREMENTS = parse_requirements("requirements.txt")
