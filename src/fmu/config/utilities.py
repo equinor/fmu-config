@@ -1,21 +1,28 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS
 """
 
+from yaml.loader import Loader
+
 # for ordered dicts!
 from fmu.config import oyaml as yaml
+from fmu.config._loader import ConstructorError, FmuLoader
 
 
-def yaml_load(filename, safe=True, tool=None):
+def yaml_load(filename, safe=True, tool=None, loader="standard"):
     """Load as YAML file, return a dictionary of type OrderedDict which is the config.
 
     Returning an ordered dictionary is a main feature of this loader. It makes it much
-    easier to compare the dictionaries returned.
+    easier to compare the dictionaries returned. In addition, it allows for reading the
+    input (extended) YAML format, if key ``allow_extended`` is True.
 
     Args:
         filename (str): Name of file (YAML formatted)
-        safe (bool): If True (default), then use `safe_load`
+        safe (bool): If True (default), then use `safe_load` when allow_extended is
+            set to False. Not applied if loader is "fmu".
         tool (str): Refers to a particular main section in the config.
-            Default is None, which measn 'all'.
+            Default is None, which means 'all'.
+        loader (str): If "fmu", the in-house FMU extended YAML loader that allows
+            use of e.g. `!include` is applied; otherwise the default is "standard" YAML.
 
     Example::
         >>> import fmu.config.utilities as utils
@@ -23,18 +30,28 @@ def yaml_load(filename, safe=True, tool=None):
 
     """
 
+    useloader = FmuLoader if loader.lower() == "fmu" else Loader
+
     with open(filename, "r", encoding="utf-8") as stream:
-        if safe:
-            cfg = yaml.safe_load(stream)
-        else:
-            cfg = yaml.load(stream)
+        try:
+            if safe and loader.lower() != "fmu":
+                cfg = yaml.safe_load(stream)
+            else:
+                cfg = yaml.load(stream, Loader=useloader)
+        except ConstructorError as cerr:
+            if "!include" in str(cerr):
+                print(
+                    "\n*** Consider setting loader='fmu' to read fmu.config "
+                    "input style ***\n"
+                )
+            raise
 
     if tool is not None:
         try:
             newcfg = cfg[tool]
             cfg = newcfg
         except Exception as exc:  # pylint: disable=broad-except
-            print("Cannot import: {}".format(exc))
+            print(f"Cannot import: {exc}")
             return None
 
     return cfg

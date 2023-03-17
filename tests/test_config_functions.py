@@ -81,7 +81,6 @@ def test_ipl_cast_value():
 
 
 def test_free_form_handle_entry():
-
     decl, expr = _freeform_handle_entry("MYVAR", 2, None, "int", False)
     assert decl == "Int MYVAR\n"
     assert expr == "MYVAR = 2\n"
