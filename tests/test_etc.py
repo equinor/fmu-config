@@ -2,14 +2,19 @@
 import os
 
 import pytest
+import yaml
+from yaml.constructor import ConstructorError
 
 from fmu.config import etc
+from fmu.config import utilities as util
 
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)
 
 logger.info("Running tests...")
 
+
+DROGON = "tests/data/yml/drogon/input/global_master_config.yml"
 
 # always this statement
 if not fmux.testsetup():
@@ -88,3 +93,36 @@ def test_user_msg():
     fmux.warning("This is also a warning")
     fmux.error("This is an error")
     fmux.critical("This is a critical error", sysexit=False)
+
+
+def test_load_input_extended_yaml():
+    """Test loading YAML will extended "fmu" option."""
+    cfg = util.yaml_load(DROGON, loader="fmu")
+
+    assert cfg["revision"] == "21.x.0.dev"
+    assert (
+        cfg["masterdata"]["smda"]["coordinate_system"]["uuid"]
+        == "ad214d85-dac7-19da-e053-c918a4889309"
+    )
+
+
+def test_load_input_extended_yaml_shallfail():
+    """Test loading non-standard YAML which shall fail when allow_extended is False."""
+    with pytest.raises(ConstructorError, match=r"!include"):
+        _ = util.yaml_load(DROGON, loader="standard")
+
+
+def test_load_yaml_compare(tmp_path):
+    """Test loading YAML and compare results with/without allow_extended."""
+
+    cfg = util.yaml_load(DROGON, loader="fmu")
+
+    yfile = tmp_path / "drogon.yml"
+    with open(yfile, "w", encoding="utf-8") as stream:
+        yaml.dump(cfg, stream, allow_unicode=True)
+
+    # read a standard YAML file both with normal and extended option
+    cfg1 = util.yaml_load(yfile, loader="fmu")
+    cfg2 = util.yaml_load(yfile, loader="standard")
+
+    assert cfg1 == cfg2

@@ -388,13 +388,11 @@ class ConfigParserFMU(object):
         newcfg = deepcopy(self._config)
 
         for key, val in self._config.items():
-
             if isinstance(val, dict):
                 subkeyorder = []
                 _tmps = {}
 
                 for subkey, subval in val.items():
-
                     if subkey.startswith("__"):
                         if isinstance(subval, dict):
                             for subsubkey, subsubval in subval.items():
@@ -507,7 +505,6 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _force_create_folders(folderlist):
-
         for folder in folderlist:
             if folder is None:
                 continue
@@ -519,7 +516,6 @@ class ConfigParserFMU(object):
 
     @staticmethod
     def _check_folders(folderlist):
-
         for folder in folderlist:
             if folder is None:
                 continue
@@ -594,7 +590,6 @@ class ConfigParserFMU(object):
         if isinstance(stream, list):
             pass
         elif isinstance(stream, str):
-
             if "~" in stream:
                 value, tvalue = stream.split("~")
                 value = value.strip()

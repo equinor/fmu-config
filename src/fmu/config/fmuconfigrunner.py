@@ -21,7 +21,6 @@ logger = xfmu.basiclogger(__name__)
 
 
 def _do_parse_args(args):
-
     if args is None:
         args = sys.argv[1:]
 

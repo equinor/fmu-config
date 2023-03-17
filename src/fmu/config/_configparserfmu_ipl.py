@@ -393,7 +393,6 @@ def _freeform_handle_entry(
 
     # inner function
     def _fixtheentry(variable, myval, subtype, count=None, template=False):
-
         logger.info("Fix freeform entry %s (subtype %s)", variable, subtype)
         tmpvalue = str(myval)
         if "~" in tmpvalue:

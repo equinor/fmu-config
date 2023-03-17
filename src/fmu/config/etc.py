@@ -64,7 +64,6 @@ class Interaction(object):
     """
 
     def __init__(self):
-
         self._callclass = None
         self._caller = None
         self._lformat = None
@@ -311,7 +310,6 @@ class Interaction(object):
         return outer[0]
 
     def _output(self, idx, level, string):
-
         # pylint: disable=too-many-branches
 
         prefix = ""
