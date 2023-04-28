@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; fmu-config 0.1.dev1+g744e884 documentation</title>
+  <title>Usage &mdash; fmu-config 0.1.dev1+ge468545 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,15 +26,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> fmu-config
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-config
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.1.dev1+g744e884
+                0.1.dev1+ge468545
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,7 +72,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Usage</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
@@ -89,8 +90,8 @@
 <p>A recommended folder structure in Equinor is (assuming the revision folder is 21.2.0
 in this example):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">21</span>.2.0/fmuconfig/input
-                /bin
-                /output
+<span class="w">                </span>/bin
+<span class="w">                </span>/output
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">input</span></code> has a file <code class="docutils literal notranslate"><span class="pre">global_master_config.yml</span></code> a possibly a few include files,
@@ -103,27 +104,27 @@ which is stored at <code class="docutils literal notranslate"><span class="pre">
 <p>The <code class="docutils literal notranslate"><span class="pre">fmu.config</span></code> module is accessed through a script, and assuming the file structure
 above, is to be run like this:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to fmuconfig/bin</span>
-fmuconfig ../input/global_master_config.yml &lt;options...&gt;
+fmuconfig<span class="w"> </span>../input/global_master_config.yml<span class="w"> </span>&lt;options...&gt;
 </pre></div>
 </div>
 <p>Here is an example of a shell script that runs <cite>fmuconfig</cite> from the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
-<span class="nv">MASTER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span>  <span class="c1"># all updates here</span>
-<span class="nv">OUTFOLDER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/output&quot;</span>                       <span class="c1"># location of result files</span>
-<span class="nv">ROOTNAME</span><span class="o">=</span><span class="s2">&quot;global_variables&quot;</span>                              <span class="c1"># root name of result files</span>
+<span class="nv">MASTER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span><span class="w">  </span><span class="c1"># all updates here</span>
+<span class="nv">OUTFOLDER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/output&quot;</span><span class="w">                       </span><span class="c1"># location of result files</span>
+<span class="nv">ROOTNAME</span><span class="o">=</span><span class="s2">&quot;global_variables&quot;</span><span class="w">                              </span><span class="c1"># root name of result files</span>
 
 <span class="c1"># clean up (be careful with syntax)</span>
-rm -f <span class="si">${</span><span class="nv">OUTFOLDER</span><span class="si">}</span>/ROOTNAME*
+rm<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">OUTFOLDER</span><span class="si">}</span>/ROOTNAME*
 
 <span class="c1"># run command for creating YAML version (+ ert tmpl version; yml.tmpl)</span>
-fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME</span> --mode yml --destination <span class="nv">$OUTFOLDER</span> <span class="se">\</span>
-      --template <span class="nv">$OUTFOLDER</span>
+fmuconfig<span class="w"> </span><span class="nv">$MASTER</span><span class="w"> </span>--rootname<span class="w"> </span><span class="nv">$ROOTNAME</span><span class="w"> </span>--mode<span class="w"> </span>yml<span class="w"> </span>--destination<span class="w"> </span><span class="nv">$OUTFOLDER</span><span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--template<span class="w"> </span><span class="nv">$OUTFOLDER</span>
 
 <span class="c1"># optional!</span>
 <span class="c1"># run command for creating IPL version if needed (+ ert tmpl version; ipl.tmpl)</span>
-fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME</span> --mode ipl --destination <span class="nv">$OUTFOLDER</span> <span class="se">\</span>
-      --template <span class="nv">$OUTFOLDER</span> --tool rms
+fmuconfig<span class="w"> </span><span class="nv">$MASTER</span><span class="w"> </span>--rootname<span class="w"> </span><span class="nv">$ROOTNAME</span><span class="w"> </span>--mode<span class="w"> </span>ipl<span class="w"> </span>--destination<span class="w"> </span><span class="nv">$OUTFOLDER</span><span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--template<span class="w"> </span><span class="nv">$OUTFOLDER</span><span class="w"> </span>--tool<span class="w"> </span>rms
 </pre></div>
 </div>
 </section>
@@ -135,7 +136,7 @@ fmuconfig <span class="nv">$MASTER</span> --rootname <span class="nv">$ROOTNAME<
 <li><p>Run from RMS python</p></li>
 </ul>
 <p>For shell script for RMS, use a system command job as this:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ../../fmuconfig/bin<span class="p">;</span> run_external sh global_variables_update.sh
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>../../fmuconfig/bin<span class="p">;</span><span class="w"> </span>run_external<span class="w"> </span>sh<span class="w"> </span>global_variables_update.sh
 </pre></div>
 </div>
 <p>The config can also be run from a python script inside RMS. In that case you
