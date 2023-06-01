@@ -11,4 +11,4 @@ pytest-runner>=4.2
 pytest>=3.8
 rstcheck
 sphinx_rtd_theme>=0.4.3
-wheel>=0.29.0
+wheel>=0.38.0
