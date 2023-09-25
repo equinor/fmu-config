@@ -28,10 +28,10 @@ Ind finally, there is a template for setting up a header for applications, see
 the ```print_fmu_header``` method
 
 """
-import os
-import sys
 import inspect
 import logging
+import os
+import sys
 import timeit
 
 # pylint: disable=protected-access
