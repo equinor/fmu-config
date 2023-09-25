@@ -39,12 +39,15 @@ dev = [
     "black",
     "coverage",
     "flake8",
+    "isort",
+    "mypy",
     "pylint",
     "pytest",
     "pytest-runner",
     "rstcheck",
     "Sphinx",
     "sphinx_rtd_theme",
+    "types-PyYAML",
 ]
 
 [project.urls]
