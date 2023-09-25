@@ -1,0 +1,6 @@
+[flake8]
+exclude = docs, .eggs
+max-line-length = 88
+ignore = E402, W503, E203
+per-file-ignores =
+    src/fmu/config/_theversion.py:E501,F401

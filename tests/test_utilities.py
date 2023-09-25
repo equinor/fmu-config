@@ -1,8 +1,8 @@
 """Testing fmu-config tools."""
+import pytest
+
 import fmu.config as config
 from fmu.config import utilities as utils
-
-import pytest
 
 # import fmu.config.fmuconfigrunner as fmurun
 

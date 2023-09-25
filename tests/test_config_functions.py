@@ -1,12 +1,13 @@
 """Testing fmu-config, here focus on individual private functions"""
-from collections import OrderedDict
 import datetime
-
-from fmu.config._configparserfmu_ipl import _guess_dtype
-from fmu.config._configparserfmu_ipl import _cast_value
-from fmu.config._configparserfmu_ipl import _freeform_handle_entry
+from collections import OrderedDict
 
 import fmu.config as config
+from fmu.config._configparserfmu_ipl import (
+    _cast_value,
+    _freeform_handle_entry,
+    _guess_dtype,
+)
 
 FMUX = config.etc.Interaction()
 logger = FMUX.basiclogger(__name__)

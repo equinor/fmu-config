@@ -5,7 +5,6 @@ from collections import OrderedDict
 
 import yaml as pyyaml
 
-
 _items = "viewitems" if sys.version_info < (3,) else "items"
 
 
@@ -21,9 +20,9 @@ def map_constructor(loader, node):
 if pyyaml.safe_dump is pyyaml.dump:
     # PyYAML >= 4
     SafeDumper = pyyaml.dumper.Dumper
-    DangerDumper = pyyaml.dumper.DangerDumper
+    DangerDumper = pyyaml.dumper.DangerDumper  # type: ignore
 else:
-    SafeDumper = pyyaml.dumper.SafeDumper
+    SafeDumper = pyyaml.dumper.SafeDumper  # type: ignore
     DangerDumper = pyyaml.dumper.Dumper
 
 pyyaml.add_representer(dict, map_representer, Dumper=SafeDumper)
@@ -42,4 +41,4 @@ del map_constructor, map_representer
 # Merge PyYAML namespace into ours.
 # This allows users a drop-in replacement:
 #   import oyaml as yaml
-from yaml import *
+from yaml import *  # type: ignore

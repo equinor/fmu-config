@@ -2,8 +2,8 @@
 flavours."""
 
 import argparse
-import sys
 import os.path
+import sys
 
 import fmu.config as fmu_config
 
