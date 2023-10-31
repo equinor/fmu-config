@@ -2,11 +2,14 @@ name: fmu-config
 
 on:
   push:
+    branches:
+      - main
   release:
     types:
       - published
   pull_request:
-    types: [created, synchronize]
+    branches:
+      - main
 
 jobs:
   fmu-config:
