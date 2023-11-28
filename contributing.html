@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributing &mdash; fmu-config 1.1.1.dev4+g59736af documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Contributing &mdash; fmu-config 1.1.1.dev9+g484be8a documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=67e2baa6"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=9eff68a1"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Credits" href="authors.html" />
     <link rel="prev" title="Examples to learn from" href="examples.html" /> 
 </head>
 
@@ -36,7 +37,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.1.1.dev4+g59736af
+                1.1.1.dev9+g484be8a
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -61,7 +62,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#code-standards">Code standards</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pep8-and-pep20">PEP8 and PEP20</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#in-addition">In addition:</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#use-flake8-and-or-pylint-to-check">Use flake8 and/or pylint to check</a></li>
 </ul>
@@ -69,8 +69,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#get-started">Get Started!</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
 </ul>
 
         </div>
@@ -106,7 +104,7 @@ little bit helps, and credit will always be given.</p>
 <h2>Types of Contributions<a class="headerlink" href="#types-of-contributions" title="Permalink to this heading"></a></h2>
 <section id="report-bugs">
 <h3>Report Bugs<a class="headerlink" href="#report-bugs" title="Permalink to this heading"></a></h3>
-<p>Report issues and bugs at <a class="reference external" href="https://git.equinor.com/fmu-utilities/fmu-config/issues">https://git.equinor.com/fmu-utilities/fmu-config/issues</a>.</p>
+<p>Report issues and bugs at https://github.com/equinor/fmu-config/issues</p>
 <p>If you are reporting a bug, please include:</p>
 <ul class="simple">
 <li><p>Your operating system name and version.</p></li>
@@ -133,7 +131,7 @@ articles, and such.</p>
 <section id="submit-feedback">
 <h3>Submit Feedback<a class="headerlink" href="#submit-feedback" title="Permalink to this heading"></a></h3>
 <p>The best way to send feedback is to file an issue
-at <a class="reference external" href="https://git.equinor.com/fmu-utilities/fmu-config/issues">https://git.equinor.com/fmu-utilities/fmu-config/issues</a>.</p>
+at https://github.com/equinor/fmu-config/issues.</p>
 <p>If you are proposing a feature:</p>
 <ul class="simple">
 <li><p>Explain in detail how it would work.</p></li>
@@ -145,64 +143,52 @@ are welcome :)</p></li>
 </section>
 <section id="code-standards">
 <h2>Code standards<a class="headerlink" href="#code-standards" title="Permalink to this heading"></a></h2>
-<p>It is very important to be complient to code standards. A summary:</p>
-<section id="pep8-and-pep20">
-<h3>PEP8 and PEP20<a class="headerlink" href="#pep8-and-pep20" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Use PEP8 standard (<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>) and PEP20 philosophy.
-This implies:</p>
-<ul>
-<li><p>Line width max 79</p></li>
-<li><p>Naming: files_as_this, ClassesAsThis, ExceptionsAsThis, CONSTANTS,
-function_as_this, method_as_this</p></li>
-<li><p>Use a single underscore to protect instance variables, other private
-variables and and private classes</p></li>
-<li><p>4 space indents (spaces, no tabs)</p></li>
-<li><p>Single quotes to delimit strings, triple double quotes in docstrings.</p></li>
-<li><p>One space before and after =, =, +, * etc</p></li>
-<li><p>No space around  = in keword lists, e.g. my_function(value=27, default=None)</p></li>
-<li><p>Avoid one or two letter variables, even for counters. And meaningful names, but don’t
-overdo it.</p></li>
-<li><p>See also: <a class="reference external" href="https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/python-style.md">https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/python-style.md</a></p></li>
-</ul>
-</li>
-</ul>
-</section>
+<p>It is very important to be complient to code standards. fmu-config uses
+<a class="reference external" href="https://pypi.org/project/black/">black</a>,
+<a class="reference external" href="https://pypi.org/project/flake8/">flake8</a>,
+<a class="reference external" href="https://pypi.org/project/isort/">isort</a>, and
+<a class="reference external" href="https://mypy.readthedocs.io/en/stable/">mypy</a> to format and lint all code.</p>
 <section id="in-addition">
 <h3>In addition:<a class="headerlink" href="#in-addition" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Start with documentation and tests. Think and communicate first!</p></li>
 <li><p>Docstrings shall start and end with “”” and use Google style.</p></li>
 <li><p>Use pytest as testing engine</p></li>
-<li><p>Code shall be be Python 2.7.13 + and python 3.4 + compliant</p></li>
+<li><p>Code shall be be Python 3.8+ compliant</p></li>
 </ul>
 </section>
 <section id="use-flake8-and-or-pylint-to-check">
 <h3>Use flake8 and/or pylint to check<a class="headerlink" href="#use-flake8-and-or-pylint-to-check" title="Permalink to this heading"></a></h3>
-<blockquote>
-<div><p>python -m flake8 mycode.py</p>
-</div></blockquote>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> </span>mycode.py
+</pre></div>
+</div>
 <p>The pylint is rather strict and sometimes excpetions are needed… , but anyway quite useful!</p>
-<blockquote>
-<div><p>python -m pylint mycode.py</p>
-</div></blockquote>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>pylint<span class="w"> </span>mycode.py
+</pre></div>
+</div>
 </section>
 </section>
 <section id="get-started">
 <h2>Get Started!<a class="headerlink" href="#get-started" title="Permalink to this heading"></a></h2>
-<p>Ready to contribute? Here’s how to set up <cite>fmu-config</cite> for local development.</p>
+<p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">fmu-config</span></code> for local development.</p>
 <ol class="arabic">
-<li><p>Fork the <cite>fmu-config</cite> repo in web browser to a personal fork</p></li>
+<li><p>Fork the <code class="docutils literal notranslate"><span class="pre">fmu-config</span></code> repo in web browser to a personal fork</p></li>
 <li><p>Clone your fork locally:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@git.equinor.com:&lt;your-user&gt;/fmu-config.git
-$<span class="w"> </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@git.equinor.no:fmu-utilities/fmu-config.git
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:&lt;your-user&gt;/fmu-config.git
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>fmu-config
+<span class="w">    </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:equinor/fmu-config.git
 </pre></div>
 </div>
-<p>This means your <cite>origin</cite> is now your personal fork, while the actual master
-is at <cite>upstream</cite>.</p>
+<p>This means your <code class="docutils literal notranslate"><span class="pre">origin</span></code> is now your personal fork, while the actual master
+is at <code class="docutils literal notranslate"><span class="pre">upstream</span></code>.</p>
 </li>
-<li><p>See the rest of recipee here:
-<a class="reference external" href="https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/developer-guide.md">https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/developer-guide.md</a></p></li>
+<li><p>Then create a virtual environment and install</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>&lt;your-venv&gt;
+<span class="w">    </span><span class="nb">source</span><span class="w"> </span>&lt;your-venv&gt;/bin/activate
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+</li>
 </ol>
 </section>
 </section>
@@ -212,7 +198,6 @@ is at <cite>upstream</cite>.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="examples.html" class="btn btn-neutral float-left" title="Examples to learn from" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="authors.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
