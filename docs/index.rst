@@ -10,8 +10,6 @@ Welcome to fmu-config's documentation!
    usage
    examples
    contributing
-   authors
-   history
 
 API
 ===
