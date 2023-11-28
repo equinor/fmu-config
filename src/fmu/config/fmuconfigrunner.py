@@ -6,15 +6,7 @@ import os.path
 import sys
 
 import fmu.config as fmu_config
-
-try:
-    from fmu.config._theversion import version as theversion
-except ImportError:
-    theversion = "0.0.0"
-
 from fmu.config import etc
-
-__version__ = theversion
 
 xfmu = etc.Interaction()
 logger = xfmu.basiclogger(__name__)
@@ -34,7 +26,7 @@ def _do_parse_args(args):
     parser.add_argument(
         "config",
         type=str,
-        help=("Input global config master file name " "on YAML format"),
+        help=("Input global config master file name on YAML format"),
     )
 
     parser.add_argument(

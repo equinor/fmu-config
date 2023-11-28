@@ -2,15 +2,14 @@
 requires = [
     "setuptools>=45.0",
     "setuptools_scm[toml]>=6.2",
-    "wheel>=0.38.1",
 ]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "src/fmu/config/_theversion.py"
+write_to = "src/fmu/config/version.py"
 
 [project]
-name = "fmu_config"
+name = "fmu-config"
 description = "Library for various config scripts in FMU scopes"
 readme = "README.md"
 requires-python = ">=3.8"

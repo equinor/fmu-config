@@ -65,7 +65,7 @@ target/
 
 # pyenv python configuration file
 .python-version
-src/fmu/config/_theversion.py
+src/fmu/config/version.py
 
 # other
 .idea/

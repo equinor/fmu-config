@@ -18,9 +18,9 @@ from copy import deepcopy
 from os.path import join as ojoin
 
 try:
-    from fmu.config._theversion import version as theversion
+    from fmu.config.version import __version__
 except ImportError:
-    theversion = "0.0.0"
+    __version__ = "0.0.0"
 
 from fmu.config import _configparserfmu_ipl, etc
 from fmu.config import oyaml as yaml
@@ -490,7 +490,7 @@ class ConfigParserFMU(object):
         host = socket.gethostname()
         user = getpass.getuser()
         now = str(datetime.datetime.now())
-        ver = theversion
+        ver = __version__
         cmt = commentmarker
 
         meta = [
