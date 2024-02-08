@@ -2,9 +2,8 @@
 import io
 from os.path import join
 
-import pytest
-
 import fmu.config as fcfg
+import pytest
 from fmu.config import utilities as ut
 
 fmux = fcfg.etc.Interaction()
@@ -12,7 +11,7 @@ logger = fmux.basiclogger(__name__)
 
 # always this statement
 if not fmux.testsetup():
-    raise SystemExit()
+    raise SystemExit
 
 
 def test_dict_with_scalar_and_lists1(tmp_path):
@@ -121,7 +120,7 @@ def test_process_value2(tmp_path):
     assert tmpl["global"]["WHATEVER"] == "<ONX>"
 
 
-@pytest.mark.parametrize("exponent", range(0, 16))
+@pytest.mark.parametrize("exponent", range(16))
 def test_small_float(tmp_path, exponent):
     """Test for issue 1, small floats in input yaml can give non-compliant
     formats in output IPL (IPL does not support Pythons scientific format)
@@ -146,13 +145,8 @@ def test_small_float(tmp_path, exponent):
     out = str(tmp_path.resolve())
 
     cfg.to_ipl(rootname="foo", destination=out, template=out)
-    ipl_lines = [
-        line
-        for line in open(
-            join(str(tmp_path.resolve()), "foo.ipl"), encoding="utf-8"
-        ).readlines()
-        if line.startswith("SMALLFLOAT")
-    ]
+    with open(join(str(tmp_path.resolve()), "foo.ipl"), encoding="utf-8") as f:
+        ipl_lines = [line for line in f.readlines() if line.startswith("SMALLFLOAT")]
     significand = ipl_lines[0].split(" = ")[1].split("E")[0].split("e")[0]
 
     # Verify we have a floating point significand if we have written
