@@ -35,18 +35,16 @@ dependencies = ["pyyaml"]
 dev = [
     "astroid",
     "autoapi",
-    "black",
     "coverage",
-    "flake8",
-    "isort",
     "mypy",
     "myst-parser",
     "pylint",
-    "pytest",
     "pytest-runner",
+    "pytest",
     "rstcheck",
-    "Sphinx",
+    "ruff",
     "sphinx_rtd_theme",
+    "Sphinx",
     "types-PyYAML",
 ]
 
@@ -56,12 +54,6 @@ Repository = "https://github.com/equinor/fmu-config"
 
 [project.scripts]
 fmuconfig = "fmu.config.fmuconfigrunner:main"
-
-[tool.black]
-line-length = 88
-
-[tool.isort]
-profile = "black"
 
 [tool.mypy]
 ignore_missing_imports = true
@@ -84,3 +76,30 @@ markers = [
 
 [tool.rstcheck]
 ignore_directives = ["argparse", "automodule"]
+
+[tool.ruff]
+line-length = 88
+exclude = ["docs/"]
+
+[tool.ruff.lint]
+ignore = [
+    "C901",
+]
+select = [
+    "C",
+    "E",
+    "F",
+    "I",
+    "PIE",
+    "Q",
+    "RET",
+    "RSE",
+    "SIM",
+    "W",
+    # "C90",
+    # "NPY",
+    # "PD",
+    # "PL",
+]
+[tool.ruff.lint.isort]
+combine-as-imports = true

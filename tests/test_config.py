@@ -3,11 +3,9 @@ import json
 import os.path
 from os.path import join
 
-import pytest
-
 import fmu.config as config
-from fmu.config import oyaml as yaml
-from fmu.config import utilities as ut
+import pytest
+from fmu.config import oyaml as yaml, utilities as ut
 
 # import fmu.config.fmuconfigrunner as fmurun
 
@@ -25,7 +23,7 @@ logger = fmux.basiclogger(__name__)
 
 # always this statement
 if not fmux.testsetup():
-    raise SystemExit()
+    raise SystemExit
 
 TMPD = fmux.tmpdir
 

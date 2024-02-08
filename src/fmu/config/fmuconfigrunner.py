@@ -80,8 +80,7 @@ def _do_parse_args(args):
         print("QUIT")
         raise SystemExit
 
-    args = parser.parse_args(args)
-    return args
+    return parser.parse_args(args)
 
 
 def main(args=None):

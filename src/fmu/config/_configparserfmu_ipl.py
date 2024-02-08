@@ -358,7 +358,11 @@ def _ipl_freeform_format(self, template=False):
 
 
 def _freeform_handle_entry(
-    variable, myvalue, myvalues, dtype, template
+    variable,
+    myvalue,
+    myvalues,
+    dtype,
+    template,
 ):  # pylint: disable=too-many-statements
     """Handling of any entry as single value or list in IPL.
 
@@ -487,19 +491,18 @@ def _fix_date_format(var, dtype, value, aslist=False):
                     mynewvalues.append(val)
             returnv = mynewvalues
 
-    if dtype == "datepair":
-        if values:
-            mynewvalues = []
-            for val in values:
-                date1, date2 = val
-                if isinstance(date1, (datetime.datetime, datetime.date)):
-                    date1 = str(date1)
-                    date1 = date1.replace("-", "")
-                if isinstance(date2, (datetime.datetime, datetime.date)):
-                    date2 = str(date2)
-                    date2 = date2.replace("-", "")
-                mynewvalues.append(date1 + "_" + date2)
+    if dtype == "datepair" and values:
+        mynewvalues = []
+        for val in values:
+            date1, date2 = val
+            if isinstance(date1, (datetime.datetime, datetime.date)):
+                date1 = str(date1)
+                date1 = date1.replace("-", "")
+            if isinstance(date2, (datetime.datetime, datetime.date)):
+                date2 = str(date2)
+                date2 = date2.replace("-", "")
+            mynewvalues.append(date1 + "_" + date2)
 
-            returnv = mynewvalues
+        returnv = mynewvalues
 
     return returnv

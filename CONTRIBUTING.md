@@ -48,9 +48,7 @@ If you are proposing a feature:
 ## Code standards
 
 It is very important to be complient to code standards. fmu-config uses
-[black](https://pypi.org/project/black/),
-[flake8](https://pypi.org/project/flake8/),
-[isort](https://pypi.org/project/isort/), and
+[ruff](https://pypi.org/project/ruff/),
 [mypy](https://mypy.readthedocs.io/en/stable/) to format and lint all code.
 
 
@@ -62,10 +60,10 @@ It is very important to be complient to code standards. fmu-config uses
 - Code shall be be Python 3.8+ compliant
 
 
-### Use flake8 and/or pylint to check
+### Linting
 
 ```sh
-  python -m flake8 mycode.py
+  ruff check . && ruff format . --check
 ```
 
 The pylint is rather strict and sometimes excpetions are needed... , but anyway quite useful!

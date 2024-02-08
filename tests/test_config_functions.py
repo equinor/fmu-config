@@ -14,7 +14,7 @@ logger = FMUX.basiclogger(__name__)
 
 # always this statement
 if not FMUX.testsetup():
-    raise SystemExit()
+    raise SystemExit
 
 
 def test_ipl_guess_dtype():

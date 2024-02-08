@@ -1,7 +1,6 @@
 """Testing fmu-config tools."""
-import pytest
-
 import fmu.config as config
+import pytest
 from fmu.config import utilities as utils
 
 # import fmu.config.fmuconfigrunner as fmurun
@@ -13,7 +12,7 @@ REEK = "tests/data/yml/reek/global_variables.yml"
 
 # always this statement
 if not fmux.testsetup():
-    raise SystemExit()
+    raise SystemExit
 
 
 def test_basic_tools():

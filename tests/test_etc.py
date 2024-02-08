@@ -3,10 +3,8 @@ import os
 
 import pytest
 import yaml
+from fmu.config import etc, utilities as util
 from yaml.constructor import ConstructorError
-
-from fmu.config import etc
-from fmu.config import utilities as util
 
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -18,7 +16,7 @@ DROGON = "tests/data/yml/drogon/input/global_master_config.yml"
 
 # always this statement
 if not fmux.testsetup():
-    raise SystemExit()
+    raise SystemExit
 
 
 def test_info_logger_plain():
@@ -31,8 +29,7 @@ def test_info_logger_plain():
 def fixture_mylogger():
     """Add logger"""
     # need to do it like this...
-    mlogger = fmux.basiclogger(__name__, level="DEBUG")
-    return mlogger
+    return fmux.basiclogger(__name__, level="DEBUG")
 
 
 def test_info_logger(mylogger, caplog):
