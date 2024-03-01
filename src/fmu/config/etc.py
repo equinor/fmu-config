@@ -28,6 +28,7 @@ Ind finally, there is a template for setting up a header for applications, see
 the ```print_fmu_header``` method
 
 """
+
 import inspect
 import logging
 import os

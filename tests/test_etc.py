@@ -1,4 +1,5 @@
 """Testing the classes/functions in in the etc module."""
+
 import os
 
 import pytest

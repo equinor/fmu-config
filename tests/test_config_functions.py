@@ -1,4 +1,5 @@
 """Testing fmu-config, here focus on individual private functions"""
+
 import datetime
 from collections import OrderedDict
 

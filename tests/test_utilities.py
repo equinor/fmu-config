@@ -1,4 +1,5 @@
 """Testing fmu-config tools."""
+
 import fmu.config as config
 import pytest
 from fmu.config import utilities as utils

@@ -1,4 +1,5 @@
 """Testing fmu-config."""
+
 import json
 import os.path
 from os.path import join

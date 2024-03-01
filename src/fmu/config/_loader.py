@@ -1,4 +1,5 @@
 """Loading nested configs for FMU"""
+
 import os.path
 from collections import OrderedDict
 
