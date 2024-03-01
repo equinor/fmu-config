@@ -1,4 +1,5 @@
 """Testing config parsing of very small principal YAML snippets, e.g. for debugging"""
+
 import io
 from os.path import join
 

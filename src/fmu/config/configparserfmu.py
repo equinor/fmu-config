@@ -3,6 +3,7 @@
 This module will normally be ran from the `fmuconfig` script,
 which is the front-end script for the user.
 """
+
 import datetime
 import errno
 import getpass
