@@ -2,7 +2,6 @@
 
 from yaml.loader import Loader
 
-# for ordered dicts!
 from fmu.config import oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
 
@@ -70,10 +69,7 @@ def compare_yaml_files(file1, file2):
     cfg1txt = yaml.dump(cfg1)
     cfg2txt = yaml.dump(cfg2)
 
-    if cfg1txt == cfg2txt:
-        return True
-
-    return False
+    return cfg1txt == cfg2txt
 
 
 def compare_text_files(file1, file2, comments="//"):
@@ -100,7 +96,4 @@ def compare_text_files(file1, file2, comments="//"):
             if not line.startswith(comments):
                 text2 += line
 
-    if text1 == text2:
-        return True
-
-    return False
+    return text1 == text2
