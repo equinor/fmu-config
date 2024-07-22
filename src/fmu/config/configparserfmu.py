@@ -12,9 +12,7 @@ import os
 import re
 import socket
 import sys
-
-# for ordered dicts!
-from collections import Counter, OrderedDict
+from collections import Counter
 from copy import deepcopy
 from os.path import join as ojoin
 
@@ -23,7 +21,9 @@ try:
 except ImportError:
     __version__ = "0.0.0"
 
-from fmu.config import _configparserfmu_ipl, etc, oyaml as yaml
+import yaml
+
+from fmu.config import _configparserfmu_ipl, etc
 from fmu.config._loader import ConstructorError, FmuLoader
 
 xfmu = etc.Interaction()
@@ -57,7 +57,7 @@ class ConfigParserFMU(object):
                 self._config = yaml.load(stream, Loader=FmuLoader)
             except ConstructorError as errmsg:
                 xfmu.error(errmsg)
-                raise SystemExit
+                raise SystemExit from errmsg
 
         self._yamlfile = yfile
 
@@ -400,8 +400,7 @@ class ConfigParserFMU(object):
                         subkeyorder.append(subkey)
                         _tmps[subkey] = subval
 
-                # order
-                ordered = OrderedDict()
+                ordered = {}
                 for keyw in subkeyorder:
                     ordered[keyw] = _tmps[keyw]
                 newcfg[key] = ordered
@@ -471,12 +470,10 @@ class ConfigParserFMU(object):
                 for num, item in enumerate(stream)
             ]
         elif isinstance(stream, dict):
-            return OrderedDict(
-                [
-                    (xkey, self._fill_empty_braces(item, xkey))
-                    for xkey, item in stream.items()
-                ]
-            )
+            return {
+                xkey: self._fill_empty_braces(item, xkey)
+                for xkey, item in stream.items()
+            }
         return stream
 
     @staticmethod
