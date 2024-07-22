@@ -87,6 +87,7 @@ ignore = [
     "C901",
 ]
 select = [
+    "B",
     "C",
     "E",
     "F",
@@ -100,5 +101,6 @@ select = [
     "TCH",
     "TID",
 ]
+
 [tool.ruff.lint.isort]
 combine-as-imports = true

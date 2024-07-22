@@ -1,7 +1,6 @@
 """Testing fmu-config, here focus on individual private functions"""
 
 import datetime
-from collections import OrderedDict
 
 import fmu.config as config
 from fmu.config._configparserfmu_ipl import (
@@ -25,9 +24,9 @@ def test_ipl_guess_dtype():
     var = "TESTVAR"
     entry = {var: 1}
     usekey = _guess_dtype(var, entry)
-    assert isinstance(usekey, OrderedDict)
+    assert isinstance(usekey, dict)
     ndict = usekey[var]
-    assert isinstance(ndict, OrderedDict)
+    assert isinstance(ndict, dict)
     assert ndict["dtype"] == "int"
     assert ndict["value"] == 1
 
@@ -35,9 +34,9 @@ def test_ipl_guess_dtype():
     var = "TESTVAR"
     entry = {var: 1.0}
     usekey = _guess_dtype(var, entry)
-    assert isinstance(usekey, OrderedDict)
+    assert isinstance(usekey, dict)
     ndict = usekey[var]
-    assert isinstance(ndict, OrderedDict)
+    assert isinstance(ndict, dict)
     assert ndict["dtype"] == "float"
     assert ndict["value"] == 1.0
 
@@ -45,9 +44,9 @@ def test_ipl_guess_dtype():
     var = "TESTVAR"
     entry = {var: "someword"}
     usekey = _guess_dtype(var, entry)
-    assert isinstance(usekey, OrderedDict)
+    assert isinstance(usekey, dict)
     ndict = usekey[var]
-    assert isinstance(ndict, OrderedDict)
+    assert isinstance(ndict, dict)
     assert ndict["dtype"] == "str"
     assert ndict["value"] == "someword"
 
@@ -55,9 +54,9 @@ def test_ipl_guess_dtype():
     var = "TESTVAR"
     entry = {var: datetime.date(1999, 11, 1)}
     usekey = _guess_dtype(var, entry)
-    assert isinstance(usekey, OrderedDict)
+    assert isinstance(usekey, dict)
     ndict = usekey[var]
-    assert isinstance(ndict, OrderedDict)
+    assert isinstance(ndict, dict)
     assert ndict["dtype"] == "date"
     assert ndict["value"] == datetime.date(1999, 11, 1)
 
@@ -65,9 +64,9 @@ def test_ipl_guess_dtype():
     var = "TESTVAR"
     entry = {var: [2, 1, 3, 2]}
     usekey = _guess_dtype(var, entry)
-    assert isinstance(usekey, OrderedDict)
+    assert isinstance(usekey, dict)
     ndict = usekey[var]
-    assert isinstance(ndict, OrderedDict)
+    assert isinstance(ndict, dict)
     assert ndict["dtype"] == "int"
     assert ndict["values"] == [2, 1, 3, 2]
 

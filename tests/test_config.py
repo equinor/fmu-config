@@ -6,7 +6,8 @@ from os.path import join
 
 import fmu.config as config
 import pytest
-from fmu.config import oyaml as yaml, utilities as ut
+import yaml
+from fmu.config import utilities as ut
 
 # import fmu.config.fmuconfigrunner as fmurun
 

@@ -1,13 +1,13 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS"""
 
+import yaml
 from yaml.loader import Loader
 
-from fmu.config import oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
 
 
 def yaml_load(filename, safe=True, tool=None, loader="standard"):
-    """Load as YAML file, return a dictionary of type OrderedDict which is the config.
+    """Load as YAML file, return a dictionary which is the config.
 
     Returning an ordered dictionary is a main feature of this loader. It makes it much
     easier to compare the dictionaries returned. In addition, it allows for reading the

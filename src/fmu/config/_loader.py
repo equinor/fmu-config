@@ -1,7 +1,6 @@
 """Loading nested configs for FMU"""
 
 import os.path
-from collections import OrderedDict
 
 import yaml
 from yaml.constructor import ConstructorError
@@ -59,7 +58,6 @@ class FmuLoader(yaml.Loader):
             return yaml.load(yfile, FmuLoader)
 
     # from https://gist.github.com/pypt/94d747fe5180851196eb
-    # but changed mapping to OrderedDict
     def construct_mapping(self, node, deep=False):
         if not isinstance(node, MappingNode):
             raise ConstructorError(
@@ -70,7 +68,7 @@ class FmuLoader(yaml.Loader):
             )
 
         self.flatten_mapping(node)
-        mapping = OrderedDict()
+        mapping = {}
         for key_node, value_node in node.value:
             key = self.construct_object(key_node, deep=deep)
             try:
@@ -81,7 +79,7 @@ class FmuLoader(yaml.Loader):
                     node.start_mark,
                     "found unacceptable key (%s)" % exc,
                     key_node.start_mark,
-                )
+                ) from exc
             # check for duplicate keys
             if key in mapping:
                 raise ConstructorError(
