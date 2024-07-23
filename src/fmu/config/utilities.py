@@ -1,13 +1,17 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS"""
 
+from __future__ import annotations
+
+import yaml
 from yaml.loader import Loader
 
-from fmu.config import oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
 
 
-def yaml_load(filename, safe=True, tool=None, loader="standard"):
-    """Load as YAML file, return a dictionary of type OrderedDict which is the config.
+def yaml_load(
+    filename: str, safe: bool = True, tool: str | None = None, loader: str = "standard"
+) -> dict | None:
+    """Load as YAML file, return a dictionary which is the config.
 
     Returning an ordered dictionary is a main feature of this loader. It makes it much
     easier to compare the dictionaries returned. In addition, it allows for reading the
@@ -55,7 +59,7 @@ def yaml_load(filename, safe=True, tool=None, loader="standard"):
     return cfg
 
 
-def compare_yaml_files(file1, file2):
+def compare_yaml_files(file1: str, file2: str) -> bool:
     """Compare two YAML files and return True if they are equal
 
     Args:
@@ -72,7 +76,7 @@ def compare_yaml_files(file1, file2):
     return cfg1txt == cfg2txt
 
 
-def compare_text_files(file1, file2, comments="//"):
+def compare_text_files(file1: str, file2: str, comments: str = "//") -> bool:
     """Compare two text files, e.g. IPL and return True if they are equal
 
     Lines starting with comments indicator will be discarded
