@@ -57,7 +57,15 @@ Repository = "https://github.com/equinor/fmu-config"
 fmuconfig = "fmu.config.fmuconfigrunner:main"
 
 [tool.mypy]
+disallow_untyped_defs = true
+exclude = "^((tests|docs|examples|build|tools)/|conftest.py?)"
+extra_checks = true
 ignore_missing_imports = true
+python_version = 3.8
+strict_equality = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
 
 [tool.pylint]
 disable = "missing-module-docstring"

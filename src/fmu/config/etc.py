@@ -29,16 +29,23 @@ the ```print_fmu_header``` method
 
 """
 
+from __future__ import annotations
+
 import inspect
 import logging
 import os
 import sys
 import timeit
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from inspect import FrameInfo
+    from types import FrameType
 
 # pylint: disable=protected-access
 
 
-class _BColors(object):
+class _BColors:
     # local class for ANSI term color commands
     # bgcolors:
     # 40=black, 41=red, 42=green, 43=yellow, 44=blue, 45=pink, 46 cyan
@@ -54,17 +61,17 @@ class _BColors(object):
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
-class Interaction(object):
+class Interaction:
     """System for handling interaction; dialogues and messages in FMU.
 
     This module cooperates with the standard Python logging module.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._callclass = None
         self._caller = None
         self._lformat = None
@@ -90,13 +97,13 @@ class Interaction(object):
             self._lformatlevel = int(loggingformat)
 
     @property
-    def logginglevel(self):
+    def logginglevel(self) -> str:
         """Set or return a logging level property, e.g. logging.CRITICAL"""
 
         return self._logginglevel
 
     @logginglevel.setter
-    def logginglevel(self, level):
+    def logginglevel(self, level: str) -> None:
         # pylint: disable=pointless-statement
 
         validlevels = ("INFO", "WARNING", "DEBUG", "CRITICAL")
@@ -108,7 +115,7 @@ class Interaction(object):
             )
 
     @property
-    def numericallogginglevel(self):
+    def numericallogginglevel(self) -> int:
         """Return a numerical logging level (read only)"""
         llo = logging.CRITICAL
         if self._logginglevel == "INFO":
@@ -121,12 +128,12 @@ class Interaction(object):
         return llo
 
     @property
-    def loggingformatlevel(self):
+    def loggingformatlevel(self) -> int:
         """Set logging format (for future use)"""
         return self._lformatlevel
 
     @property
-    def loggingformat(self):
+    def loggingformat(self) -> str:
         """Returns the format string to be used in logging"""
 
         if self._lformatlevel <= 1:
@@ -142,16 +149,18 @@ class Interaction(object):
         return self._lformat
 
     @property
-    def tmpdir(self):
+    def tmpdir(self) -> str:
         """Get and set tmpdir for testing"""
         return self._tmpdir
 
     @tmpdir.setter
-    def tmpdir(self, value):
+    def tmpdir(self, value: str) -> None:
         self._tmpdir = value
 
     @staticmethod
-    def print_fmu_header(appname, appversion, info=None):
+    def print_fmu_header(
+        appname: str, appversion: str, info: str | None = None
+    ) -> None:
         """Prints a banner for a FMU app to STDOUT.
 
         Args:
@@ -179,7 +188,7 @@ class Interaction(object):
         print(_BColors.ENDC)
         print("")
 
-    def basiclogger(self, name, level=None):
+    def basiclogger(self, name: str, level: str | None = None) -> logging.Logger:
         """Initiate the logger by some default settings."""
 
         if level is not None and self._logginglevel_fromenv is None:
@@ -194,14 +203,14 @@ class Interaction(object):
         return logging.getLogger(name)
 
     @staticmethod
-    def functionlogger(name):
+    def functionlogger(name: str) -> logging.Logger:
         """Get the logger for functions (not top level)."""
 
         logger = logging.getLogger(name)
         logger.addHandler(logging.NullHandler())
         return logger
 
-    def testsetup(self, path="TMP"):
+    def testsetup(self, path: str = "TMP") -> bool:
         """Basic setup for FMU testing (developer only; relevant for tests)"""
 
         try:
@@ -217,7 +226,7 @@ class Interaction(object):
         return True
 
     @staticmethod
-    def timer(*args):
+    def timer(*args: dict) -> float:
         """Without args; return the time, with a time as arg return the
         difference.
 
@@ -233,11 +242,11 @@ class Interaction(object):
         time1 = timeit.default_timer()
 
         if args:
-            return time1 - args[0]
+            return time1 - args[0]  # type: ignore
 
         return time1
 
-    def echo(self, string):
+    def echo(self, string: str) -> None:
         """Show info at runtime (for user scripts)"""
         level = -5
         idx = 3
@@ -248,7 +257,7 @@ class Interaction(object):
 
         self._output(idx, level, string)
 
-    def warn(self, string):
+    def warn(self, string: str) -> None:
         """Show warnings at Runtime (pure user info/warns)."""
         level = 0
         idx = 6
@@ -261,7 +270,7 @@ class Interaction(object):
 
     warning = warn
 
-    def error(self, string):
+    def error(self, string: str) -> None:
         """Issue an error, will not exit system by default"""
         level = -8
         idx = 8
@@ -272,7 +281,7 @@ class Interaction(object):
 
         self._output(idx, level, string)
 
-    def critical(self, string, sysexit=True):
+    def critical(self, string: str, sysexit: bool = True) -> None:
         """Issue a critical error, default is SystemExit."""
         level = -9
         idx = 9
@@ -285,14 +294,11 @@ class Interaction(object):
         if sysexit:
             raise SystemExit("STOP!")
 
-    def get_callerinfo(self, caller, frame):
+    def get_callerinfo(self, caller: str, frame: FrameType) -> tuple[str, str]:
         """Get caller info for logging (developer stuff)"""
-        the_class = self._get_class_from_frame(frame)
-
         # just keep the last class element
-        xname = str(the_class)
-        xname = xname.split(".")
-        the_class = xname[-1]
+        xname = str(self._get_class_from_frame(frame))
+        the_class = xname.split(".")[-1]
 
         self._caller = caller
         self._callclass = the_class
@@ -304,13 +310,13 @@ class Interaction(object):
     # =========================================================================
 
     @staticmethod
-    def _get_class_from_frame(frame):
+    def _get_class_from_frame(frame: FrameType) -> FrameInfo:
         # python3 is incomplete (need more coffee)
         current = inspect.currentframe()
         outer = inspect.getouterframes(current)
         return outer[0]
 
-    def _output(self, idx, level, string):
+    def _output(self, idx: int, level: int, string: str) -> None:
         # pylint: disable=too-many-branches
 
         prefix = ""

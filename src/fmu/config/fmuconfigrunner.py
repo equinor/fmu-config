@@ -1,6 +1,8 @@
 """Script for converting the global config to various flavours of suiteble
 flavours."""
 
+from __future__ import annotations
+
 import argparse
 import os.path
 import sys
@@ -12,7 +14,7 @@ xfmu = etc.Interaction()
 logger = xfmu.basiclogger(__name__)
 
 
-def _do_parse_args(args):
+def _do_parse_args(args: list[str] | None) -> argparse.Namespace:
     if args is None:
         args = sys.argv[1:]
 
@@ -83,10 +85,10 @@ def _do_parse_args(args):
     return parser.parse_args(args)
 
 
-def main(args=None):
+def main(args_: list[str] | None = None) -> None:
     """The fmuconfigrunner is a script that takes ..."""
 
-    args = _do_parse_args(args)
+    args = _do_parse_args(args_)
 
     cfg = fmu_config.ConfigParserFMU()
 
