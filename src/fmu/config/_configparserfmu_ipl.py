@@ -1,10 +1,18 @@
 """Addon to configparser.py. Focus on IPL handling"""
 
+from __future__ import annotations
+
 import datetime
 import os
 from copy import deepcopy
+from typing import TYPE_CHECKING
 
 from fmu.config import etc
+
+if TYPE_CHECKING:
+    from typing import Any
+
+    from .configparserfmu import ConfigParserFMU
 
 XFMU = etc.Interaction()
 logger = XFMU.functionlogger(__name__)
@@ -18,8 +26,12 @@ class ConfigError(ValueError):
 
 
 def to_ipl(
-    self, rootname="global_variables", destination=None, template=None, tool="rms"
-):
+    config_parser: ConfigParserFMU,
+    rootname: str = "global_variables",
+    destination: str | None = None,
+    template: str | None = None,
+    tool: str = "rms",
+) -> None:
     """Export the config as a global variables IPL and/or template
     form of the IPL.
 
@@ -44,35 +56,39 @@ def to_ipl(
         raise ConfigError('Given "template" {} is not a directory'.format(template))
 
     declarations = []
-    expressions_dest = []
-    expressions_tmpl = []
+    expressions_dest: list[str] = []
+    expressions_tmpl: list[str] = []
 
-    metadata = self._get_sysinfo(commentmarker="//")
+    metadata = config_parser._get_sysinfo(commentmarker="//")
     declarations.extend(metadata)
 
-    hdecl, hlist = _ipl_stringlist_format(self, "horizons", tool=tool)
+    hdecl, hlist = _ipl_stringlist_format(config_parser, "horizons", tool=tool)
     if hdecl is not None:
         declarations.extend(hdecl)
+        assert hlist is not None
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
-    hdecl, hlist = _ipl_stringlist_format(self, "zones", tool=tool)
+    hdecl, hlist = _ipl_stringlist_format(config_parser, "zones", tool=tool)
     if hdecl is not None:
         declarations.extend(hdecl)
+        assert hlist is not None
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
-    hdecl, hlist = _ipl_kwlists_format(self, tool=tool)
+    hdecl, hlist = _ipl_kwlists_format(config_parser, tool=tool)
     if hdecl is not None:
         declarations.extend(hdecl)
+        assert hlist is not None
         expressions_dest.extend(hlist)
         expressions_tmpl.extend(hlist)
 
     # freeform formats (most complex to handle)
     if destination:
-        hdecl, hlist = _ipl_freeform_format(self)
+        hdecl, hlist = _ipl_freeform_format(config_parser)
         if hdecl is not None:
             declarations.extend(hdecl)
+            assert hlist is not None
             expressions_dest.extend(hlist)
 
         destfile = os.path.join(destination, rootname + ".ipl")
@@ -84,11 +100,12 @@ def to_ipl(
                 stream.write(line)
 
     if template:
-        hdecl, hlist = _ipl_freeform_format(self, template=True)
+        hdecl, hlist = _ipl_freeform_format(config_parser, template=True)
         if hdecl is not None:
             if not destination:
                 declarations.extend(hdecl)
 
+            assert hlist is not None
             expressions_tmpl.extend(hlist)
 
         tmplfile = os.path.join(template, rootname + ".ipl.tmpl")
@@ -100,10 +117,12 @@ def to_ipl(
                 stream.write(line)
 
 
-def _ipl_stringlist_format(self, subtype, tool="rms"):
+def _ipl_stringlist_format(
+    config_parser: ConfigParserFMU, subtype: str, tool: str = "rms"
+) -> tuple[list[str] | None, list[str] | None]:
     """Process the rms horizons etc, and return declarations and values."""
 
-    cfg = self.config[tool].get(subtype)
+    cfg = config_parser.config[tool].get(subtype)
     if cfg is None:
         return None, None
 
@@ -123,7 +142,9 @@ def _ipl_stringlist_format(self, subtype, tool="rms"):
     return decl, expr
 
 
-def _ipl_kwlists_format(self, tool="rms"):
+def _ipl_kwlists_format(
+    config_parser: ConfigParserFMU, tool: str = "rms"
+) -> tuple[list[str] | None, list[str] | None]:
     """Process the rms 'kwlists', and return declarations and values.
 
     This format is on the form::
@@ -150,7 +171,7 @@ def _ipl_kwlists_format(self, tool="rms"):
        etc
     """
 
-    cfg = self.config[tool].get("kwlists")
+    cfg = config_parser.config[tool].get("kwlists")
     if cfg is None:
         return None, None
 
@@ -173,7 +194,7 @@ def _ipl_kwlists_format(self, tool="rms"):
     return decl, expr
 
 
-def _cast_value(value):
+def _cast_value(value: Any) -> Any:
     """Convert data type when a number is represented as a string,
     e.g. '1' or '34.33'
     """
@@ -201,7 +222,7 @@ def _cast_value(value):
     return result
 
 
-def _guess_dtype(var, entry):
+def _guess_dtype(var: str, entry: dict[str, Any]) -> dict[str, Any]:
     """Guess the IPL dtype from value or values if dtype is missing.
 
     The entry itself will then be a scalar or a list, which need to be
@@ -216,7 +237,7 @@ def _guess_dtype(var, entry):
     keyword = var
     logger.info("Guess dtype and value(s) for %s %s", var, values)
 
-    usekey = {}
+    usekey: dict[str, dict[str, Any]] = {}
     usekey[keyword] = {}
     usekey[keyword]["dtype"] = None
     usekey[keyword]["value"] = None  # Keep "value" if singel entry
@@ -266,7 +287,9 @@ def _guess_dtype(var, entry):
     return usekey
 
 
-def _ipl_freeform_format(self, template=False):
+def _ipl_freeform_format(
+    config_parser: ConfigParserFMU, template: bool = False
+) -> tuple[list[str] | None, list[str] | None]:
     """Process the RMS IPL YAML config freeform types.
 
     The freeform types are e.g. like this::
@@ -293,7 +316,7 @@ def _ipl_freeform_format(self, template=False):
     decl = ["\n// Declare free form:\n"]
     expr = ["\n// Free form expressions:\n"]
 
-    cfg = self.config["rms"]
+    cfg = config_parser.config["rms"]
 
     # collect uppercase keys in 'rms'
     freeform_keys = []
@@ -358,12 +381,12 @@ def _ipl_freeform_format(self, template=False):
 
 
 def _freeform_handle_entry(
-    variable,
-    myvalue,
-    myvalues,
-    dtype,
-    template,
-):  # pylint: disable=too-many-statements
+    variable: str,
+    myvalue: str | bool | None,
+    myvalues: list[str] | None,
+    dtype: str,
+    template: bool,
+) -> tuple[str, str]:  # pylint: disable=too-many-statements
     """Handling of any entry as single value or list in IPL.
 
     Either myvalue or myvalues shall be None!
@@ -396,7 +419,13 @@ def _freeform_handle_entry(
     )
 
     # inner function
-    def _fixtheentry(variable, myval, subtype, count=None, template=False):
+    def _fixtheentry(
+        variable: str,
+        myval: str | bool,
+        subtype: str,
+        count: int | None = None,
+        template: bool = False,
+    ) -> tuple[str, str]:
         logger.info("Fix freeform entry %s (subtype %s)", variable, subtype)
         tmpvalue = str(myval)
         if "~" in tmpvalue:
@@ -461,7 +490,9 @@ def _freeform_handle_entry(
     return decl, expr
 
 
-def _fix_date_format(var, dtype, value, aslist=False):
+def _fix_date_format(
+    var: str, dtype: str, value: str | None, aslist: bool = False
+) -> str | list[str] | None:
     """Make dateformat to acceptable RMS IPL format."""
 
     logger.info("Fix dates for %s", var)
@@ -473,16 +504,16 @@ def _fix_date_format(var, dtype, value, aslist=False):
         logger.info("Fix dates... dtype is %s RETURN", dtype)
         return value
 
-    values = None
+    values: list[tuple[datetime.datetime, datetime.datetime]] | str | None = None
     if aslist:
         logger.debug("Dates is a list")
         values = value
-        value = None
+        value = ""
 
     if dtype == "date":
         logger.info("Process date ...")
         if values:
-            mynewvalues = []
+            mynewvalues: list[str] = []
             logger.info("Process date as values")
             for val in values:
                 if isinstance(val, (datetime.datetime, datetime.date)):
@@ -494,7 +525,8 @@ def _fix_date_format(var, dtype, value, aslist=False):
     if dtype == "datepair" and values:
         mynewvalues = []
         for val in values:
-            date1, date2 = val
+            date1, date2 = val  # type: ignore
+            # -- might be iterable, list, tuple
             if isinstance(date1, (datetime.datetime, datetime.date)):
                 date1 = str(date1)
                 date1 = date1.replace("-", "")

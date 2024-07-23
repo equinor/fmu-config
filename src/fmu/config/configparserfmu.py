@@ -4,6 +4,8 @@ This module will normally be ran from the `fmuconfig` script,
 which is the front-end script for the user.
 """
 
+from __future__ import annotations
+
 import datetime
 import errno
 import getpass
@@ -15,6 +17,7 @@ import sys
 from collections import Counter
 from copy import deepcopy
 from os.path import join as ojoin
+from typing import TYPE_CHECKING
 
 try:
     from fmu.config.version import __version__
@@ -26,49 +29,53 @@ import yaml
 from fmu.config import _configparserfmu_ipl, etc
 from fmu.config._loader import ConstructorError, FmuLoader
 
+if TYPE_CHECKING:
+    from typing import Any, Literal
+
 xfmu = etc.Interaction()
 logger = xfmu.functionlogger(__name__)
 
 
-class ConfigParserFMU(object):
+class ConfigParserFMU:
     """Class for parsing global config files for FMU."""
 
-    def __init__(self):
-        self._config = {}
-        self._yamlfile = None
+    def __init__(self) -> None:
+        self._config: dict[str, Any] = {}
+        self._yamlfile: str | None = None
         self._runsilent = True
         logger.debug("Ran __init__")
 
     @property
-    def config(self):
+    def config(self) -> dict[str, Any]:
         """Get the current config as a Python dictionary (read only)."""
         return self._config
 
     @property
-    def yamlfile(self):
+    def yamlfile(self) -> str | None:
         """The name of the input master YAML formatted file (read only)."""
         return self._yamlfile
 
-    def parse(self, yfile, smart_braces=True):
+    def parse(self, yfile: str, smart_braces: bool = True) -> None:
         """Parsing the YAML file (reading it)."""
 
-        with open(yfile, "r", encoding="utf-8") as stream:
+        with open(yfile, encoding="utf-8") as stream:
             try:
                 self._config = yaml.load(stream, Loader=FmuLoader)
             except ConstructorError as errmsg:
-                xfmu.error(errmsg)
+                xfmu.error(str(errmsg))
                 raise SystemExit from errmsg
 
         self._yamlfile = yfile
 
         if smart_braces:
-            self._config = self._fill_empty_braces(deepcopy(self._config), "X")
+            res = self._fill_empty_braces(deepcopy(self._config), "X")
+            assert isinstance(res, dict)
+            self._config = res
 
         self._cleanify_doubleunderscores()
-
         self._validate_unique_tmplkeys()
 
-    def show(self, style="yaml"):
+    def show(self, style: Literal["yaml", "yml", "json", "jason"] = "yaml") -> None:
         """Show (print) the current configuration to STDOUT.
 
         Args:
@@ -83,13 +90,13 @@ class ConfigParserFMU(object):
 
     def to_table(
         self,
-        rootname="myconfig",
-        destination=None,
-        template=None,
-        entry=None,
-        createfolders=False,
-        sep=",",
-    ):
+        rootname: str = "myconfig",
+        destination: str | None = None,
+        template: str | None = None,
+        entry: str | None = None,
+        createfolders: bool = False,
+        sep: str = ",",
+    ) -> None:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-branches
 
@@ -154,9 +161,7 @@ class ConfigParserFMU(object):
             ) as dest:
                 for row in cfg:
                     for col in row:
-                        stream = str(col)
-                        stream = self._get_required_form(stream, template=False)
-                        # print('<{}>'.format(stream))
+                        stream = self._get_required_form(str(col), template=False)
                         print(str(stream) + sep, file=dest, end="")
                     print("", file=dest)
         if template:
@@ -165,19 +170,18 @@ class ConfigParserFMU(object):
             ) as tmpl:
                 for row in cfg:
                     for col in row:
-                        stream = str(col)
-                        stream = self._get_required_form(stream, template=True)
+                        stream = self._get_required_form(str(col), template=True)
                         print(str(stream) + sep, file=tmpl, end="")
                     print("", file=tmpl)
 
     def to_yaml(
         self,
-        rootname="myconfig",
-        destination=None,
-        template=None,
-        tool=None,
-        createfolders=False,
-    ):
+        rootname: str = "myconfig",
+        destination: str | None = None,
+        template: str | None = None,
+        tool: str | None = None,
+        createfolders: bool = False,
+    ) -> None:
         # pylint: disable=too-many-arguments
 
         """Export the config as YAML files; one with true values and
@@ -229,10 +233,10 @@ class ConfigParserFMU(object):
         mystream = re.sub(r"\s+~", "~", mystream)
         mystream = re.sub(r"~\s+", "~", mystream)
 
-        # pdb.set_trace()
-
         cfg1 = self._get_dest_form(mystream)
         cfg2 = self._get_tmpl_form(mystream)
+        assert isinstance(cfg1, str)  # Above can also return list
+        assert isinstance(cfg2, str)
 
         if destination:
             out = os.path.join(destination, rootname + ".yml")
@@ -245,8 +249,13 @@ class ConfigParserFMU(object):
                 stream.write(cfg2)
 
     def to_json(
-        self, rootname, destination=None, template=None, createfolders=False, tool=None
-    ):
+        self,
+        rootname: str,
+        destination: str | None = None,
+        template: str | None = None,
+        createfolders: bool = False,
+        tool: str | None = None,
+    ) -> None:
         """Export the config as JSON files; one with true values and
         one with templated variables.
 
@@ -295,24 +304,26 @@ class ConfigParserFMU(object):
 
         if destination:
             cfg1 = self._get_dest_form(mystream)
+            assert isinstance(cfg1, str)  # Above can also return list
             out = os.path.join(destination, rootname + ".json")
             with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg1)
 
         if template:
             cfg2 = self._get_tmpl_form(mystream)
+            assert isinstance(cfg2, str)  # Above can also return list
             out = os.path.join(template, rootname + ".json.tmpl")
             with open(out, "w", encoding="utf-8") as stream:
                 stream.write(cfg2)
 
     def to_ipl(
         self,
-        rootname="global_variables",
-        destination=None,
-        template=None,
-        createfolders=False,
-        tool="rms",
-    ):
+        rootname: str = "global_variables",
+        destination: str | None = None,
+        template: str | None = None,
+        createfolders: bool = False,
+        tool: str = "rms",
+    ) -> None:
         """Export the config as a global variables IPL and/or template.
 
         Args:
@@ -342,7 +353,7 @@ class ConfigParserFMU(object):
             tool=tool,
         )
 
-    def to_eclipse(self):
+    def to_eclipse(self) -> None:
         """Export the config templates and actuals under `eclipse`"""
 
         cfg = self.config
@@ -354,6 +365,8 @@ class ConfigParserFMU(object):
             content = edeck["content"]
             content_dest = self._get_dest_form(content)
             content_tmpl = self._get_tmpl_form(content)
+            assert isinstance(content_dest, str)  # Above can return list
+            assert isinstance(content_tmpl, str)
 
             with open(edeck["destfile"], "w", encoding="utf-8") as dest:
                 dest.write(content_dest)
@@ -365,7 +378,7 @@ class ConfigParserFMU(object):
     # Private methods
     # =========================================================================
 
-    def _cleanify_doubleunderscores(self):
+    def _cleanify_doubleunderscores(self) -> None:
         """Remove keys with double underscore in level 2, and
         move data up one level.
 
@@ -407,7 +420,7 @@ class ConfigParserFMU(object):
 
         self._config = newcfg
 
-    def _validate_unique_tmplkeys(self):
+    def _validate_unique_tmplkeys(self) -> None:
         """Collect all <...> and check that they are unique and uppercase.
 
         Note that duplicate <xxx> may be OK, and a print should only be issued
@@ -437,7 +450,9 @@ class ConfigParserFMU(object):
                 if cnt > 1:
                     xfmu.echo("{0:30s} occurs {1:3d} times".format(item, cnt))
 
-    def _fill_empty_braces(self, stream, key):
+    def _fill_empty_braces(
+        self, stream: str | list | dict, key: str
+    ) -> str | list | dict[str, Any]:
         """If an empty variable is given, this shall be replaced with
         key name.
 
@@ -477,7 +492,7 @@ class ConfigParserFMU(object):
         return stream
 
     @staticmethod
-    def _get_sysinfo(commentmarker="#"):
+    def _get_sysinfo(commentmarker: str = "#") -> list[str]:
         """Return a text string that serves as info for the outpyt styles
         that support comments."""
 
@@ -496,7 +511,7 @@ class ConfigParserFMU(object):
         ]
 
     @staticmethod
-    def _force_create_folders(folderlist):
+    def _force_create_folders(folderlist: list[str | None]) -> None:
         for folder in folderlist:
             if folder is None:
                 continue
@@ -507,7 +522,7 @@ class ConfigParserFMU(object):
                     raise
 
     @staticmethod
-    def _check_folders(folderlist):
+    def _check_folders(folderlist: list[str | None]) -> None:
         for folder in folderlist:
             if folder is None:
                 continue
@@ -519,7 +534,7 @@ class ConfigParserFMU(object):
                     "must be True.".format(folder)
                 )
 
-    def _strip_rmsdtype(self):
+    def _strip_rmsdtype(self) -> dict[str, Any]:
         """Returns a copy of the _config dictionary so that the (e.g.)
         FREEFORM['dtype'] and FREEFORM['value'] = x or FREEFORM['values'] = x
         becomes simplified to FREEFORM = x
@@ -551,7 +566,9 @@ class ConfigParserFMU(object):
         return newcfg
 
     @staticmethod
-    def _get_required_form(stream, template=False, ipl=False):
+    def _get_required_form(
+        stream: str | list, template: bool = False, ipl: bool = False
+    ) -> list | str | None:
         """Given a variable on form 1.0 ~ <SOME>, return the required form.
 
         For single values, it should be flexible how it looks like, e.g.::
@@ -601,12 +618,10 @@ class ConfigParserFMU(object):
         return result
 
     @staticmethod
-    def _get_tmpl_form(stream):
+    def _get_tmpl_form(stream: list | str) -> list | str:
         """Get template form (<...> if present, not numbers)."""
 
         pattern = "\\-*[\\-a-zA-Z0-9._/]+~"
-
-        # pdb.set_trace()
 
         if isinstance(stream, list):
             logger.info("STREAM is a list object")
@@ -616,18 +631,18 @@ class ConfigParserFMU(object):
                 moditem = re.sub('"', "", moditem)
                 moditem = " " + moditem.strip()
                 result.append(moditem)
-        elif isinstance(stream, str):
-            logger.info("STREAM is a str object - get tmpl form")
-            result = re.sub(pattern, "", stream)
-            result = re.sub('"', "", result)
-            result = result.strip() + "\n"
-        else:
-            raise ValueError("Input for templateconversion neither string " "or list")
+            return result
 
-        return result
+        if isinstance(stream, str):
+            logger.info("STREAM is a str object - get tmpl form")
+            res = re.sub(pattern, "", stream)
+            res = re.sub('"', "", res)
+            return res.strip() + "\n"
+
+        raise ValueError("Input for templateconversion neither string or list")
 
     @staticmethod
-    def _get_dest_form(stream):
+    def _get_dest_form(stream: list | str) -> list | str:
         """Get destination form (numbers, not <...>)"""
 
         logger.info("TRY DEST %s", stream)
@@ -640,12 +655,11 @@ class ConfigParserFMU(object):
                 moditem = re.sub(pattern, "", item)
                 moditem = " " + moditem.strip()
                 result.append(moditem)
-        elif isinstance(stream, str):
-            logger.info("STREAM is a str object - get dest form")
-            result = re.sub(pattern, "", stream)
-            result = result.strip() + "\n"
-        else:
-            raise ValueError("Input for templateconversion neither string " "or list")
+            return result
 
-        logger.info("DEST %s", result)
-        return result
+        if isinstance(stream, str):
+            logger.info("STREAM is a str object - get dest form")
+            res = re.sub(pattern, "", stream)
+            return res.strip() + "\n"
+
+        raise ValueError("Input for templateconversion neither string " "or list")
