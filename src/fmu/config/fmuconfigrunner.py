@@ -1,6 +1,8 @@
 """Script for converting the global config to various flavours of suiteble
 flavours."""
 
+from __future__ import annotations
+
 import argparse
 import os.path
 import sys
@@ -12,7 +14,7 @@ xfmu = etc.Interaction()
 logger = xfmu.basiclogger(__name__)
 
 
-def _do_parse_args(args):
+def _do_parse_args(args: list[str] | None) -> argparse.Namespace:
     if args is None:
         args = sys.argv[1:]
 
@@ -83,55 +85,55 @@ def _do_parse_args(args):
     return parser.parse_args(args)
 
 
-def main(args=None):
+def main(args: list[str] | None = None) -> None:
     """The fmuconfigrunner is a script that takes ..."""
 
-    args = _do_parse_args(args)
+    parsed_args = _do_parse_args(args)
 
     cfg = fmu_config.ConfigParserFMU()
 
     logger.info("OK %s", cfg)
 
-    if isinstance(args.config, str):
-        if not os.path.isfile(args.config):
+    if isinstance(parsed_args.config, str):
+        if not os.path.isfile(parsed_args.config):
             raise IOError("Input file does not exist")
-        cfg.parse(args.config)
+        cfg.parse(parsed_args.config)
 
-    if args.mode == "ipl":
+    if parsed_args.mode == "ipl":
         logger.info("Mode is IPL")
         cfg.to_ipl(
-            rootname=args.rootname,
-            destination=args.destination,
-            template=args.template,
-            tool=args.tool,
+            rootname=parsed_args.rootname,
+            destination=parsed_args.destination,
+            template=parsed_args.template,
+            tool=parsed_args.tool,
         )
 
-    elif args.mode in ("yaml", "yml"):
+    elif parsed_args.mode in ("yaml", "yml"):
         logger.info("Mode is YAML")
         cfg.to_yaml(
-            rootname=args.rootname,
-            destination=args.destination,
-            template=args.template,
-            tool=args.tool,
+            rootname=parsed_args.rootname,
+            destination=parsed_args.destination,
+            template=parsed_args.template,
+            tool=parsed_args.tool,
         )
 
-    elif args.mode in ("json", "jason"):
+    elif parsed_args.mode in ("json", "jason"):
         logger.info("Mode is JASON")
         cfg.to_json(
-            rootname=args.rootname,
-            destination=args.destination,
-            template=args.template,
-            tool=args.tool,
+            rootname=parsed_args.rootname,
+            destination=parsed_args.destination,
+            template=parsed_args.template,
+            tool=parsed_args.tool,
         )
 
-    elif args.mode == "table":
+    elif parsed_args.mode == "table":
         logger.info("Mode is TABLE")
         cfg.to_table(
-            rootname=args.rootname,
-            destination=args.destination,
-            template=args.template,
-            entry=args.tool,
-            sep=args.sep,
+            rootname=parsed_args.rootname,
+            destination=parsed_args.destination,
+            template=parsed_args.template,
+            entry=parsed_args.tool,
+            sep=parsed_args.sep,
         )
     else:
         raise RuntimeError("Invalid options for mode")

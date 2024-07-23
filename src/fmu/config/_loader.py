@@ -1,10 +1,16 @@
 """Loading nested configs for FMU"""
 
+from __future__ import annotations
+
 import os.path
+from typing import TYPE_CHECKING
 
 import yaml
 from yaml.constructor import ConstructorError
 from yaml.nodes import MappingNode
+
+if TYPE_CHECKING:
+    from types_pyyaml import _Node, _ReadStream
 
 
 class FmuLoader(yaml.Loader):
@@ -16,7 +22,7 @@ class FmuLoader(yaml.Loader):
 
     # pylint: disable=too-many-ancestors
 
-    def __init__(self, stream):
+    def __init__(self, stream: _ReadStream) -> None:
         self._root = os.path.split(stream.name)[0]
         super(FmuLoader, self).__init__(stream)
 
@@ -27,12 +33,14 @@ class FmuLoader(yaml.Loader):
         FmuLoader.add_constructor("!include", FmuLoader.include)
         FmuLoader.add_constructor("!import", FmuLoader.include)
 
-    def include(self, node):
+    def include(self, node: _Node) -> list | dict | None:
         """Include method"""
 
-        result = None
+        result: list | dict | None = None
         if isinstance(node, yaml.ScalarNode):
-            result = self.extract_file(self.construct_scalar(node))
+            scalar = self.construct_scalar(node)
+            assert isinstance(scalar, str)
+            result = self.extract_file(scalar)
 
         elif isinstance(node, yaml.SequenceNode):
             result = []
@@ -50,7 +58,7 @@ class FmuLoader(yaml.Loader):
 
         return result
 
-    def extract_file(self, filename):
+    def extract_file(self, filename: str) -> dict:
         """Extract file method"""
 
         filepath = os.path.join(self._root, filename)
@@ -58,7 +66,7 @@ class FmuLoader(yaml.Loader):
             return yaml.load(yfile, FmuLoader)
 
     # from https://gist.github.com/pypt/94d747fe5180851196eb
-    def construct_mapping(self, node, deep=False):
+    def construct_mapping(self, node: _Node, deep: bool = False) -> dict:
         if not isinstance(node, MappingNode):
             raise ConstructorError(
                 None,
