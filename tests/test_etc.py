@@ -4,8 +4,9 @@ import os
 
 import pytest
 import yaml
-from fmu.config import etc, utilities as util
 from yaml.constructor import ConstructorError
+
+from fmu.config import etc, utilities as util
 
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)

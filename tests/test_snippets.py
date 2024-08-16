@@ -3,8 +3,9 @@
 import io
 from os.path import join
 
-import fmu.config as fcfg
 import pytest
+
+import fmu.config as fcfg
 from fmu.config import utilities as ut
 
 fmux = fcfg.etc.Interaction()
