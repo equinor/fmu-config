@@ -83,7 +83,12 @@ class ConfigParserFMU:
 
         xfmu.echo("Output of configuration:")
         if style in ("yaml", "yml"):
-            yaml.dump(self.config, stream=sys.stdout)
+            yaml.dump(
+                self.config,
+                default_flow_style=False,
+                sort_keys=False,
+                stream=sys.stdout,
+            )
         elif style in ("json", "jason"):
             stream = json.dumps(self.config, indent=4, default=str)
             print(stream)
@@ -224,9 +229,16 @@ class ConfigParserFMU:
         newcfg = self._strip_rmsdtype()
 
         if tool is not None:
-            mystream = yaml.dump(newcfg[tool], allow_unicode=True)
+            mystream = yaml.dump(
+                newcfg[tool],
+                default_flow_style=False,
+                sort_keys=False,
+                allow_unicode=True,
+            )
         else:
-            mystream = yaml.dump(newcfg, allow_unicode=True)
+            mystream = yaml.dump(
+                newcfg, default_flow_style=False, sort_keys=False, allow_unicode=True
+            )
 
         mystream = "".join(self._get_sysinfo()) + mystream
 
@@ -428,7 +440,7 @@ class ConfigParserFMU:
 
         """
 
-        mystream = yaml.dump(self._config)
+        mystream = yaml.dump(self._config, default_flow_style=False, sort_keys=False)
         tlist = []
         tmpl = re.findall(r"<\w+>", mystream)
         for item in tmpl:
