@@ -71,4 +71,4 @@ src/fmu/config/version.py
 .idea/
 .projectile
 .vscode/
-
+.venv/

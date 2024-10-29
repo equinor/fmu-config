@@ -70,8 +70,8 @@ def compare_yaml_files(file1: str, file2: str) -> bool:
     cfg1 = yaml_load(file1)
     cfg2 = yaml_load(file2)
 
-    cfg1txt = yaml.dump(cfg1)
-    cfg2txt = yaml.dump(cfg2)
+    cfg1txt = yaml.dump(cfg1, default_flow_style=False, sort_keys=False)
+    cfg2txt = yaml.dump(cfg2, default_flow_style=False, sort_keys=False)
 
     return cfg1txt == cfg2txt
 

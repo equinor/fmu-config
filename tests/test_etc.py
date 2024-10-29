@@ -1,12 +1,14 @@
 """Testing the classes/functions in in the etc module."""
 
 import os
+from pathlib import Path
 
 import pytest
 import yaml
 from yaml.constructor import ConstructorError
 
 from fmu.config import etc, utilities as util
+from fmu.config.configparserfmu import ConfigParserFMU
 
 fmux = etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -124,4 +126,21 @@ def test_load_yaml_compare(tmp_path):
     cfg1 = util.yaml_load(yfile, loader="fmu")
     cfg2 = util.yaml_load(yfile, loader="standard")
 
-    assert cfg1 == cfg2
+    assert cfg == cfg1 == cfg2
+
+
+def test_mapping_ordering_maintained(tmp_path: Path) -> None:
+    cfg = ConfigParserFMU()
+    cfg._config = {"revision": "test", "global": {"c": 1, "b": 2, "a": 3}}
+
+    # Will alphabetically sort mappings
+    with open(tmp_path / "bad_cfg.yml", "w", encoding="utf-8") as f:
+        yaml.dump(cfg, f, allow_unicode=True)
+    # Shouldn't alphabetically sort mappings
+    cfg.to_yaml("good_cfg", tmp_path)
+
+    bad_cfg = util.yaml_load(tmp_path / "bad_cfg.yml", loader="fmu")
+    good_cfg = util.yaml_load(tmp_path / "good_cfg.yml", loader="fmu")
+
+    assert bad_cfg != cfg._config
+    assert good_cfg == cfg._config
