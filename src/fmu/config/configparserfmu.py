@@ -14,7 +14,9 @@ import os
 import re
 import socket
 import sys
-from collections import Counter
+
+# for ordered dicts!
+from collections import Counter, OrderedDict
 from copy import deepcopy
 from os.path import join as ojoin
 from typing import TYPE_CHECKING
@@ -24,9 +26,7 @@ try:
 except ImportError:
     __version__ = "0.0.0"
 
-import yaml
-
-from fmu.config import _configparserfmu_ipl, etc
+from fmu.config import _configparserfmu_ipl, etc, oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
 
 if TYPE_CHECKING:
@@ -425,7 +425,8 @@ class ConfigParserFMU:
                         subkeyorder.append(subkey)
                         _tmps[subkey] = subval
 
-                ordered = {}
+                # order
+                ordered = OrderedDict()
                 for keyw in subkeyorder:
                     ordered[keyw] = _tmps[keyw]
                 newcfg[key] = ordered
@@ -497,10 +498,12 @@ class ConfigParserFMU:
                 for num, item in enumerate(stream)
             ]
         elif isinstance(stream, dict):
-            return {
-                xkey: self._fill_empty_braces(item, xkey)
-                for xkey, item in stream.items()
-            }
+            return OrderedDict(
+                [
+                    (xkey, self._fill_empty_braces(item, xkey))
+                    for xkey, item in stream.items()
+                ]
+            )
         return stream
 
     @staticmethod
