@@ -5,8 +5,10 @@ from pathlib import Path
 
 import pytest
 import yaml
+from pytest import MonkeyPatch
 from yaml.constructor import ConstructorError
 
+import fmu.config as config
 from fmu.config import etc, utilities as util
 from fmu.config.configparserfmu import ConfigParserFMU
 
@@ -144,3 +146,61 @@ def test_mapping_ordering_maintained(tmp_path: Path) -> None:
 
     assert bad_cfg != cfg._config
     assert good_cfg == cfg._config
+
+
+def test_mapping_ordering_maintained_during_include(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    with open("global_config.yml", "w", encoding="utf-8") as f:
+        # Can't yaml dump this, puts the !include in quotes
+        f.write(
+            """
+revision: test
+global:
+  foo: !include _bar.yml
+    """.strip()
+        )
+
+    _bar_yml = {
+        "A_Upper": 11.2,
+        "A_Lower_2": 12.3,
+        "A_Lower_1": 12.3,
+        "C_Fm_3": 13.4,
+        "C_Fm_2": 13.4,
+        "C_Fm_1": 13.4,
+        "B_Upper_2": 14.5,
+        "B_Upper_1": 14.5,
+        "B_Lower_2": 14.3,
+        "B_Lower_1": 14.3,
+    }
+    with open("_bar.yml", "w", encoding="utf-8") as f:
+        f.write(yaml.dump(_bar_yml))
+
+    cfg = config.ConfigParserFMU()
+    cfg.parse("global_config.yml")
+    cfg.to_yaml(
+        rootname="out_config",
+        destination=tmp_path,
+        template=tmp_path,
+    )
+    with open("out_config.yml", encoding="utf-8") as f:
+        # Strip out added comments
+        result = "".join([line for line in f.readlines() if not line.startswith("#")])
+
+    expected = """
+revision: test
+global:
+  foo:
+    A_Upper: 11.2
+    A_Lower_2: 12.3
+    A_Lower_1: 12.3
+    C_Fm_3: 13.4
+    C_Fm_2: 13.4
+    C_Fm_1: 13.4
+    B_Upper_2: 14.5
+    B_Upper_1: 14.5
+    B_Lower_2: 14.3
+    B_Lower_1: 14.3
+""".strip()
+    assert result.strip() == expected.strip()
