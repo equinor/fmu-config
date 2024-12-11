@@ -14,20 +14,18 @@ import os
 import re
 import socket
 import sys
-
-# for ordered dicts!
 from collections import Counter, OrderedDict
 from copy import deepcopy
 from os.path import join as ojoin
 from typing import TYPE_CHECKING
 
+from fmu.config import _configparserfmu_ipl, _oyaml as yaml, etc
+from fmu.config._loader import ConstructorError, FmuLoader
+
 try:
     from fmu.config.version import __version__
 except ImportError:
     __version__ = "0.0.0"
-
-from fmu.config import _configparserfmu_ipl, etc, oyaml as yaml
-from fmu.config._loader import ConstructorError, FmuLoader
 
 if TYPE_CHECKING:
     from typing import Any, Literal

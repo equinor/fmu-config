@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from yaml.loader import Loader
+
 from fmu.config import _oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
-from yaml.loader import Loader
 
 
 def yaml_load(

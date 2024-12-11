@@ -4,10 +4,10 @@ import json
 import os.path
 from os.path import join
 
-import fmu.config as config
 import pytest
-from fmu.config import _oyaml as yaml
-from fmu.config import utilities as ut
+
+import fmu.config as config
+from fmu.config import _oyaml as yaml, utilities as ut
 
 # import fmu.config.fmuconfigrunner as fmurun
 

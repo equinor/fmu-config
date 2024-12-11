@@ -238,7 +238,7 @@ def _guess_dtype(var: str, entry: dict[str, Any]) -> dict[str, Any]:
     keyword = var
     logger.info("Guess dtype and value(s) for %s %s", var, values)
 
-    usekey = OrderedDict()
+    usekey: OrderedDict = OrderedDict()
     usekey[keyword] = OrderedDict()
     usekey[keyword]["dtype"] = None
     usekey[keyword]["value"] = None  # Keep "value" if singel entry
