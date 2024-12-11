@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 import os
+from collections import OrderedDict
 from copy import deepcopy
 from typing import TYPE_CHECKING
 
@@ -229,7 +230,7 @@ def _guess_dtype(var: str, entry: dict[str, Any]) -> dict[str, Any]:
     analysed. If a list, only the first value is analysed for data
     type; then it is ASSUMED it is the type...
 
-    Returns a dict as usekey[keyword]['dtype'] and
+    Returns a dict (OrderedDict) as usekey[keyword]['dtype'] and
     usekey[keyword]['value'] or usekey[keyword]['values']
     """
 
@@ -237,8 +238,8 @@ def _guess_dtype(var: str, entry: dict[str, Any]) -> dict[str, Any]:
     keyword = var
     logger.info("Guess dtype and value(s) for %s %s", var, values)
 
-    usekey: dict[str, dict[str, Any]] = {}
-    usekey[keyword] = {}
+    usekey = OrderedDict()
+    usekey[keyword] = OrderedDict()
     usekey[keyword]["dtype"] = None
     usekey[keyword]["value"] = None  # Keep "value" if singel entry
     usekey[keyword]["values"] = None  # Keep "values", if list

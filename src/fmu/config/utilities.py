@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-import yaml
-from yaml.loader import Loader
-
+from fmu.config import _oyaml as yaml
 from fmu.config._loader import ConstructorError, FmuLoader
+from yaml.loader import Loader
 
 
 def yaml_load(
     filename: str, safe: bool = True, tool: str | None = None, loader: str = "standard"
 ) -> dict | None:
-    """Load as YAML file, return a dictionary which is the config.
+    """Load as YAML file, return a dictionary of type OrderedDict which is the config.
 
     Returning an ordered dictionary is a main feature of this loader. It makes it much
     easier to compare the dictionaries returned. In addition, it allows for reading the

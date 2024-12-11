@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os.path
+from collections import OrderedDict
 from typing import TYPE_CHECKING
 
 import yaml
@@ -67,6 +68,7 @@ class FmuLoader(yaml.Loader):
 
     # from https://gist.github.com/pypt/94d747fe5180851196eb
     def construct_mapping(self, node: _Node, deep: bool = False) -> dict:
+        # but changed mapping to OrderedDict
         if not isinstance(node, MappingNode):
             raise ConstructorError(
                 None,
@@ -76,7 +78,7 @@ class FmuLoader(yaml.Loader):
             )
 
         self.flatten_mapping(node)
-        mapping = {}
+        mapping = OrderedDict()
         for key_node, value_node in node.value:
             key = self.construct_object(key_node, deep=deep)
             try:
