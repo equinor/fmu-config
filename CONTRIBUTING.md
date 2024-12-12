@@ -57,7 +57,7 @@ It is very important to be complient to code standards. fmu-config uses
 - Start with documentation and tests. Think and communicate first!
 - Docstrings shall start and end with """ and use Google style.
 - Use pytest as testing engine
-- Code shall be be Python 3.8+ compliant
+- Code shall be be Python 3.9+ compliant
 
 
 ### Linting
