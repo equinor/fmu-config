@@ -12,7 +12,7 @@ write_to = "src/fmu/config/version.py"
 name = "fmu-config"
 description = "Library for various config scripts in FMU scopes"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { file = "LICENSE" }
 authors = [
     { name = "Equinor", email = "jriv@equinor.com" },
@@ -23,7 +23,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -61,7 +60,7 @@ disallow_untyped_defs = true
 exclude = "^((tests|docs|examples|build|tools)/|conftest.py?)"
 extra_checks = true
 ignore_missing_imports = true
-python_version = 3.8
+python_version = 3.11
 strict_equality = true
 warn_redundant_casts = true
 warn_unused_configs = true
@@ -95,19 +94,21 @@ ignore = [
     "C901",
 ]
 select = [
-    "B",
-    "C",
-    "E",
-    "F",
-    "I",
-    "PIE",
-    "Q",
-    "RET",
-    "RSE",
-    "SIM",
-    "W",
-    "TCH",
-    "TID",
+    "B",  # flake-8-bugbear
+    "C",  # pylint-convention
+    "E",  # pycodestyle-error
+    "F",  # pyflakes
+    "I",  # isort
+    "NPY",  # numpy
+    "PIE",  # flake8-pie
+    "Q",  # flake8-quotes
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports
+    # "UP",  # pyupgrade
+    "W",  # pylint-warnings
 ]
 
 [tool.ruff.lint.isort]
