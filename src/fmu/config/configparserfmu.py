@@ -138,7 +138,7 @@ class ConfigParserFMU:
             )
 
         if entry is None:
-            raise ValueError("The entry is None; need a value, " 'e.g. "global.FWL"')
+            raise ValueError('The entry is None; need a value, e.g. "global.FWL"')
 
         if createfolders:
             self._force_create_folders([destination, template])
@@ -451,7 +451,7 @@ class ConfigParserFMU:
             item = item.lstrip("<")
             if any(char.islower() for char in item):
                 xfmu.error(
-                    "Your template key contains lowercase " "letter: {}".format(wasitem)
+                    "Your template key contains lowercase letter: {}".format(wasitem)
                 )
 
         if len(tlist) != len(set(tlist)) and not self._runsilent:
@@ -626,7 +626,7 @@ class ConfigParserFMU:
                     result = tvalue if template else value
 
         else:
-            raise ValueError("Input for templateconversion neither string " "or list")
+            raise ValueError("Input for templateconversion neither string or list")
 
         return result
 
@@ -675,4 +675,4 @@ class ConfigParserFMU:
             res = re.sub(pattern, "", stream)
             return res.strip() + "\n"
 
-        raise ValueError("Input for templateconversion neither string " "or list")
+        raise ValueError("Input for templateconversion neither string or list")
