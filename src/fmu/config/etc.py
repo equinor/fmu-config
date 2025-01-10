@@ -110,9 +110,7 @@ class Interaction:
         if level in validlevels:
             self._logginglevel = level
         else:
-            raise ValueError(
-                "Invalid level given, must be " "in {}".format(validlevels)
-            )
+            raise ValueError("Invalid level given, must be in {}".format(validlevels))
 
     @property
     def numericallogginglevel(self) -> int:
