@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples to learn from &mdash; fmu-config 1.2.4.dev1+g585d523 documentation</title>
+  <title>Examples to learn from &mdash; fmu-config 1.2.4.dev2+g10b2728 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=23079343"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=c8cf6023"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -89,14 +89,14 @@
            <div itemprop="articleBody">
              
   <section id="examples-to-learn-from">
-<h1>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Permalink to this heading"></a></h1>
+<h1>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Link to this heading"></a></h1>
 <p>Below is a presentation of Ogre config files</p>
 <section id="ogre-example-config">
-<h2>Ogre example config<a class="headerlink" href="#ogre-example-config" title="Permalink to this heading"></a></h2>
+<h2>Ogre example config<a class="headerlink" href="#ogre-example-config" title="Link to this heading"></a></h2>
 <p>Ogre has a large number of surfaces, and for convenience these lists
 are places into separate files. Note that these data are fake data.</p>
 <section id="the-main-global-config-file">
-<h3>The main global config file<a class="headerlink" href="#the-main-global-config-file" title="Permalink to this heading"></a></h3>
+<h3>The main global config file<a class="headerlink" href="#the-main-global-config-file" title="Link to this heading"></a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="c1"># Master global config for Ogre</span>
 <span class="c1"># Prototype by JRIV</span>
@@ -264,7 +264,7 @@ are places into separate files. Note that these data are fake data.</p>
 </div>
 </section>
 <section id="the-include-files">
-<h3>The include files<a class="headerlink" href="#the-include-files" title="Permalink to this heading"></a></h3>
+<h3>The include files<a class="headerlink" href="#the-include-files" title="Link to this heading"></a></h3>
 <p>Note that the include files starts on indent level “zero”.</p>
 <p>rms_horizons.yml</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
@@ -404,7 +404,7 @@ are places into separate files. Note that these data are fake data.</p>
 </section>
 </section>
 <section id="vinstre-example-config">
-<h2>Vinstre example config<a class="headerlink" href="#vinstre-example-config" title="Permalink to this heading"></a></h2>
+<h2>Vinstre example config<a class="headerlink" href="#vinstre-example-config" title="Link to this heading"></a></h2>
 <p>Note that these data are fake data. In this example, a simplified version of the
 FREE IPL variables is used, which perhaps should be the preferred form.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Master FMU global config inspired by J Sverdrup setup, but fake numbers</span>
@@ -540,9 +540,9 @@ FREE IPL variables is used, which perhaps should be the preferred form.</p>
 </div>
 </section>
 <section id="using-the-config-in-rms-ipl-and-python">
-<h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Permalink to this heading"></a></h2>
+<h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Link to this heading"></a></h2>
 <section id="ipl-example">
-<h3>IPL example<a class="headerlink" href="#ipl-example" title="Permalink to this heading"></a></h3>
+<h3>IPL example<a class="headerlink" href="#ipl-example" title="Link to this heading"></a></h3>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Include(&quot;../input/global_variables/global_variables.ipl&quot;)
 
 FOR i FROM 1 TO TOP_LOBE.length DO
@@ -551,7 +551,7 @@ FOR i FROM 1 TO TOP_LOBE.length DO
 </div>
 </section>
 <section id="python-example">
-<h3>Python example<a class="headerlink" href="#python-example" title="Permalink to this heading"></a></h3>
+<h3>Python example<a class="headerlink" href="#python-example" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.config.utilities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
 
 <span class="n">cfg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s1">&#39;../input/global_variables/global_variables_rms.yml&#39;</span><span class="p">)</span>

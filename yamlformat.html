@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YAML file and folders conventions &mdash; fmu-config 1.2.4.dev1+g585d523 documentation</title>
+  <title>YAML file and folders conventions &mdash; fmu-config 1.2.4.dev2+g10b2728 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=23079343"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=c8cf6023"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -95,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="yaml-file-and-folders-conventions">
-<h1>YAML file and folders conventions<a class="headerlink" href="#yaml-file-and-folders-conventions" title="Permalink to this heading"></a></h1>
+<h1>YAML file and folders conventions<a class="headerlink" href="#yaml-file-and-folders-conventions" title="Link to this heading"></a></h1>
 <p>To summarize:</p>
 <ul class="simple">
 <li><p>YAML file endings is .yml</p></li>
@@ -103,10 +103,10 @@
 <em>uppercase</em> letters mean some kind of freeform variable.</p></li>
 </ul>
 <section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading"></a></h2>
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Link to this heading"></a></h2>
 <p>The folder structure is <em>under discussion</em> and might change.</p>
 <section id="alternative-1-close-to-compatible-with-current">
-<h3>Alternative 1, close to compatible with current<a class="headerlink" href="#alternative-1-close-to-compatible-with-current" title="Permalink to this heading"></a></h3>
+<h3>Alternative 1, close to compatible with current<a class="headerlink" href="#alternative-1-close-to-compatible-with-current" title="Link to this heading"></a></h3>
 <p>To make it compatible with current FMU setups:</p>
 <ul class="simple">
 <li><p>Place the global_master_config.yml under <code class="docutils literal notranslate"><span class="pre">share/config</span></code></p></li>
@@ -117,7 +117,7 @@ the templated version to <code class="docutils literal notranslate"><span class=
 </ul>
 </section>
 <section id="alternative-2-a-proposal-for-change">
-<h3>Alternative 2, a proposal for change<a class="headerlink" href="#alternative-2-a-proposal-for-change" title="Permalink to this heading"></a></h3>
+<h3>Alternative 2, a proposal for change<a class="headerlink" href="#alternative-2-a-proposal-for-change" title="Link to this heading"></a></h3>
 <p>The proposal is that all config files, both input and output,
 are stored under <code class="docutils literal notranslate"><span class="pre">share/config</span></code></p>
 <ul class="simple">
@@ -133,7 +133,7 @@ fmuconfig script is ran.</p>
 </div></blockquote>
 </section>
 <section id="alternative-3-a-second-proposal-for-change">
-<h3>Alternative 3, a second proposal for change<a class="headerlink" href="#alternative-3-a-second-proposal-for-change" title="Permalink to this heading"></a></h3>
+<h3>Alternative 3, a second proposal for change<a class="headerlink" href="#alternative-3-a-second-proposal-for-change" title="Link to this heading"></a></h3>
 <p>The proposal is that all config files, both input and output,
 are stored under <code class="docutils literal notranslate"><span class="pre">config</span></code> on tool level (same level as rms, ert, …)</p>
 <ul class="simple">
@@ -148,7 +148,7 @@ are stored under <code class="docutils literal notranslate"><span class="pre">co
 </section>
 </section>
 <section id="file-format-and-nested-files">
-<h2>File format and nested files<a class="headerlink" href="#file-format-and-nested-files" title="Permalink to this heading"></a></h2>
+<h2>File format and nested files<a class="headerlink" href="#file-format-and-nested-files" title="Link to this heading"></a></h2>
 <p>The master config file itself is a YAML formatted file. It follows the standard
 YAML specification, with <em>one major exception</em>, and that is that
 <em>file nesting</em> is allowed. This allows for placing various parts of
@@ -159,7 +159,7 @@ they will follow the YAML standard.</p>
 seen.</p>
 </section>
 <section id="some-conventions">
-<h2>Some conventions<a class="headerlink" href="#some-conventions" title="Permalink to this heading"></a></h2>
+<h2>Some conventions<a class="headerlink" href="#some-conventions" title="Link to this heading"></a></h2>
 <p>The examples section (next) should be studied in detail in order to
 understand the format.</p>
 <ul>
@@ -210,7 +210,7 @@ and value(s) is applied). For example</p>
 </ul>
 </section>
 <section id="include-files">
-<h2>Include files<a class="headerlink" href="#include-files" title="Permalink to this heading"></a></h2>
+<h2>Include files<a class="headerlink" href="#include-files" title="Link to this heading"></a></h2>
 <p>In the input master YAML config, include files are allowed. Note that the include
 statement must “belong” to a keyword, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>kwlists: !include kwlists.yml
@@ -229,9 +229,9 @@ underscores:</p>
 example where this technique is applied.</p>
 </section>
 <section id="rms-related-settings">
-<h2>RMS related settings<a class="headerlink" href="#rms-related-settings" title="Permalink to this heading"></a></h2>
+<h2>RMS related settings<a class="headerlink" href="#rms-related-settings" title="Link to this heading"></a></h2>
 <section id="horizons-zones-and-kwlists">
-<h3>Horizons, zones and kwlists<a class="headerlink" href="#horizons-zones-and-kwlists" title="Permalink to this heading"></a></h3>
+<h3>Horizons, zones and kwlists<a class="headerlink" href="#horizons-zones-and-kwlists" title="Link to this heading"></a></h3>
 <p>Within the <code class="docutils literal notranslate"><span class="pre">rms</span></code> section there may be 3 significant subheadings:</p>
 <ul class="simple">
 <li><p>horizons</p></li>
@@ -272,7 +272,7 @@ Python or IPL.</p>
 </div>
 </section>
 <section id="freeform-with-dtype-and-value-s">
-<h3>Freeform, with dtype and value(s)<a class="headerlink" href="#freeform-with-dtype-and-value-s" title="Permalink to this heading"></a></h3>
+<h3>Freeform, with dtype and value(s)<a class="headerlink" href="#freeform-with-dtype-and-value-s" title="Link to this heading"></a></h3>
 <p>The rest of <code class="docutils literal notranslate"><span class="pre">rms</span></code> will be on so-called <em>freeform</em> format, where one needs to</p>
 <ul class="simple">
 <li><p>Have an identifier or variable name in <strong>UPPERCASE</strong>.</p></li>
@@ -320,7 +320,7 @@ plural <code class="docutils literal notranslate"><span class="pre">values</span
 </div>
 </section>
 <section id="freeform-output-is-always-simplified">
-<h3>Freeform, output is always simplified<a class="headerlink" href="#freeform-output-is-always-simplified" title="Permalink to this heading"></a></h3>
+<h3>Freeform, output is always simplified<a class="headerlink" href="#freeform-output-is-always-simplified" title="Link to this heading"></a></h3>
 <p>For the output YAML or JSON format, <code class="docutils literal notranslate"><span class="pre">dtype</span></code> and <code class="docutils literal notranslate"><span class="pre">value(s)</span></code> will be stripped aways, and
 output style will always be on the form:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">KH_MULT_MTR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
@@ -328,7 +328,7 @@ output style will always be on the form:</p>
 </div>
 </section>
 <section id="ipl-code-stubs">
-<h3>IPL code stubs:<a class="headerlink" href="#ipl-code-stubs" title="Permalink to this heading"></a></h3>
+<h3>IPL code stubs:<a class="headerlink" href="#ipl-code-stubs" title="Link to this heading"></a></h3>
 <p>IPL pure declarations can be defined as <code class="docutils literal notranslate"><span class="pre">_IPL_DECLARE_WHATEVER</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_IPL_DECLARE_STUB1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">  </span><span class="no">GridModel GM</span>
@@ -346,7 +346,7 @@ output style will always be on the form:</p>
 </section>
 </section>
 <section id="summary-of-reserved-words">
-<h2>Summary of Reserved words<a class="headerlink" href="#summary-of-reserved-words" title="Permalink to this heading"></a></h2>
+<h2>Summary of Reserved words<a class="headerlink" href="#summary-of-reserved-words" title="Link to this heading"></a></h2>
 <p>Here is an overview of reserved words (small letters), and the data values are also described
 for some cases.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">authors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;shortname1&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;shortname2&#39;</span><span class="p p-Indicator">]</span>
