@@ -72,17 +72,17 @@ class Interaction:
     """
 
     def __init__(self) -> None:
-        self._callclass = None
-        self._caller = None
-        self._lformat = None
+        self._callclass: str | None = None
+        self._caller: str | None = None
+        self._lformat: str | None = None
         self._lformatlevel = 1
         self._logginglevel = "CRITICAL"
-        self._logginglevel_fromenv = None
+        self._logginglevel_fromenv: str | None = None
         self._loggingname = ""
         self._syslevel = 1
         self._test_env = True
         self._tmpdir = "TMP"
-        self._testpath = None
+        self._testpath: str | None = None
 
         # a string, for Python logging:
         self._logginglevel_fromenv = os.environ.get("FMU_LOGGING_LEVEL", None)
