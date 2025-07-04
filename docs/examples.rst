@@ -59,19 +59,19 @@ IPL example
 """""""""""
 .. code-block:: text
 
-   Include("../input/global_variables/global_variables.ipl")
+   Include("../../fmuconfig/output/global_variables.ipl")
 
-   FOR i FROM 1 TO TOP_LOBE.length DO
+   FOR i FROM 1 TO TOP_LOBES.length DO
        Print("Reading ", TOP_LOBE[i])
 
 
-Python example
-""""""""""""""
+Python example (using yaml_load)
+""""""""""""""""""""""""""""""""
 .. code-block:: python
 
    import fmu.config.utilities as utils
 
-   cfg = utils.yaml_load('../input/global_variables/global_variables_rms.yml')
+   CFG = utils.yaml_load('../../fmuconfig/output/global_variables.yml')
 
-   for toplobe in cfg['horizons']['TOP_LOBE']:
+   for toplobe in CFG["rms"]["horizons"]["TOP_LOBES"]:
        print('Working with {}'.format(toplobe))

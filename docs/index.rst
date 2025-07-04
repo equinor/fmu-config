@@ -11,12 +11,7 @@ Welcome to fmu-config's documentation!
    examples
    contributing
 
-API
-===
 
-.. toctree::
-
-   fmu.config/fmu.config
 
 Indices and tables
 ==================

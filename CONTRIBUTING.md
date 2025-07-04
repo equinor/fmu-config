@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report issues and bugs at https://github.com/equinor/fmu-config/issues
+Report issues and bugs at [fmu-config/issues](https://github.com/equinor/fmu-config/issues)
 
 If you are reporting a bug, please include:
 
@@ -35,8 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue
-at https://github.com/equinor/fmu-config/issues.
+The best way to send feedback is to file an issue at [fmu-config/issues](https://github.com/equinor/fmu-config/issues)
 
 If you are proposing a feature:
 
@@ -51,14 +50,12 @@ It is very important to be complient to code standards. fmu-config uses
 [ruff](https://pypi.org/project/ruff/),
 [mypy](https://mypy.readthedocs.io/en/stable/) to format and lint all code.
 
-
-### In addition:
+### In addition
 
 - Start with documentation and tests. Think and communicate first!
 - Docstrings shall start and end with """ and use Google style.
 - Use pytest as testing engine
 - Code shall be be Python 3.9+ compliant
-
 
 ### Linting
 
@@ -72,12 +69,13 @@ The pylint is rather strict and sometimes excpetions are needed... , but anyway 
   python -m pylint mycode.py
 ```
 
-## Get Started!
+## Get Started
 
 Ready to contribute? Here's how to set up `fmu-config` for local development.
 
 1. Fork the `fmu-config` repo in web browser to a personal fork
 2. Clone your fork locally:
+
     ```sh
         git clone git@github.com:<your-user>/fmu-config.git
         cd fmu-config
@@ -87,6 +85,7 @@ Ready to contribute? Here's how to set up `fmu-config` for local development.
    This means your `origin` is now your personal fork, while the actual master
    is at `upstream`.
 3. Then create a virtual environment and install
+
     ```sh
         python -m venv <your-venv>
         source <your-venv>/bin/activate
