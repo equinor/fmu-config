@@ -105,3 +105,30 @@ need to initiate the Class instance and run a few methods. Here is an example:
    if __name__ == "__main__":
       cleanup()
       main()
+
+Using the output YAML in RMS or scripts
+---------------------------------------
+
+.. code-block:: python
+
+   from fmu.config import utilities as util
+
+   CONFIG = "../../fmuconfig/output/global_variables.yml"
+
+   CFG = util.yaml_load(CONFIG)
+
+
+Loading the input YAML in RMS or scripts
+----------------------------------------
+
+In some cases we may need to load the 'input' version of the YAML files which in fmu.config has
+a syntax (e.g. the ``!include`` keys) which makes it not compatible with the YAML standard.
+The solution then is to use a ``loader="FMU"`` key-value:
+
+.. code-block:: python
+
+   from fmu.config import utilities as util
+
+   CONFIG = "../../fmuconfig/input/global_master_variables.yml"
+
+   CFG = util.yaml_load(CONFIG, loader="FMU")
