@@ -34,6 +34,6 @@ install_test_dependencies () {
 run_pytest () {
     echo "Running fmu-config tests with pytest..."
     pushd $CI_TEST_ROOT
-    pytest ./tests -n 4 -vv 
+    pytest ./tests -vv 
     popd
 }
