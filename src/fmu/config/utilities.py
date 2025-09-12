@@ -1,6 +1,7 @@
 """Module with some simple functions, e.g. for parsing for YAML into RMS"""
 
-from __future__ import annotations
+from pathlib import Path
+from typing import Any
 
 from yaml.loader import Loader
 
@@ -9,8 +10,11 @@ from fmu.config._loader import ConstructorError, FmuLoader
 
 
 def yaml_load(
-    filename: str, safe: bool = True, tool: str | None = None, loader: str = "standard"
-) -> dict | None:
+    filename: str | Path,
+    safe: bool = True,
+    tool: str | None = None,
+    loader: str = "standard",
+) -> dict[str, Any] | None:
     """Load as YAML file, return a dictionary of type OrderedDict which is the config.
 
     Returning an ordered dictionary is a main feature of this loader. It makes it much
@@ -18,7 +22,7 @@ def yaml_load(
     input (extended) YAML format, if key ``allow_extended`` is True.
 
     Args:
-        filename (str): Name of file (YAML formatted)
+        filename (str, Path): Name of file (YAML formatted)
         safe (bool): If True (default), then use `safe_load` when allow_extended is
             set to False. Not applied if loader is "fmu".
         tool (str): Refers to a particular main section in the config.
