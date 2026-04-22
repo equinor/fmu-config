@@ -677,7 +677,6 @@ stratigraphy: !include _stratigraphy.yml
 # Here are *very technical* switches that are purely related to the simplification or
 # dataio/sumo projects that are still under development. Normal fields should skip this
 # part!
-# Contact JRIV for details
 #========================================================================================
 
 experimental:

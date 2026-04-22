@@ -15,7 +15,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Equinor", email = "jriv@equinor.com" },
+    { name = "Equinor", email = "fg_fmu-atlas@equinor.com" },
 ]
 keywords = ["fmu", "config"]
 classifiers = [
