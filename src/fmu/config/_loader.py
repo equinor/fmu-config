@@ -21,8 +21,6 @@ class FmuLoader(yaml.Loader):
     https://davidchall.github.io/yaml-includes.html
     """
 
-    # pylint: disable=too-many-ancestors
-
     def __init__(self, stream: _ReadStream) -> None:
         self._root = os.path.split(stream.name)[0]
         super(FmuLoader, self).__init__(stream)

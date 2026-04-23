@@ -56,7 +56,7 @@ def yaml_load(
         try:
             newcfg = cfg[tool]
             cfg = newcfg
-        except Exception as exc:  # pylint: disable=broad-except
+        except Exception as exc:
             print(f"Cannot import: {exc}")
             return None
 
