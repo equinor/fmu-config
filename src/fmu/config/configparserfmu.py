@@ -100,9 +100,6 @@ class ConfigParserFMU:
         createfolders: bool = False,
         sep: str = ",",
     ) -> None:
-        # pylint: disable=too-many-arguments
-        # pylint: disable=too-many-branches
-
         """Export a particular entry in config as text table files;
         one with true values and one with templated variables.
 
@@ -185,8 +182,6 @@ class ConfigParserFMU:
         tool: str | None = None,
         createfolders: bool = False,
     ) -> None:
-        # pylint: disable=too-many-arguments
-
         """Export the config as YAML files; one with true values and
         one with templated variables.
 
@@ -404,7 +399,6 @@ class ConfigParserFMU:
 
         """
 
-        # pylint: disable=too-many-nested-blocks
         newcfg = deepcopy(self._config)
 
         for key, val in self._config.items():

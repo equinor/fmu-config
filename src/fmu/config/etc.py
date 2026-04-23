@@ -42,15 +42,12 @@ if TYPE_CHECKING:
     from inspect import FrameInfo
     from types import FrameType
 
-# pylint: disable=protected-access
-
 
 class _BColors:
     # local class for ANSI term color commands
     # bgcolors:
     # 40=black, 41=red, 42=green, 43=yellow, 44=blue, 45=pink, 46 cyan
 
-    # pylint: disable=too-few-public-methods
     HEADER = "\033[1;96m"
     OKBLUE = "\033[94m"
     OKGREEN = "\033[92m"
@@ -104,7 +101,6 @@ class Interaction:
 
     @logginglevel.setter
     def logginglevel(self, level: str) -> None:
-        # pylint: disable=pointless-statement
 
         validlevels = ("INFO", "WARNING", "DEBUG", "CRITICAL")
         if level in validlevels:
@@ -315,7 +311,6 @@ class Interaction:
         return outer[0]
 
     def _output(self, idx: int, level: int, string: str) -> None:
-        # pylint: disable=too-many-branches
 
         prefix = ""
         endfix = ""

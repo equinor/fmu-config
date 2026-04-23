@@ -38,7 +38,6 @@ dev = [
     "coverage",
     "mypy",
     "myst-parser",
-    "pylint",
     "pytest-runner",
     "pytest",
     "rstcheck",
@@ -66,8 +65,6 @@ warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-[tool.pylint]
-disable = "missing-module-docstring"
 
 [tool.pytest.ini_options]
 norecursedirs = [
@@ -95,7 +92,6 @@ ignore = [
 ]
 select = [
     "B",  # flake-8-bugbear
-    "C",  # pylint-convention
     "E",  # pycodestyle-error
     "F",  # pyflakes
     "I",  # isort
@@ -108,7 +104,6 @@ select = [
     "TCH",  # flake8-type-checking
     "TID",  # flake8-tidy-imports
     # "UP",  # pyupgrade
-    "W",  # pylint-warnings
 ]
 
 [tool.ruff.lint.isort]

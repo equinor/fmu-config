@@ -63,11 +63,6 @@ It is very important to be complient to code standards. fmu-config uses
   ruff check . && ruff format . --check
 ```
 
-The pylint is rather strict and sometimes excpetions are needed... , but anyway quite useful!
-
-```sh
-  python -m pylint mycode.py
-```
 
 ## Get Started
 

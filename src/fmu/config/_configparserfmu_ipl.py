@@ -18,9 +18,6 @@ if TYPE_CHECKING:
 XFMU = etc.Interaction()
 logger = XFMU.functionlogger(__name__)
 
-# pylint: disable=protected-access
-# pylint: disable=too-many-branches
-
 
 class ConfigError(ValueError):
     """Exception used for config error, derived from ValueError"""
@@ -387,7 +384,7 @@ def _freeform_handle_entry(
     myvalues: list[str] | None,
     dtype: str,
     template: bool,
-) -> tuple[str, str]:  # pylint: disable=too-many-statements
+) -> tuple[str, str]:
     """Handling of any entry as single value or list in IPL.
 
     Either myvalue or myvalues shall be None!
