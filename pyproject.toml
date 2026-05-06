@@ -108,3 +108,6 @@ select = [
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
+
+[tool.uv]
+exclude-newer = "1 week"
