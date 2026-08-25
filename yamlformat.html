@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YAML file and folders conventions &mdash; fmu-config 1.7.4.dev5+g1a757e43c documentation</title>
+  <title>YAML file and folders conventions &mdash; fmu-config 1.7.4.dev5+g1a757e43c.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=aaa54c3b"></script>
+      <script src="_static/documentation_options.js?v=e0d8d7d5"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -264,10 +264,10 @@ Python or IPL.</p>
 <span class="nt">kwlists</span><span class="p">:</span>
 
 <span class="w">  </span><span class="nt">FACIES_NAMES</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">OFFSHORE_VI_C</span><span class="p">:</span><span class="w">         </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Offshore</span><span class="nv"> </span><span class="s">mudstones,</span><span class="nv"> </span><span class="s">Viking</span><span class="nv"> </span><span class="s">Gp.&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">MUDDY_SPIC_C</span><span class="p">:</span><span class="w">          </span><span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Muddy</span><span class="nv"> </span><span class="s">spiculites&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">BIOSTROME_REEF_C</span><span class="p">:</span><span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Biostrome</span><span class="nv"> </span><span class="s">reef&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">SANDY_SPIC_C</span><span class="p">:</span><span class="w">          </span><span class="p p-Indicator">[</span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Sandy</span><span class="nv"> </span><span class="s">spiculites&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">OFFSHORE_VI_C</span><span class="p">:</span><span class="w">         </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"Offshore</span><span class="nv"> </span><span class="s">mudstones,</span><span class="nv"> </span><span class="s">Viking</span><span class="nv"> </span><span class="s">Gp."</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">MUDDY_SPIC_C</span><span class="p">:</span><span class="w">          </span><span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"Muddy</span><span class="nv"> </span><span class="s">spiculites"</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">BIOSTROME_REEF_C</span><span class="p">:</span><span class="w">      </span><span class="p p-Indicator">[</span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"Biostrome</span><span class="nv"> </span><span class="s">reef"</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">SANDY_SPIC_C</span><span class="p">:</span><span class="w">          </span><span class="p p-Indicator">[</span><span class="nv">8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"Sandy</span><span class="nv"> </span><span class="s">spiculites"</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </section>
@@ -339,7 +339,7 @@ output style will always be on the form:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_IPL_CODE_STUB1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">   </span><span class="no">// code for something</span>
 <span class="w">   </span><span class="no">FOR i FROM 1 TO 100 DO</span>
-<span class="w">      </span><span class="no">Print(&quot;Hello&quot;)</span>
+<span class="w">      </span><span class="no">Print("Hello")</span>
 <span class="w">   </span><span class="no">ENDFOR</span>
 </pre></div>
 </div>
@@ -349,7 +349,7 @@ output style will always be on the form:</p>
 <h2>Summary of Reserved words<a class="headerlink" href="#summary-of-reserved-words" title="Link to this heading"></a></h2>
 <p>Here is an overview of reserved words (small letters), and the data values are also described
 for some cases.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">authors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;shortname1&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;shortname2&#39;</span><span class="p p-Indicator">]</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">authors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'shortname1'</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">'shortname2'</span><span class="p p-Indicator">]</span>
 
 <span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w">   </span><span class="c1"># this is config file version</span>
 

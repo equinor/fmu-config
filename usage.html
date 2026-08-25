@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; fmu-config 1.7.4.dev5+g1a757e43c documentation</title>
+  <title>Usage &mdash; fmu-config 1.7.4.dev5+g1a757e43c.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=aaa54c3b"></script>
+      <script src="_static/documentation_options.js?v=e0d8d7d5"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -109,9 +109,9 @@ fmuconfig<span class="w"> </span>../input/global_master_config.yml<span class="w
 <p>Here is an example of a shell script that runs <cite>fmuconfig</cite> from the <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
-<span class="nv">MASTER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span><span class="w">  </span><span class="c1"># all updates here</span>
-<span class="nv">OUTFOLDER</span><span class="o">=</span><span class="s2">&quot;../../fmuconfig/output&quot;</span><span class="w">                       </span><span class="c1"># location of result files</span>
-<span class="nv">ROOTNAME</span><span class="o">=</span><span class="s2">&quot;global_variables&quot;</span><span class="w">                              </span><span class="c1"># root name of result files</span>
+<span class="nv">MASTER</span><span class="o">=</span><span class="s2">"../../fmuconfig/input/global_master_config.yml"</span><span class="w">  </span><span class="c1"># all updates here</span>
+<span class="nv">OUTFOLDER</span><span class="o">=</span><span class="s2">"../../fmuconfig/output"</span><span class="w">                       </span><span class="c1"># location of result files</span>
+<span class="nv">ROOTNAME</span><span class="o">=</span><span class="s2">"global_variables"</span><span class="w">                              </span><span class="c1"># root name of result files</span>
 
 <span class="c1"># clean up (be careful with syntax)</span>
 rm<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">OUTFOLDER</span><span class="si">}</span>/ROOTNAME*
@@ -140,19 +140,19 @@ fmuconfig<span class="w"> </span><span class="nv">$MASTER</span><span class="w">
 </div>
 <p>The config can also be run from a python script inside RMS. In that case you
 need to initiate the Class instance and run a few methods. Here is an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Run global config in RMS python.&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""Run global config in RMS python."""</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fmu.config</span>
 
 
-<span class="n">MASTER</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/input/global_master_config.yml&quot;</span>
-<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/output&quot;</span>
-<span class="n">ROOT</span> <span class="o">=</span> <span class="s2">&quot;global_variables&quot;</span>
+<span class="n">MASTER</span> <span class="o">=</span> <span class="s2">"../../fmuconfig/input/global_master_config.yml"</span>
+<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s2">"../../fmuconfig/output"</span>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="s2">"global_variables"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">():</span>
-   <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">OUTPUT</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">):</span>
+   <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">OUTPUT</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s2">"*"</span><span class="p">):</span>
       <span class="n">file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed old </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removed old </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
@@ -160,15 +160,15 @@ need to initiate the Class instance and run a few methods. Here is an example:</
    <span class="n">cfg</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">MASTER</span><span class="p">)</span>
 
    <span class="c1"># make IPL, optional!</span>
-   <span class="n">cfg</span><span class="o">.</span><span class="n">to_ipl</span><span class="p">(</span><span class="n">rootname</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="s2">&quot;rms&quot;</span><span class="p">)</span>
+   <span class="n">cfg</span><span class="o">.</span><span class="n">to_ipl</span><span class="p">(</span><span class="n">rootname</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="s2">"rms"</span><span class="p">)</span>
 
    <span class="c1"># YAML</span>
    <span class="n">cfg</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="n">rootname</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">)</span>
 
-   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Global IPL and YML are updated&quot;</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">Global IPL and YML are updated"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
    <span class="n">cleanup</span><span class="p">()</span>
    <span class="n">main</span><span class="p">()</span>
 </pre></div>
@@ -178,7 +178,7 @@ need to initiate the Class instance and run a few methods. Here is an example:</
 <h2>Using the output YAML in RMS or scripts<a class="headerlink" href="#using-the-output-yaml-in-rms-or-scripts" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">utilities</span> <span class="k">as</span> <span class="n">util</span>
 
-<span class="n">CONFIG</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/output/global_variables.yml&quot;</span>
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="s2">"../../fmuconfig/output/global_variables.yml"</span>
 
 <span class="n">CFG</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">)</span>
 </pre></div>
@@ -191,9 +191,9 @@ a syntax (e.g. the <code class="docutils literal notranslate"><span class="pre">
 The solution then is to use a <code class="docutils literal notranslate"><span class="pre">loader=&quot;FMU&quot;</span></code> key-value:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">utilities</span> <span class="k">as</span> <span class="n">util</span>
 
-<span class="n">CONFIG</span> <span class="o">=</span> <span class="s2">&quot;../../fmuconfig/input/global_master_variables.yml&quot;</span>
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="s2">"../../fmuconfig/input/global_master_variables.yml"</span>
 
-<span class="n">CFG</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="s2">&quot;FMU&quot;</span><span class="p">)</span>
+<span class="n">CFG</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">,</span> <span class="n">loader</span><span class="o">=</span><span class="s2">"FMU"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
