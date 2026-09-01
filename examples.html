@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples to learn from &mdash; fmu-config 1.7.4.dev5+g1a757e43c.d20260901 documentation</title>
+  <title>Examples to learn from &mdash; fmu-config 1.7.4.dev6+gb23023ce8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a4e327a3"></script>
+      <script src="_static/documentation_options.js?v=eb325c78"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -221,7 +221,7 @@ are places into separate files. Note that these data are fake data.</p>
 <span class="w">  </span><span class="nt">KH_MULT_MST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
 
 <span class="w">  </span><span class="c1"># for dates, spesifying dtype can be more safe, but not required. Ad always treat</span>
-<span class="w">  </span><span class="c1"># dates as "values", not "value" (since dates are complex data types)</span>
+<span class="w">  </span><span class="c1"># dates as &quot;values&quot;, not &quot;value&quot; (since dates are complex data types)</span>
 <span class="w">  </span><span class="c1"># I.e. treat dates always as lists.</span>
 <span class="w">  </span><span class="nt">TESTSOMEDATE</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
@@ -483,7 +483,7 @@ FREE IPL variables is used, which perhaps should be the preferred form.</p>
 <span class="w">  </span><span class="nt">_IPL_CODE_STUB1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">    </span><span class="no">// code for something</span>
 <span class="w">    </span><span class="no">FOR i FROM 1 TO 100 DO</span>
-<span class="w">       </span><span class="no">Print("Hello")</span>
+<span class="w">       </span><span class="no">Print(&quot;Hello&quot;)</span>
 <span class="w">    </span><span class="no">DONE</span>
 
 <span class="w">  </span><span class="c1"># guessing the dtype with one value</span>
@@ -518,11 +518,11 @@ FREE IPL variables is used, which perhaps should be the preferred form.</p>
 <span class="nt">eclipse</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">MULTFLT</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">      </span><span class="no">MULTFLT</span>
-<span class="w">      </span><span class="no">'F1'   0.12~&lt;MULTFLT_F1&gt; /</span>
-<span class="w">      </span><span class="no">'F2'   0.01~&lt;MULTFLT_F2&gt; /</span>
-<span class="w">      </span><span class="no">'F3'   0.04~&lt;MULTFLT_F3&gt; /</span>
-<span class="w">      </span><span class="no">'F4'   0.12~&lt;MULTFLT_F4&gt; /</span>
-<span class="w">      </span><span class="no">'F5'   0.06~&lt;MULTFLT_F5&gt; /</span>
+<span class="w">      </span><span class="no">&#39;F1&#39;   0.12~&lt;MULTFLT_F1&gt; /</span>
+<span class="w">      </span><span class="no">&#39;F2&#39;   0.01~&lt;MULTFLT_F2&gt; /</span>
+<span class="w">      </span><span class="no">&#39;F3&#39;   0.04~&lt;MULTFLT_F3&gt; /</span>
+<span class="w">      </span><span class="no">&#39;F4&#39;   0.12~&lt;MULTFLT_F4&gt; /</span>
+<span class="w">      </span><span class="no">&#39;F5&#39;   0.06~&lt;MULTFLT_F5&gt; /</span>
 <span class="w">      </span><span class="no">/</span>
 
 <span class="nt">_special_chars</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">special_chars.yml</span>
@@ -543,10 +543,10 @@ FREE IPL variables is used, which perhaps should be the preferred form.</p>
 <h2>Using the config in RMS, IPL and Python<a class="headerlink" href="#using-the-config-in-rms-ipl-and-python" title="Link to this heading"></a></h2>
 <section id="ipl-example">
 <h3>IPL example<a class="headerlink" href="#ipl-example" title="Link to this heading"></a></h3>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Include("../../fmuconfig/output/global_variables.ipl")
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Include(&quot;../../fmuconfig/output/global_variables.ipl&quot;)
 
 FOR i FROM 1 TO TOP_LOBES.length DO
-    Print("Reading ", TOP_LOBE[i])
+    Print(&quot;Reading &quot;, TOP_LOBE[i])
 </pre></div>
 </div>
 </section>
@@ -554,10 +554,10 @@ FOR i FROM 1 TO TOP_LOBES.length DO
 <h3>Python example (using yaml_load)<a class="headerlink" href="#python-example-using-yaml-load" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.config.utilities</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">utils</span>
 
-<span class="n">CFG</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s1">'../../fmuconfig/output/global_variables.yml'</span><span class="p">)</span>
+<span class="n">CFG</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s1">&#39;../../fmuconfig/output/global_variables.yml&#39;</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">toplobe</span> <span class="ow">in</span> <span class="n">CFG</span><span class="p">[</span><span class="s2">"rms"</span><span class="p">][</span><span class="s2">"horizons"</span><span class="p">][</span><span class="s2">"TOP_LOBES"</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Working with </span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toplobe</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">toplobe</span> <span class="ow">in</span> <span class="n">CFG</span><span class="p">[</span><span class="s2">&quot;rms&quot;</span><span class="p">][</span><span class="s2">&quot;horizons&quot;</span><span class="p">][</span><span class="s2">&quot;TOP_LOBES&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Working with </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toplobe</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
