@@ -643,8 +643,20 @@ class ConfigParserFMU:
         if isinstance(stream, str):
             logger.info("STREAM is a str object - get tmpl form")
             res = re.sub(pattern, "", stream)
-            res = re.sub('"', "", res)
-            return res.strip() + "\n"
+            # keep double quotes inside YAML literal block scalars (e.g. expressions)
+            lines = []
+            block_indent = None
+            for line in res.splitlines(keepends=True):
+                indent = len(line) - len(line.lstrip(" "))
+                if block_indent is not None and (
+                    indent > block_indent or not line.strip()
+                ):
+                    lines.append(line)
+                    continue
+                block_header = re.search(r"(?::\s+|^ *(?:-\s+)+)\|[-+0-9]*\s*$", line)
+                block_indent = indent if block_header else None
+                lines.append(line.replace('"', ""))
+            return "".join(lines).strip() + "\n"
 
         raise ValueError("Input for templateconversion neither string or list")
 
