@@ -70,8 +70,11 @@ _IPL_DECLARE_STUB1: 'GridModel GM
 _IPL_DECLARE_STUB2: 'Function MYFUNCTION
 
   '
-_IPL_CODE_STUB1: // code for something\nFOR i FROM 1 TO 100 DO\n   Print(\Hello\\
-  )\nDONE\n
+_IPL_CODE_STUB1: |
+  // code for something
+  FOR i FROM 1 TO 100 DO
+     Print("Hello")
+  DONE
 COHIBA_MODE2: <COHIBA_MODE2>
 COHIBA_MODE3: SIMULATION
 RUN_MANILA1: 1
