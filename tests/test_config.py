@@ -92,7 +92,11 @@ def test_to_yaml_multiline_string(tmp_path):
         "rms:\n"
         "  expression: |\n"
         "    fwl = 1677 ~ <FWL>;\n"
-        '    case(region.codes in ["A", "B"], fwl)\n',
+        '    case(region.codes in ["A", "B"], fwl)\n'
+        "  items:\n"
+        "  - |\n"
+        '    x in ["A", "B"]\n'
+        "    y\n",
         encoding="utf-8",
     )
     cfg = config.ConfigParserFMU()
@@ -107,6 +111,7 @@ def test_to_yaml_multiline_string(tmp_path):
     case = 'case(region.codes in ["A", "B"], fwl)\n'
     assert yaml.safe_load(dest)["rms"]["expression"] == "fwl = 1677;\n" + case
     assert yaml.safe_load(tmpl)["rms"]["expression"] == "fwl = <FWL>;\n" + case
+    assert yaml.safe_load(tmpl)["rms"]["items"] == ['x in ["A", "B"]\ny\n']
 
 
 def test_basic_ogre():
