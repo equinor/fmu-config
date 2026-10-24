@@ -653,7 +653,9 @@ class ConfigParserFMU:
                 ):
                     lines.append(line)
                     continue
-                block_header = re.search(r":\s+\|[-+0-9]*\s*$", line)
+                block_header = re.search(
+                    r"(?::\s+|^ *(?:-\s+)+)\|[-+0-9]*\s*$", line
+                )
                 block_indent = indent if block_header else None
                 lines.append(line.replace('"', ""))
             return "".join(lines).strip() + "\n"
