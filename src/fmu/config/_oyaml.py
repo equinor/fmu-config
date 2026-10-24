@@ -12,6 +12,11 @@ def map_representer(dumper, data):  # type: ignore
     return dumper.represent_dict(getattr(data, _items)())
 
 
+def str_representer(dumper, data):  # type: ignore
+    style = "|" if "\n" in data else None
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
+
+
 def map_constructor(loader, node):  # type: ignore
     loader.flatten_mapping(node)
     return OrderedDict(loader.construct_pairs(node))
@@ -29,13 +34,15 @@ pyyaml.add_representer(dict, map_representer, Dumper=SafeDumper)
 pyyaml.add_representer(OrderedDict, map_representer, Dumper=SafeDumper)
 pyyaml.add_representer(dict, map_representer, Dumper=DangerDumper)
 pyyaml.add_representer(OrderedDict, map_representer, Dumper=DangerDumper)
+pyyaml.add_representer(str, str_representer, Dumper=SafeDumper)
+pyyaml.add_representer(str, str_representer, Dumper=DangerDumper)
 
 
 if sys.version_info < (3, 7):
     pyyaml.add_constructor("tag:yaml.org,2002:map", map_constructor)
 
 
-del map_constructor, map_representer
+del map_constructor, map_representer, str_representer
 
 
 # Merge PyYAML namespace into ours.
